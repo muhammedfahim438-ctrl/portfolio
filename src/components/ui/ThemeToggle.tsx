@@ -2,9 +2,19 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) {
+    return (
+      <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-themeBg-secondary border border-themeBorder" />
+    );
+  }
 
   return (
     <button
