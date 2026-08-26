@@ -45,10 +45,7 @@ export function SplashScreen() {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 border border-themeBorder flex items-center justify-center overflow-hidden"
             >
-              <svg viewBox="0 0 200 200" className="w-full h-full opacity-60" fill="none">
-                <circle cx="100" cy="70" r="35" fill="currentColor" className="text-themeAccent" />
-                <ellipse cx="100" cy="150" rx="55" ry="45" fill="currentColor" className="text-themeSecondary" />
-              </svg>
+              <img src="/my-picture.png" alt="Muhammed Fahim M" className="w-full h-full object-cover" />
             </motion.div>
           </div>
 

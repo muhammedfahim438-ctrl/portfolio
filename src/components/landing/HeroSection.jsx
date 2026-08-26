@@ -141,10 +141,7 @@ export function HeroSection() {
               <div className="relative w-72 h-72 md:w-96 md:h-96">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/20 to-themeSecondary/20 blur-2xl" />
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/10 to-themeSecondary/10 border border-themeBorder flex items-center justify-center overflow-hidden">
-                  <svg viewBox="0 0 200 200" className="w-full h-full opacity-40" fill="none">
-                    <circle cx="100" cy="70" r="35" fill="currentColor" className="text-themeAccent" />
-                    <ellipse cx="100" cy="150" rx="55" ry="45" fill="currentColor" className="text-themeSecondary" />
-                  </svg>
+                  <img src="/my-picture.png" alt="Muhammed Fahim M" className="w-full h-full object-cover" />
                 </div>
               </div>
             </motion.div>
