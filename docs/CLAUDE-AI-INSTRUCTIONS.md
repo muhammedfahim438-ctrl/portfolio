@@ -125,7 +125,7 @@ CRITICAL INSTRUCTIONS:
 1. BEFORE GENERATING OR CREATING ANY CODE FILES, EXPLICITLY PRESENT YOUR PROPOSED ARCHITECTURE STEP AND ASK: "DO YOU WANT ME TO PROCEED WITH THIS STEP, OR DO YOU HAVE ANY MODIFICATIONS?" WAIT FOR EXPLICIT APPROVAL BEFORE WRITING CODE FOR EACH SECTION.
 
 2. READ PORTFOLIO-MANUAL.md COMPLETELY before writing any code. It contains:
-   - The Aurora color palette (teal + violet, NOT default indigo)
+   - The Green Nature color palette (sage green + mint green, NOT default indigo)
    - All Firestore schemas with pre-filled data
    - Every component specification
    - All resume content and GitHub data
@@ -135,7 +135,7 @@ CRITICAL INSTRUCTIONS:
 
 3. NO HARDCODED HEX COLORS in any component. Always use Tailwind theme tokens (bg-themeAccent, text-themeText, etc.) or CSS variables (hsl(var(--themeAccent))).
 
-4. USE HSL CSS VARIABLES for the theme system, NOT raw hex. The Aurora palette uses HSL values.
+4. USE HSL CSS VARIABLES for the theme system, NOT raw hex. The Green Nature palette uses HSL values.
 
 5. Fonts: Space Grotesk (headings/display), Inter (body), JetBrains Mono (code/terminal).
 
@@ -200,7 +200,7 @@ Generate config files: vite.config.js, postcss.config.js
 
 IMPORTANT:
 - Do NOT write any components or pages yet — just project scaffolding
-- Use the Aurora palette in globals.css (teal + violet, NOT indigo)
+- Use the Green Nature palette in globals.css (sage green + mint green, NOT indigo)
 - Use HSL CSS variables in the Tailwind color mapping
 - Install GSAP via npm (gsap package)
 
@@ -215,7 +215,7 @@ After each phase completes, paste the next prompt:
 
 **Phase 2:**
 ```
-Phase 2: Build the Aurora theme system.
+Phase 2: Build the Green Nature theme system.
 
 Create src/app/globals.css with ALL CSS variables from PORTFOLIO-MANUAL.md Section 6.
 - Use HSL format for all color variables
@@ -296,7 +296,7 @@ Full-screen overlay:
 - Tagline: "Data Science & Full-Stack Developer" fades in
 - After 3.5s or click: slides up and unmounts
 - Background: hsl(var(--themeBg))
-- Name: .text-gradient class (teal → violet)
+- Name: .text-gradient class (sage green → mint green)
 - Subtle glow pulse behind name
 
 Use the GSAP timeline from Section 7.1 of the manual.
@@ -322,12 +322,12 @@ The voice_text for the 1-liner: "Hi! I'm Muhammed Fahim M, a Data Science and Fu
 Phase 8: Build TerminalWidget.
 
 Full terminal simulation with:
-- Prompt: fahim@portfolio:~$ (teal colored)
+- Prompt: fahim@portfolio:~$ (sage green colored)
 - Blinking cursor, typewriter output effect
 - Command history (up/down arrows)
 - All commands: help, whoami, skills, projects, experience, contact, github, cert, clear, theme, history
 - Easter eggs: "sudo hire me" (ASCII art), "matrix" (green rain), "ls -la" (unix joke)
-- Color output (teal prompts, white input, muted output, violet errors)
+- Color output (sage green prompts, white input, muted output, mint green errors)
 - Auto-scroll to bottom
 ```
 
@@ -367,7 +367,7 @@ Phase 11: Build FeaturedProjects + ProjectOverlay.
 FeaturedProjects:
 - Query Firestore: projects where featured == true (max 3)
 - Glassmorphic cards with image, title, description, tags, buttons
-- Featured badge (violet)
+- Featured badge (mint green)
 - "View All Projects" button
 
 ProjectOverlay:
@@ -384,7 +384,7 @@ Phase 12: Build CertificationsSection.
 
 3-column grid of glassmorphic cards:
 - Load from Firestore certifications collection
-- Each: TbCertificate icon (teal), title, issuer, date
+- Each: TbCertificate icon (sage green), title, issuer, date
 - "Verify" button → modal with placeholder message
 - Framer Motion scroll animation
 ```
@@ -573,7 +573,7 @@ Then start Phase 1:
 2. Install dependencies: firebase, next-themes, framer-motion, gsap, @studio-freight/lenis, react-icons, react-hot-toast, chart.js, react-chartjs-2
 3. Create the file/folder structure as shown in the manual (Section 3)
 4. Generate config files: vite.config.js, postcss.config.js
-5. Set up vite.config.js with the Aurora palette (teal + violet HSL variables)
+5. Set up vite.config.js with the Green Nature palette (sage green + mint green HSL variables)
 6. Create .env.local with placeholder values (I already have my real .env.local configured)
 
 Do NOT write any components or pages yet — just project scaffolding.
@@ -591,8 +591,8 @@ Show me the structure before proceeding to Phase 2.
 | Surface | `#eef0f6` | Surface | `#1b1530` |
 | Text | `#1a1530` | Text | `#f1ecff` |
 | Text Secondary | `#6b6889` | Text Secondary | `#9489b8` |
-| **Accent (Primary)** | `#3fd0c9` **Teal** | **Accent** | `#3fd0c9` **Teal** |
-| **Secondary** | `#a06bff` **Violet** | **Secondary** | `#a06bff` **Violet** |
+| **Accent (Primary)** | `#3fd0c9` **Sage Green** | **Accent** | `#3fd0c9` **Sage Green** |
+| **Secondary** | `#a06bff` **Mint Green** | **Secondary** | `#a06bff` **Mint Green** |
 | Border | `#dfe3ef` | Border | `#2a2440` |
 
 **Font Stack:**

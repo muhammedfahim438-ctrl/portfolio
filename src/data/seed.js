@@ -188,10 +188,10 @@ export async function seedCertifications() {
 
 export async function seedWorkflowSteps() {
   const steps = [
-    { step_number: 1, title: "Data Collection", description: "Gathering raw data from Census XLS files, REST APIs, databases", icon: "database", color: "#3fd0c9" },
-    { step_number: 2, title: "Data Cleaning", description: "Resolving duplicates, inconsistent formats, foreign key mismatches", icon: "filter", color: "#a06bff" },
-    { step_number: 3, title: "Analysis & Modeling", description: "Financial metrics, ML models with Scikit-learn, SMOTE", icon: "brain", color: "#3fd0c9" },
-    { step_number: 4, title: "Visualization & Deployment", description: "Power BI dashboards, Chart.js, Vercel deployment", icon: "chart", color: "#a06bff" },
+    { step_number: 1, title: "Data Collection", description: "Gathering raw data from Census XLS files, REST APIs, databases", icon: "database", color: "#aac8a7" },
+    { step_number: 2, title: "Data Cleaning", description: "Resolving duplicates, inconsistent formats, foreign key mismatches", icon: "filter", color: "#c3edc0" },
+    { step_number: 3, title: "Analysis & Modeling", description: "Financial metrics, ML models with Scikit-learn, SMOTE", icon: "brain", color: "#aac8a7" },
+    { step_number: 4, title: "Visualization & Deployment", description: "Power BI dashboards, Chart.js, Vercel deployment", icon: "chart", color: "#e9ffc2" },
   ];
 
   for (const step of steps) {

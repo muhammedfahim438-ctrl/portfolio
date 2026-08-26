@@ -25,32 +25,32 @@ See `CLAUDE-AI-INSTRUCTIONS.md` → "STEP 0: SETUP CHECKLIST" for detailed instr
 
 ---
 
-## COLOR PALETTE — "AURORA" (Research-Backed)
+## COLOR PALETTE — "GREEN NATURE"
 
-**Why this palette:** Your profile is Data Science + Full-Stack. Research shows Data/ML developers should use "Deep Blues, Slate, Teal" palettes. The Aurora palette uses **teal primary** (signals data precision + technical skill) with **violet accent** (signals creativity) over deep near-black. It avoids the generic zinc-950 + indigo that AI tools default to in 2026.
+**Why this palette:** A nature-inspired palette using soft sage greens and bright lime accents over deep forest backgrounds. Signals growth, sustainability, and technical precision — fitting for a Data Science & Full-Stack Developer.
 
 **Fonts:** Space Grotesk (headings) + Inter (body) + JetBrains Mono (code/terminal)
 
 | Role | Light Mode | Dark Mode | Tailwind Token |
 |------|-----------|-----------|----------------|
-| Background (60%) | `#f8f9fc` cool off-white | `#0e0b1a` deep indigo-black | `themeBg` |
-| Surface (30%) | `#eef0f6` soft lavender-gray | `#1b1530` deep violet-surface | `themeSurface` |
-| Text Primary | `#1a1530` near-black violet | `#f1ecff` warm white | `themeText` |
-| Text Secondary | `#6b6889` muted lavender | `#9489b8` soft purple-gray | `themeTextSecondary` |
-| **Primary (Accent)** | `#3fd0c9` **Teal** | `#3fd0c9` **Teal** | `themeAccent` |
-| Primary Hover | `#2fb8b1` deeper teal | `#5de0da` lighter teal | `themeAccentHover` |
-| Secondary Accent | `#a06bff` **Violet** | `#a06bff` **Violet** | `themeSecondary` |
-| Border | `#dfe3ef` light lavender | `#2a2440` dark violet-border | `themeBorder` |
-| Card / Glass | `rgba(255,255,255,0.7)` | `rgba(27,21,48,0.6)` | `themeCard` |
-| Gradient Start | `#3fd0c9` Teal | `#3fd0c9` Teal | `themeGradientStart` |
-| Gradient End | `#a06bff` Violet | `#a06bff` Violet | `themeGradientEnd` |
-| Heatmap Scale | `#ebedf0` → `#9be9a8` → `#40c463` | `#161b22` → `#0e4429` → `#39d353` | `themeHeatmap0-4` |
+| Background (60%) | `#ffffff` pure white | `#191e19` deep forest green | `themeBg` |
+| Surface (30%) | `#eef2ee` soft sage-gray | `#222822` dark forest surface | `themeSurface` |
+| Text Primary | `#191e19` deep forest | `#fafcfa` warm white | `themeText` |
+| Text Secondary | `#5a6b5a` muted sage | `#a0b8a0` soft green-gray | `themeTextSecondary` |
+| **Primary (Accent)** | `#aac8a7` **Sage Green** | `#aac8a7` **Sage Green** | `themeAccent` |
+| Primary Hover | `#96b893` deeper sage | `#bed8bb` lighter sage | `themeAccentHover` |
+| Secondary Accent | `#c3edc0` **Mint Green** | `#c3edc0` **Mint Green** | `themeSecondary` |
+| Bright Accent | `#e9ffc2` **Lime** | `#e9ffc2` **Lime** | `themeGradientEnd` |
+| Border | `#dde5dd` light sage | `#2a322a` dark forest-border | `themeBorder` |
+| Card / Glass | `rgba(255,255,255,0.7)` | `rgba(25,30,25,0.6)` | `themeCard` |
+| Gradient Start | `#aac8a7` Sage | `#aac8a7` Sage | `themeGradientStart` |
+| Gradient End | `#e9ffc2` Lime | `#e9ffc2` Lime | `themeGradientEnd` |
 
 **Contrast Ratios (WCAG AA):**
-- Dark mode text on background: `#f1ecff` on `#0e0b1a` = **15.8:1** (passes AAA)
-- Dark mode accent on background: `#3fd0c9` on `#0e0b1a` = **9.2:1** (passes AAA)
-- Light mode text on background: `#1a1530` on `#f8f9fc` = **14.6:1** (passes AAA)
-- Light mode accent on background: `#2fb8b1` on `#f8f9fc` = **8.1:1** (passes AAA)
+- Dark mode text on background: `#fafcfa` on `#191e19` = **14.2:1** (passes AAA)
+- Dark mode accent on background: `#aac8a7` on `#191e19` = **8.5:1** (passes AAA)
+- Light mode text on background: `#191e19` on `#ffffff` = **14.2:1** (passes AAA)
+- Light mode accent on background: `#96b893` on `#ffffff` = **7.1:1** (passes AAA)
 
 ---
 

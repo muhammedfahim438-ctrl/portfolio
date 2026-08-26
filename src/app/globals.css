@@ -21,55 +21,55 @@
 }
 
 :root {
-  /* Aurora Light Mode */
-  --themeBg: #f8f9fc;
-  --themeBgSecondary: #eef0f6;
-  --themeSurface: #e8eaf2;
-  --themeText: #1a1530;
-  --themeTextSecondary: #6b6889;
-  --themeAccent: #3fd0c9;
-  --themeAccentHover: #2fb8b1;
-  --themeSecondary: #a06bff;
-  --themeBorder: #dfe3ef;
+  /* Green Nature Light Mode */
+  --themeBg: #ffffff;
+  --themeBgSecondary: #f5f7f5;
+  --themeSurface: #eef2ee;
+  --themeText: #191e19;
+  --themeTextSecondary: #5a6b5a;
+  --themeAccent: #aac8a7;
+  --themeAccentHover: #96b893;
+  --themeSecondary: #c3edc0;
+  --themeBorder: #dde5dd;
   --themeCard: rgba(255, 255, 255, 0.7);
   --themeInput: #ffffff;
   --themeGlass: 0.08;
   --themeGlassBorder: rgba(255, 255, 255, 0.5);
   --themeShadow: rgba(0, 0, 0, 0.06);
-  --themeGradientStart: #3fd0c9;
-  --themeGradientEnd: #a06bff;
-  --themeWaveform: #3fd0c9;
+  --themeGradientStart: #aac8a7;
+  --themeGradientEnd: #e9ffc2;
+  --themeWaveform: #aac8a7;
   --themeHeatmap0: #ebedf0;
-  --themeHeatmap1: #9be9a8;
-  --themeHeatmap2: #40c463;
-  --themeHeatmap3: #30a14e;
-  --themeHeatmap4: #216e39;
+  --themeHeatmap1: #c3edc0;
+  --themeHeatmap2: #aac8a7;
+  --themeHeatmap3: #7da87a;
+  --themeHeatmap4: #4a7048;
 }
 
 .dark {
-  /* Aurora Dark Mode */
-  --themeBg: #0e0b1a;
-  --themeBgSecondary: #15112a;
-  --themeSurface: #1b1530;
-  --themeText: #f1ecff;
-  --themeTextSecondary: #9489b8;
-  --themeAccent: #3fd0c9;
-  --themeAccentHover: #5de0da;
-  --themeSecondary: #a06bff;
-  --themeBorder: #2a2440;
-  --themeCard: rgba(27, 21, 48, 0.6);
-  --themeInput: #1b1530;
+  /* Green Nature Dark Mode */
+  --themeBg: #191e19;
+  --themeBgSecondary: #1e241e;
+  --themeSurface: #222822;
+  --themeText: #fafcfa;
+  --themeTextSecondary: #a0b8a0;
+  --themeAccent: #aac8a7;
+  --themeAccentHover: #bed8bb;
+  --themeSecondary: #c3edc0;
+  --themeBorder: #2a322a;
+  --themeCard: rgba(25, 30, 25, 0.6);
+  --themeInput: #222822;
   --themeGlass: 0.05;
   --themeGlassBorder: rgba(255, 255, 255, 0.08);
   --themeShadow: rgba(0, 0, 0, 0.3);
-  --themeGradientStart: #3fd0c9;
-  --themeGradientEnd: #a06bff;
-  --themeWaveform: #3fd0c9;
-  --themeHeatmap0: #161b22;
-  --themeHeatmap1: #0e4429;
-  --themeHeatmap2: #006d32;
-  --themeHeatmap3: #26a641;
-  --themeHeatmap4: #39d353;
+  --themeGradientStart: #aac8a7;
+  --themeGradientEnd: #e9ffc2;
+  --themeWaveform: #aac8a7;
+  --themeHeatmap0: #1e241e;
+  --themeHeatmap1: #2a4a2a;
+  --themeHeatmap2: #3a6a3a;
+  --themeHeatmap3: #5a9a5a;
+  --themeHeatmap4: #7dc87a;
 }
 
 body {
