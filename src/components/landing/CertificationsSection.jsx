@@ -7,19 +7,34 @@ import { Modal } from "@/components/ui/Modal";
 
 const certifications = [
   {
+    title: "Full Stack Developer Intern",
+    issuer: "TechFifo",
+    year: "2026",
+    badge_image_url: "",
+  },
+  {
+    title: "Data Analyst Intern",
+    issuer: "Bluestock Fintech",
+    year: "2026",
+    badge_image_url: "",
+  },
+  {
     title: "Programming Fundamentals",
     issuer: "Infosys Springboard",
     year: "2026",
+    badge_image_url: "",
   },
   {
     title: "n8n Workflow Automation",
     issuer: "n8n",
     year: "2026",
+    badge_image_url: "",
   },
   {
-    title: "Linguaskill",
-    issuer: "Cambridge",
+    title: "Linguaskill Certification",
+    issuer: "Cambridge Assessment English",
     year: "2026",
+    badge_image_url: "",
   },
 ];
 
@@ -44,56 +59,75 @@ export function CertificationsSection() {
 
   return (
     <>
-      <section className="py-20 px-4">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl md:text-4xl font-display font-bold text-center mb-12 text-gradient"
-        >
-          Certifications
-        </motion.h2>
+      <section className="py-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-16"
+          >
+            <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
+              Credentials
+            </p>
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient">
+              Certifications
+            </h2>
+          </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {certifications.map((cert) => (
-            <motion.div
-              key={cert.title}
-              variants={cardVariants}
-              whileHover={{ y: -4 }}
-              className="glass rounded-2xl p-6 flex flex-col items-center text-center space-y-4"
-            >
-              <div className="w-16 h-16 rounded-full bg-themeBg-secondary border border-themeBorder flex items-center justify-center">
-                <TbCertificate className="w-8 h-8 text-themeAccent" />
-              </div>
-
-              <div>
-                <h3 className="font-display font-semibold text-themeText text-lg">
-                  {cert.title}
-                </h3>
-                <p className="text-themeText-secondary text-sm mt-1">
-                  {cert.issuer}
-                </p>
-                <p className="text-themeText-secondary text-xs mt-0.5">
-                  {cert.year}
-                </p>
-              </div>
-
-              <button
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {certifications.map((cert) => (
+              <motion.div
+                key={cert.title}
+                variants={cardVariants}
+                whileHover={{ y: -4 }}
+                className="cert-card glass rounded-2xl p-6 flex flex-col items-center text-center space-y-4 cursor-pointer group"
                 onClick={() => handleVerify(cert)}
-                className="px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
               >
-                Verify
-              </button>
-            </motion.div>
-          ))}
-        </motion.div>
+                <div className="cert-badge w-20 h-20 rounded-2xl bg-themeBg-secondary border border-themeBorder flex items-center justify-center overflow-hidden">
+                  {cert.badge_image_url ? (
+                    <img
+                      src={cert.badge_image_url}
+                      alt={cert.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <TbCertificate className="w-10 h-10 text-themeAccent group-hover:scale-110 transition-transform" />
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="font-display font-semibold text-themeText text-base">
+                    {cert.title}
+                  </h3>
+                  <p className="text-themeText-secondary text-sm mt-1">
+                    {cert.issuer}
+                  </p>
+                  <p className="text-themeText-secondary/60 text-xs mt-0.5">
+                    {cert.year}
+                  </p>
+                </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleVerify(cert);
+                  }}
+                  className="px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
+                >
+                  Verify
+                </button>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       <Modal

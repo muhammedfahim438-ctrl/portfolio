@@ -1,29 +1,56 @@
 import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import Lenis from "lenis";
 import { SplashScreen } from "@/components/landing/SplashScreen";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { TerminalWidget } from "@/components/landing/TerminalWidget";
-import { SkillsBentoGrid } from "@/components/landing/SkillsBentoGrid";
-import { WorkflowTimeline } from "@/components/landing/WorkflowTimeline";
+import { MarqueeTicker } from "@/components/landing/MarqueeTicker";
+import { AboutSection } from "@/components/landing/AboutSection";
+import { SkillsTabs } from "@/components/landing/SkillsTabs";
 import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
 import { CertificationsSection } from "@/components/landing/CertificationsSection";
-import { GitHubHeatmap } from "@/components/landing/GitHubHeatmap";
+import { RecognitionSection } from "@/components/landing/RecognitionSection";
+import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
+import { TrustedBySection } from "@/components/landing/TrustedBySection";
+import { CTASection } from "@/components/landing/CTASection";
 import { ContactFooter } from "@/components/landing/ContactFooter";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import { AuthGuard } from "@/components/admin/AuthGuard";
 import AdminPage from "@/app/admin/page";
 import LoginPage from "@/app/admin/login/page";
 import SeedPage from "@/pages/SeedPage";
 
 function LandingPage() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
+
   return (
     <main className="min-h-screen bg-themeBg">
+      <CustomCursor />
       <SplashScreen />
       <HeroSection />
-      <TerminalWidget />
-      <SkillsBentoGrid />
-      <WorkflowTimeline />
+      <MarqueeTicker />
+      <AboutSection />
+      <SkillsTabs />
       <FeaturedProjects />
       <CertificationsSection />
-      <GitHubHeatmap />
+      <RecognitionSection />
+      <TestimonialsSection />
+      <TrustedBySection />
+      <CTASection />
       <ContactFooter />
     </main>
   );

@@ -39,11 +39,6 @@
   --themeGradientStart: #aac8a7;
   --themeGradientEnd: #e9ffc2;
   --themeWaveform: #aac8a7;
-  --themeHeatmap0: #ebedf0;
-  --themeHeatmap1: #c3edc0;
-  --themeHeatmap2: #aac8a7;
-  --themeHeatmap3: #7da87a;
-  --themeHeatmap4: #4a7048;
 }
 
 .dark {
@@ -65,11 +60,6 @@
   --themeGradientStart: #aac8a7;
   --themeGradientEnd: #e9ffc2;
   --themeWaveform: #aac8a7;
-  --themeHeatmap0: #1e241e;
-  --themeHeatmap1: #2a4a2a;
-  --themeHeatmap2: #3a6a3a;
-  --themeHeatmap3: #5a9a5a;
-  --themeHeatmap4: #7dc87a;
 }
 
 body {
@@ -99,6 +89,7 @@ body {
   color: white;
 }
 
+/* Lenis Smooth Scroll */
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -111,6 +102,7 @@ html.lenis, html.lenis body {
   overscroll-behavior: contain;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -124,6 +116,7 @@ html.lenis, html.lenis body {
   border-radius: 3px;
 }
 
+/* Animations */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -140,4 +133,102 @@ html.lenis, html.lenis body {
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Marquee Animation */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--themeAccent);
+  mix-blend-mode: difference;
+  z-index: 9999;
+  transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.custom-cursor.hovering {
+  transform: scale(2.5);
+  background: var(--themeAccent);
+  opacity: 0.5;
+}
+
+/* Skills Tabs - Sticky Pinned */
+.skills-tabs-container {
+  position: relative;
+}
+
+.skills-tabs-content {
+  position: sticky;
+  top: 100px;
+}
+
+/* Testimonial Slider */
+.swiper-testimonial {
+  overflow: visible !important;
+}
+
+.swiper-testimonial .swiper-slide {
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-testimonial .swiper-slide-active {
+  opacity: 1;
+}
+
+/* Certification Card Hover */
+.cert-card:hover .cert-badge {
+  transform: scale(1.05);
+}
+
+.cert-badge {
+  transition: transform 0.3s ease;
+}
+
+/* Project Card Hover Zoom */
+.project-card .project-image {
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.05);
+}
+
+/* Stats Counter */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Trusted By Logo Strip */
+@keyframes logo-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-logo-scroll {
+  animation: logo-scroll 20s linear infinite;
+}
+
+/* Preloader Progress */
+.preloader-progress {
+  transition: width 0.1s ease-out;
 }

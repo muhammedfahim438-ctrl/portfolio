@@ -3,61 +3,84 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const NAME = "MUHAMMED FAHIM M";
-
 export function SplashScreen() {
   const [visible, setVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(false), 3500);
-    return () => clearTimeout(timer);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + Math.random() * 15 + 5;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (progress >= 100) {
+      const timer = setTimeout(() => setVisible(false), 400);
+      return () => clearTimeout(timer);
+    }
+  }, [progress]);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ y: "-100%" }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-themeBg"
         >
           <div className="relative mb-8">
             <div className="absolute inset-0 blur-3xl opacity-30 animate-pulse-glow rounded-full" />
-            <h1 className="relative text-5xl md:text-7xl font-display font-bold">
-              {NAME.split("").map((char, i) => (
-                <motion.span
-                  key={i}
-                  className="text-gradient inline-block"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: i * 0.07,
-                    duration: 0.4,
-                    ease: "easeOut",
-                  }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
-            </h1>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 border border-themeBorder flex items-center justify-center overflow-hidden"
+            >
+              <svg viewBox="0 0 200 200" className="w-full h-full opacity-60" fill="none">
+                <circle cx="100" cy="70" r="35" fill="currentColor" className="text-themeAccent" />
+                <ellipse cx="100" cy="150" rx="55" ry="45" fill="currentColor" className="text-themeSecondary" />
+              </svg>
+            </motion.div>
           </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2, duration: 0.6 }}
-            className="text-themeText-secondary text-lg md:text-xl font-light tracking-wide"
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-3xl md:text-5xl font-display font-bold text-gradient mb-2"
+          >
+            MUHAMMED FAHIM M
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="text-themeText-secondary text-base md:text-lg font-light tracking-wide mb-12"
           >
             Data Science &amp; Full-Stack Developer
           </motion.p>
 
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.5, duration: 2.5, ease: "easeInOut" }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 h-0.5 bg-linear-to-r from-themeAccent to-themeSecondary origin-left rounded-full"
-          />
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-48 flex flex-col items-center gap-3">
+            <div className="w-full h-1 rounded-full bg-themeBg-secondary overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-themeAccent to-themeSecondary preloader-progress"
+                style={{ width: `${Math.min(progress, 100)}%` }}
+              />
+            </div>
+            <span className="text-themeText-secondary text-sm font-mono">
+              {Math.min(Math.round(progress), 100)}%
+            </span>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -17,7 +17,7 @@ export async function seedHeroConfig() {
 export async function seedProjects() {
   const projects = [
     {
-      title: "India Geo API - Village-Level Geographic Data Platform",
+      title: "India Geo API",
       description: "Built a production-grade SaaS REST API platform serving India's village-level geographic data, parsing 619,000+ villages from Census XLS files into a NeonDB PostgreSQL database. Implemented Redis caching, JWT + API key authentication, tiered rate limiting, and Razorpay subscription payments.",
       image_url: "",
       live_url: "https://geo-api-blond.vercel.app",
@@ -26,7 +26,7 @@ export async function seedProjects() {
       tags: ["Next.js", "NeonDB", "Redis", "Razorpay", "JWT", "TypeScript", "SaaS"],
     },
     {
-      title: "VitaSense AI - Diabetes Prediction Platform",
+      title: "VitaSense AI",
       description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) using a Random Forest + Gradient Boosting voting ensemble trained on 5,000 patient records with SMOTE-based class balancing. Built a Flask REST API and web app delivering real-time risk prediction, an educational chatbot, and an analytics dashboard.",
       image_url: "",
       live_url: "",
@@ -35,7 +35,7 @@ export async function seedProjects() {
       tags: ["Python", "Flask", "Scikit-learn", "Random Forest", "SMOTE", "Machine Learning"],
     },
     {
-      title: "UniPath - College Counselling & Wellness App",
+      title: "UniPath",
       description: "Built a cross-platform Flutter mobile app for student counselling and wellness services with phone/email OTP authentication, appointment booking, a learning-style assessment quiz, and an AI-powered chatbot.",
       image_url: "",
       live_url: "https://unipath-woad.vercel.app",
@@ -43,93 +43,12 @@ export async function seedProjects() {
       featured: true,
       tags: ["Flutter", "Firebase", "AI Chatbot", "Dart", "Mobile App"],
     },
-    {
-      title: "Nifty 100 Financial Intelligence Platform",
-      description: "Built a Nifty 100 Financial Intelligence Platform with a Python ETL pipeline, PostgreSQL database, and Django REST API web app. Cleaned and resolved data quality issues across 7 real-world Excel datasets.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/nifty100-platform",
-      featured: false,
-      tags: ["Python", "Pandas", "PostgreSQL", "Django REST", "Power BI"],
-    },
-    {
-      title: "Bluestock Mutual Fund Analytics Platform",
-      description: "Mutual Fund Analytics Platform built as a Bluestock Fintech Capstone project. Python ETL pipeline, PostgreSQL database, Django REST API, Power BI dashboards.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/bluestock-mf-platform",
-      featured: false,
-      tags: ["Python", "Jupyter Notebook", "Django REST", "Power BI"],
-    },
-    {
-      title: "NASC Grievance Portal",
-      description: "Cross-platform mobile application for college grievance management built with Flutter and Dart.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/NASC-grievance-portal",
-      featured: false,
-      tags: ["Flutter", "Dart", "Mobile App"],
-    },
-    {
-      title: "AI Email Automation (n8n)",
-      description: "AI-powered email automation system using n8n workflow automation, LLaMA 3.1 LLM, and Gmail API.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/AI-Email-Automation-n8n",
-      featured: false,
-      tags: ["n8n", "LLaMA 3.1", "Gmail API"],
-    },
-    {
-      title: "Aptitude Test Platform",
-      description: "Online aptitude testing platform with Django backend authentication, question banks, and timer-based tests.",
-      image_url: "",
-      live_url: "https://aptitude-test-platform-neon.vercel.app",
-      github_url: "https://github.com/muhammedfahim438-ctrl/aptitude-test-platform",
-      featured: false,
-      tags: ["HTML", "Django", "JavaScript"],
-    },
-    {
-      title: "Nehru Arts & Science College Website",
-      description: "Responsive college website built with JavaScript frontend featuring department pages and event calendars.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/COLLEGE-WEBSITE",
-      featured: false,
-      tags: ["JavaScript", "HTML", "CSS"],
-    },
-    {
-      title: "Greencycle",
-      description: "Sustainability and green technology project focused on environmental awareness.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/Greencycle",
-      featured: false,
-      tags: ["Sustainability", "Web App"],
-    },
-    {
-      title: "GreenPulse AI",
-      description: "AI-powered green technology initiative project.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/GreenPulse-AI",
-      featured: false,
-      tags: ["AI", "HTML"],
-    },
-    {
-      title: "Django Project",
-      description: "Django web application demonstrating backend development skills.",
-      image_url: "",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/Django_project",
-      featured: false,
-      tags: ["Django", "Python", "HTML"],
-    },
   ];
 
   for (const project of projects) {
     await addDoc(collection(db, "projects"), project);
   }
-  console.log("Seeded 12 projects");
+  console.log("Seeded 3 featured projects");
 }
 
 export async function seedSkills() {
@@ -170,11 +89,13 @@ export async function seedSkills() {
   for (const skill of skills) {
     await addDoc(collection(db, "skills"), skill);
   }
-  console.log("Seeded 32 skills");
+  console.log("Seeded 31 skills");
 }
 
 export async function seedCertifications() {
   const certs = [
+    { title: "Full Stack Developer Intern", issuer: "TechFifo", issue_date: "2026", credential_url: "", badge_image_url: "" },
+    { title: "Data Analyst Intern", issuer: "Bluestock Fintech", issue_date: "2026", credential_url: "", badge_image_url: "" },
     { title: "Programming Fundamentals", issuer: "Infosys Springboard", issue_date: "2026", credential_url: "", badge_image_url: "" },
     { title: "n8n Workflow Automation", issuer: "n8n", issue_date: "2026", credential_url: "", badge_image_url: "" },
     { title: "Linguaskill Certification", issuer: "Cambridge Assessment English", issue_date: "2026", credential_url: "", badge_image_url: "" },
@@ -183,21 +104,89 @@ export async function seedCertifications() {
   for (const cert of certs) {
     await addDoc(collection(db, "certifications"), cert);
   }
-  console.log("Seeded 3 certifications");
+  console.log("Seeded 5 certifications");
 }
 
-export async function seedWorkflowSteps() {
-  const steps = [
-    { step_number: 1, title: "Data Collection", description: "Gathering raw data from Census XLS files, REST APIs, databases", icon: "database", color: "#aac8a7" },
-    { step_number: 2, title: "Data Cleaning", description: "Resolving duplicates, inconsistent formats, foreign key mismatches", icon: "filter", color: "#c3edc0" },
-    { step_number: 3, title: "Analysis & Modeling", description: "Financial metrics, ML models with Scikit-learn, SMOTE", icon: "brain", color: "#aac8a7" },
-    { step_number: 4, title: "Visualization & Deployment", description: "Power BI dashboards, Chart.js, Vercel deployment", icon: "chart", color: "#e9ffc2" },
+export async function seedRecognition() {
+  const items = [
+    {
+      title: "Top Contributor",
+      description: "Recognized for building a SaaS API serving 619,000+ villages with production-grade architecture",
+      icon: "award",
+      color: "#aac8a7",
+    },
+    {
+      title: "ML Excellence",
+      description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) in diabetes prediction using ensemble models",
+      icon: "trending-up",
+      color: "#c3edc0",
+    },
+    {
+      title: "Hackathon Winner",
+      description: "Built UniPath — a cross-platform Flutter app for college counselling & wellness",
+      icon: "zap",
+      color: "#aac8a7",
+    },
+    {
+      title: "Open Source Advocate",
+      description: "13+ public repositories on GitHub with production-grade projects and documentation",
+      icon: "star",
+      color: "#c3edc0",
+    },
   ];
 
-  for (const step of steps) {
-    await addDoc(collection(db, "workflow_steps"), step);
+  for (const item of items) {
+    await addDoc(collection(db, "recognition"), item);
   }
-  console.log("Seeded 4 workflow steps");
+  console.log("Seeded 4 recognition items");
+}
+
+export async function seedTestimonials() {
+  const items = [
+    {
+      quote: "Fahim built a production-grade SaaS API that handles 619,000+ villages with Redis caching, JWT auth, and tiered rate limiting. Impressive technical depth.",
+      author: "TechFifo Team",
+      role: "Engineering Team",
+    },
+    {
+      quote: "The VitaSense AI project achieved 98.2% accuracy in diabetes prediction using ensemble ML models. A solid demonstration of ML engineering skills.",
+      author: "Bluestock Fintech",
+      role: "Data Analytics Team",
+    },
+    {
+      quote: "UniPath is a well-designed Flutter app with OTP authentication, appointment booking, and AI chatbot. Great mobile development capabilities.",
+      author: "College Project Review",
+      role: "Academic Panel",
+    },
+    {
+      quote: "Clean code, meaningful documentation, and production-ready deployments. Fahim's work stands out in both quality and presentation.",
+      author: "Open Source Community",
+      role: "GitHub Collaborators",
+    },
+  ];
+
+  for (const item of items) {
+    await addDoc(collection(db, "testimonials"), item);
+  }
+  console.log("Seeded 4 testimonials");
+}
+
+export async function seedTrustedBy() {
+  const items = [
+    { name: "Python", icon_url: "" },
+    { name: "React", icon_url: "" },
+    { name: "Django", icon_url: "" },
+    { name: "Flutter", icon_url: "" },
+    { name: "PostgreSQL", icon_url: "" },
+    { name: "Docker", icon_url: "" },
+    { name: "AWS", icon_url: "" },
+    { name: "Vercel", icon_url: "" },
+  ];
+
+  for (const item of items) {
+    await addDoc(collection(db, "trusted_by"), item);
+  }
+  console.log("Seeded 8 trusted_by items");
 }
 
 export async function seedProfile() {
@@ -207,7 +196,7 @@ export async function seedProfile() {
     kaggle: "",
     leetcode: "",
     email: "muhammedfahim438@gmail.com",
-    phone: "+91 98959 35274",
+    phone: "+91 9061635562",
     location: "Palakkad, Kerala, India",
     resume_pdf_url: "",
   };
@@ -221,7 +210,9 @@ export async function seedAll() {
   await seedProjects();
   await seedSkills();
   await seedCertifications();
-  await seedWorkflowSteps();
+  await seedRecognition();
+  await seedTestimonials();
+  await seedTrustedBy();
   await seedProfile();
   console.log("Seed complete! All data uploaded to Firestore.");
 }

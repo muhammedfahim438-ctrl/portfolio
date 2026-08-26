@@ -34,8 +34,8 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 export function FeaturedProjects() {
@@ -43,99 +43,105 @@ export function FeaturedProjects() {
 
   return (
     <>
-      <section id="projects" className="py-20 px-4">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl md:text-4xl font-display font-bold text-center mb-12 text-gradient"
-        >
-          Featured Projects
-        </motion.h2>
+      <section id="projects" className="py-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-16"
+          >
+            <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
+              Selected Work
+            </p>
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient">
+              Featured Projects
+            </h2>
+          </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          {featuredProjects.map((project) => (
-            <motion.div
-              key={project.title}
-              variants={cardVariants}
-              whileHover={{ y: -4 }}
-              className="glass rounded-2xl overflow-hidden group"
-            >
-              <div className="relative h-48 bg-gradient-to-br from-themeAccent/20 to-themeSecondary/20 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-themeBg/60 to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-xl bg-themeBg-secondary/50 border border-themeBorder flex items-center justify-center text-2xl font-display font-bold text-themeAccent opacity-50 group-hover:opacity-100 transition-opacity">
-                    {project.title.charAt(0)}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {featuredProjects.map((project) => (
+              <motion.div
+                key={project.title}
+                variants={cardVariants}
+                className="project-card glass rounded-2xl overflow-hidden group"
+              >
+                <div className="relative h-52 overflow-hidden">
+                  <div className="project-image absolute inset-0 bg-gradient-to-br from-themeAccent/20 to-themeSecondary/20 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-xl bg-themeBg-secondary/50 border border-themeBorder flex items-center justify-center text-3xl font-display font-bold text-themeAccent opacity-60 group-hover:opacity-100 transition-opacity">
+                      {project.title.charAt(0)}
+                    </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-4">
-                <h3 className="text-xl font-display font-semibold text-themeText">
-                  {project.title}
-                </h3>
-                <p className="text-themeText-secondary text-sm leading-relaxed">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 rounded-full text-xs font-medium bg-themeBg-secondary border border-themeBorder text-themeText-secondary"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <div className="absolute inset-0 bg-gradient-to-t from-themeBg/80 via-transparent to-transparent" />
                 </div>
 
-                <div className="flex gap-3 pt-2">
-                  {project.live_url && (
+                <div className="p-6 space-y-4">
+                  <h3 className="text-xl font-display font-semibold text-themeText">
+                    {project.title}
+                  </h3>
+                  <p className="text-themeText-secondary text-sm leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 rounded-full text-xs font-medium bg-themeAccent/10 text-themeAccent border border-themeAccent/20"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    {project.live_url && (
+                      <a
+                        href={project.live_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-themeAccent text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                      >
+                        <FaExternalLinkAlt className="w-3.5 h-3.5" />
+                        Live Demo
+                      </a>
+                    )}
                     <a
-                      href={project.live_url}
+                      href={project.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r from-themeAccent to-themeSecondary text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
                     >
-                      <FaExternalLinkAlt className="w-3.5 h-3.5" />
-                      Live Demo
+                      <FaGithub className="w-4 h-4" />
+                      GitHub
                     </a>
-                  )}
-                  <a
-                    href={project.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-                  >
-                    <FaGithub className="w-4 h-4" />
-                    GitHub
-                  </a>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+              </motion.div>
+            ))}
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-10"
-        >
-          <button
-            onClick={() => setOverlayOpen(true)}
-            className="px-6 py-3 rounded-xl border border-themeBorder text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors font-medium"
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
           >
-            View All Projects
-          </button>
-        </motion.div>
+            <button
+              onClick={() => setOverlayOpen(true)}
+              className="px-8 py-3 rounded-xl border border-themeBorder text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors font-medium"
+            >
+              View All Projects
+            </button>
+          </motion.div>
+        </div>
       </section>
 
       <ProjectOverlay isOpen={overlayOpen} onClose={() => setOverlayOpen(false)} />

@@ -75,22 +75,58 @@ export async function deleteCertification(id) {
   return deleteDoc(doc(db, "certifications", id));
 }
 
-// Workflow Steps
-export async function getWorkflowSteps() {
-  const snap = await getDocs(collection(db, "workflow_steps"));
+// Recognition
+export async function getRecognition() {
+  const snap = await getDocs(collection(db, "recognition"));
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-export async function addWorkflowStep(data) {
-  return addDoc(collection(db, "workflow_steps"), data);
+export async function addRecognition(data) {
+  return addDoc(collection(db, "recognition"), data);
 }
 
-export async function updateWorkflowStep(id, data) {
-  return updateDoc(doc(db, "workflow_steps", id), data);
+export async function updateRecognition(id, data) {
+  return updateDoc(doc(db, "recognition", id), data);
 }
 
-export async function deleteWorkflowStep(id) {
-  return deleteDoc(doc(db, "workflow_steps", id));
+export async function deleteRecognition(id) {
+  return deleteDoc(doc(db, "recognition", id));
+}
+
+// Testimonials
+export async function getTestimonials() {
+  const snap = await getDocs(collection(db, "testimonials"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function addTestimonial(data) {
+  return addDoc(collection(db, "testimonials"), data);
+}
+
+export async function updateTestimonial(id, data) {
+  return updateDoc(doc(db, "testimonials", id), data);
+}
+
+export async function deleteTestimonial(id) {
+  return deleteDoc(doc(db, "testimonials", id));
+}
+
+// Trusted By
+export async function getTrustedBy() {
+  const snap = await getDocs(collection(db, "trusted_by"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function addTrustedBy(data) {
+  return addDoc(collection(db, "trusted_by"), data);
+}
+
+export async function updateTrustedBy(id, data) {
+  return updateDoc(doc(db, "trusted_by", id), data);
+}
+
+export async function deleteTrustedBy(id) {
+  return deleteDoc(doc(db, "trusted_by", id));
 }
 
 // Profile
