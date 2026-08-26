@@ -1,119 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import { getProjects } from "@/lib/firestore";
 
-const allProjects = [
-  {
-    title: "India Geo API",
-    description: "SaaS REST API serving 619,000+ villages",
-    tags: ["Next.js", "NeonDB", "Redis"],
-    language: "TypeScript",
-    category: ["Backend", "Data"],
-    live_url: "https://geo-api-blond.vercel.app",
-    github_url: "https://github.com/muhammedfahim438-ctrl/geo-api",
-  },
-  {
-    title: "VitaSense AI",
-    description: "98.2% accuracy diabetes prediction",
-    tags: ["Python", "Flask", "Scikit-learn"],
-    language: "Python",
-    category: ["AI/ML", "Backend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl/VitaSense-AI-v2",
-  },
-  {
-    title: "UniPath",
-    description: "College counselling & wellness mobile app",
-    tags: ["Flutter", "Firebase"],
-    language: "Dart",
-    category: ["Mobile"],
-    live_url: "https://unipath-woad.vercel.app",
-    github_url: "https://github.com/muhammedfahim438-ctrl/unipath",
-  },
-  {
-    title: "Nifty 100 Platform",
-    description: "Nifty 100 stock analysis platform",
-    tags: ["Python", "Pandas"],
-    language: "Jupyter",
-    category: ["Data", "AI/ML"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "Bluestock MF Platform",
-    description: "Mutual fund analysis platform",
-    tags: ["Python", "Pandas"],
-    language: "Jupyter",
-    category: ["Data"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "NASC Grievance Portal",
-    description: "Student grievance redressal system",
-    tags: ["Flutter", "Firebase"],
-    language: "Dart",
-    category: ["Mobile", "Frontend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "AI Email Automation",
-    description: "Automated email workflows with AI",
-    tags: ["n8n", "AI"],
-    language: "n8n",
-    category: ["AI/ML", "Tools"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "Aptitude Test Platform",
-    description: "Online aptitude testing platform",
-    tags: ["HTML", "CSS", "JavaScript"],
-    language: "HTML",
-    category: ["Frontend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "College Website",
-    description: "Responsive college website",
-    tags: ["JavaScript", "HTML", "CSS"],
-    language: "JavaScript",
-    category: ["Frontend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "Greencycle",
-    description: "Sustainable cycling platform",
-    tags: ["Web", "JavaScript"],
-    language: "Web",
-    category: ["Frontend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "GreenPulse AI",
-    description: "Environmental data analysis tool",
-    tags: ["HTML", "Python"],
-    language: "HTML",
-    category: ["AI/ML", "Frontend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-  {
-    title: "Django Project",
-    description: "Full-stack Django web application",
-    tags: ["Django", "Python"],
-    language: "Django",
-    category: ["Backend"],
-    github_url: "https://github.com/muhammedfahim438-ctrl",
-  },
-];
+const TABS = ["All", "Backend", "Frontend", "Mobile", "Data", "AI/ML", "Tools"];
 
-const tabs = ["All", "Backend", "Frontend", "Mobile", "Data", "AI/ML", "Tools"];
-
-export function ProjectOverlay({ isOpen, onClose }) {
+export function ProjectOverlay({ isOpen, onClose, onSelectProject }) {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("All");
+
+  const load = useCallback(async () => {
+    try {
+      const data = await getProjects();
+      setProjects(data);
+    } catch {
+      // silent
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      load();
+      setActiveTab("All");
+    }
+  }, [isOpen, load]);
 
   const filtered =
     activeTab === "All"
-      ? allProjects
-      : allProjects.filter((p) => p.category.includes(activeTab));
+      ? projects
+      : projects.filter((p) => p.category === activeTab);
 
   return (
     <AnimatePresence>
@@ -151,7 +71,7 @@ export function ProjectOverlay({ isOpen, onClose }) {
             </div>
 
             <div className="flex flex-wrap gap-2 mb-8">
-              {tabs.map((tab) => (
+              {TABS.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -166,71 +86,106 @@ export function ProjectOverlay({ isOpen, onClose }) {
               ))}
             </div>
 
-            <motion.div
-              layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-              <AnimatePresence mode="popLayout">
-                {filtered.map((project) => (
-                  <motion.div
-                    key={project.title}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                    className="glass rounded-2xl p-6 space-y-4 hover:border-themeAccent/30 transition-colors"
-                  >
-                    <div className="flex items-start justify-between">
-                      <h3 className="text-lg font-display font-semibold text-themeText">
-                        {project.title}
-                      </h3>
-                      <span className="text-xs px-2 py-1 rounded-full bg-themeBg-secondary border border-themeBorder text-themeText-secondary">
-                        {project.language}
-                      </span>
-                    </div>
+            {loading ? (
+              <div className="text-center py-20 text-themeText-secondary">Loading projects…</div>
+            ) : (
+              <motion.div
+                layout
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                <AnimatePresence mode="popLayout">
+                  {filtered.map((project) => (
+                    <motion.div
+                      key={project.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.3 }}
+                      className="glass rounded-2xl overflow-hidden hover:border-themeAccent/30 transition-colors cursor-pointer group"
+                      onClick={() => {
+                        onClose();
+                        onSelectProject?.(project);
+                      }}
+                      data-cursor-hover
+                    >
+                      <div className="relative h-36 overflow-hidden bg-gradient-to-br from-themeAccent/20 to-themeSecondary/20 flex items-center justify-center">
+                        {project.image_url ? (
+                          <img
+                            src={project.image_url}
+                            alt={project.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <span className="text-3xl font-display font-bold text-themeAccent opacity-50 group-hover:opacity-100 transition-opacity">
+                            {project.title.charAt(0)}
+                          </span>
+                        )}
+                      </div>
 
-                    <p className="text-themeText-secondary text-sm leading-relaxed">
-                      {project.description}
-                    </p>
+                      <div className="p-5 space-y-3">
+                        <div className="flex items-start justify-between">
+                          <h3 className="text-base font-display font-semibold text-themeText">
+                            {project.title}
+                          </h3>
+                          {project.category && (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-themeAccent/15 text-themeAccent shrink-0 ml-2">
+                              {project.category}
+                            </span>
+                          )}
+                        </div>
 
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2.5 py-1 rounded-full text-xs bg-themeBg-secondary border border-themeBorder text-themeText-secondary"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                        <p className="text-themeText-secondary text-xs leading-relaxed line-clamp-2">
+                          {project.description}
+                        </p>
 
-                    <div className="flex gap-3 pt-2">
-                      {project.live_url && (
-                        <a
-                          href={project.live_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-linear-to-r from-themeAccent to-themeSecondary text-white text-xs font-medium hover:opacity-90"
-                        >
-                          <FaExternalLinkAlt className="w-3 h-3" />
-                          Live
-                        </a>
-                      )}
-                      <a
-                        href={project.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-                      >
-                        <FaGithub className="w-3.5 h-3.5" />
-                        Code
-                      </a>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(project.tags ?? []).slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 rounded-full text-[10px] bg-themeBg-secondary border border-themeBorder text-themeText-secondary"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
+                          {project.live_url && (
+                            <a
+                              href={project.live_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-themeAccent text-white text-xs font-medium hover:opacity-90"
+                            >
+                              <FaExternalLinkAlt className="w-3 h-3" />
+                              Live
+                            </a>
+                          )}
+                          {project.github_url && (
+                            <a
+                              href={project.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
+                            >
+                              <FaGithub className="w-3.5 h-3.5" />
+                              Code
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            )}
+
+            {!loading && filtered.length === 0 && (
+              <div className="text-center py-20 text-themeText-secondary">
+                No projects in this category.
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}

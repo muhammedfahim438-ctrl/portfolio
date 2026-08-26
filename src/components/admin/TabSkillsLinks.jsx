@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import {
   getSkills,
   addSkill,
+  updateSkill,
   deleteSkill,
   getCertifications,
   addCertification,
@@ -54,6 +55,11 @@ function SkillsManager() {
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [level, setLevel] = useState(50);
   const [adding, setAdding] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editLevel, setEditLevel] = useState(50);
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -86,6 +92,42 @@ function SkillsManager() {
       toast.error("Failed to add skill");
     } finally {
       setAdding(false);
+    }
+  }
+
+  function startEdit(skill) {
+    setEditingId(skill.id);
+    setEditName(skill.name);
+    setEditCategory(skill.category);
+    setEditLevel(skill.level);
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditName("");
+    setEditCategory("");
+    setEditLevel(50);
+  }
+
+  async function handleSaveEdit(id) {
+    if (!editName.trim()) {
+      toast.error("Skill name is required");
+      return;
+    }
+    setSavingEdit(true);
+    try {
+      await updateSkill(id, {
+        name: editName.trim(),
+        category: editCategory,
+        level: editLevel,
+      });
+      toast.success("Skill updated");
+      setEditingId(null);
+      await load();
+    } catch {
+      toast.error("Failed to update skill");
+    } finally {
+      setSavingEdit(false);
     }
   }
 
@@ -127,14 +169,66 @@ function SkillsManager() {
                       key={skill.id}
                       className="flex items-center gap-2 rounded-lg bg-themeInput px-3 py-1.5 text-sm text-themeText border border-themeBorder"
                     >
-                      <span>{skill.name}</span>
-                      <span className="text-themeAccent font-mono text-xs">{skill.level}</span>
-                      <button
-                        onClick={() => handleDelete(skill.id)}
-                        className="ml-1 text-red-400 hover:text-red-300 text-xs"
-                      >
-                        ✕
-                      </button>
+                      {editingId === skill.id ? (
+                        <>
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="w-28 rounded bg-themeBg px-2 py-1 text-themeText border border-themeBorder outline-none text-xs"
+                            autoFocus
+                          />
+                          <select
+                            value={editCategory}
+                            onChange={(e) => setEditCategory(e.target.value)}
+                            className="rounded bg-themeBg px-2 py-1 text-themeText border border-themeBorder outline-none text-xs"
+                          >
+                            {CATEGORIES.map((c) => (
+                              <option key={c} value={c}>{c}</option>
+                            ))}
+                          </select>
+                          <input
+                            type="range"
+                            min={0}
+                            max={100}
+                            value={editLevel}
+                            onChange={(e) => setEditLevel(Number(e.target.value))}
+                            className="w-16 accent-themeAccent"
+                          />
+                          <span className="text-themeAccent font-mono text-xs w-6">{editLevel}</span>
+                          <button
+                            onClick={() => handleSaveEdit(skill.id)}
+                            disabled={savingEdit}
+                            className="text-green-400 hover:text-green-300 text-xs font-medium"
+                          >
+                            {savingEdit ? "…" : "✓"}
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="text-themeText-secondary hover:text-themeText text-xs"
+                          >
+                            ✕
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <span>{skill.name}</span>
+                          <span className="text-themeAccent font-mono text-xs">{skill.level}</span>
+                          <button
+                            onClick={() => startEdit(skill)}
+                            className="ml-1 text-themeText-secondary hover:text-themeAccent text-xs"
+                            title="Edit skill"
+                          >
+                            ✎
+                          </button>
+                          <button
+                            onClick={() => handleDelete(skill.id)}
+                            className="text-red-400 hover:text-red-300 text-xs"
+                          >
+                            ✕
+                          </button>
+                        </>
+                      )}
                     </div>
                   ))}
                 </div>

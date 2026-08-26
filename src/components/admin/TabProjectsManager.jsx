@@ -1,15 +1,22 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import toast from "react-hot-toast";
 import { getProjects, addProject, updateProject, deleteProject } from "@/lib/firestore";
+import { uploadFile } from "@/lib/storage";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
+
+const CATEGORIES = ["Backend", "Frontend", "Mobile", "Data", "AI/ML", "Tools"];
 
 const emptyProject = {
   title: "",
   description: "",
+  long_description: "",
   image_url: "",
+  images: [],
+  video_url: "",
+  category: "Backend",
   live_url: "",
   github_url: "",
   featured: false,
@@ -25,6 +32,10 @@ export function TabProjectsManager() {
   const [tagsInput, setTagsInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [uploadingImg, setUploadingImg] = useState(false);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const mainImgRef = useRef(null);
+  const galleryRef = useRef(null);
 
   const load = useCallback(async () => {
     try {
@@ -51,15 +62,19 @@ export function TabProjectsManager() {
   function openEdit(project) {
     setEditingId(project.id ?? null);
     setForm({
-      title: project.title,
-      description: project.description,
-      image_url: project.image_url,
-      live_url: project.live_url,
-      github_url: project.github_url,
-      featured: project.featured,
-      tags: project.tags,
+      title: project.title ?? "",
+      description: project.description ?? "",
+      long_description: project.long_description ?? "",
+      image_url: project.image_url ?? "",
+      images: project.images ?? [],
+      video_url: project.video_url ?? "",
+      category: project.category ?? "Backend",
+      live_url: project.live_url ?? "",
+      github_url: project.github_url ?? "",
+      featured: project.featured ?? false,
+      tags: project.tags ?? [],
     });
-    setTagsInput(project.tags.join(", "));
+    setTagsInput((project.tags ?? []).join(", "));
     setModalOpen(true);
   }
 
@@ -115,6 +130,45 @@ export function TabProjectsManager() {
     }
   }
 
+  async function handleMainImageUpload(file) {
+    if (!file) return;
+    setUploadingImg(true);
+    try {
+      const url = await uploadFile(file, `projects/main/${Date.now()}_${file.name}`);
+      setForm((prev) => ({ ...prev, image_url: url }));
+      toast.success("Main image uploaded");
+    } catch {
+      toast.error("Failed to upload image");
+    } finally {
+      setUploadingImg(false);
+    }
+  }
+
+  async function handleGalleryUpload(files) {
+    if (!files?.length) return;
+    setUploadingGallery(true);
+    try {
+      const urls = [];
+      for (const file of files) {
+        const url = await uploadFile(file, `projects/gallery/${Date.now()}_${file.name}`);
+        urls.push(url);
+      }
+      setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
+      toast.success(`${urls.length} image(s) uploaded`);
+    } catch {
+      toast.error("Failed to upload images");
+    } finally {
+      setUploadingGallery(false);
+    }
+  }
+
+  function removeGalleryImage(index) {
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-themeText/50">
@@ -140,6 +194,7 @@ export function TabProjectsManager() {
             <thead className="border-b border-themeBorder text-themeText/60">
               <tr>
                 <th className="px-4 py-3 font-medium">Title</th>
+                <th className="px-4 py-3 font-medium">Category</th>
                 <th className="px-4 py-3 font-medium">Tags</th>
                 <th className="px-4 py-3 font-medium">Featured</th>
                 <th className="px-4 py-3 font-medium text-right">Actions</th>
@@ -150,8 +205,13 @@ export function TabProjectsManager() {
                 <tr key={project.id} className="hover:bg-themeBg/50 transition-colors">
                   <td className="px-4 py-3 text-themeText font-medium">{project.title}</td>
                   <td className="px-4 py-3">
+                    <span className="text-xs px-2 py-1 rounded-full bg-themeAccent/15 text-themeAccent">
+                      {project.category || "—"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1.5">
-                      {project.tags.map((tag) => (
+                      {(project.tags ?? []).slice(0, 3).map((tag) => (
                         <span
                           key={tag}
                           className="inline-block rounded-full bg-themeAccent/15 px-2.5 py-0.5 text-xs text-themeAccent"
@@ -159,6 +219,9 @@ export function TabProjectsManager() {
                           {tag}
                         </span>
                       ))}
+                      {(project.tags ?? []).length > 3 && (
+                        <span className="text-xs text-themeText/40">+{(project.tags ?? []).length - 3}</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-3">
@@ -200,7 +263,7 @@ export function TabProjectsManager() {
       )}
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <div className="space-y-5">
+        <div className="space-y-5 max-h-[80vh] overflow-y-auto pr-2">
           <h3 className="text-lg font-semibold text-themeText">
             {editingId ? "Edit Project" : "New Project"}
           </h3>
@@ -220,11 +283,11 @@ export function TabProjectsManager() {
 
           <div className="space-y-1.5">
             <label htmlFor="proj-desc" className="block text-sm font-medium text-themeText/70">
-              Description
+              Short Description (for cards)
             </label>
             <textarea
               id="proj-desc"
-              rows={3}
+              rows={2}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
@@ -232,14 +295,95 @@ export function TabProjectsManager() {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="proj-image" className="block text-sm font-medium text-themeText/70">
-              Image URL
+            <label htmlFor="proj-long-desc" className="block text-sm font-medium text-themeText/70">
+              Detailed Description (for project detail view)
+            </label>
+            <textarea
+              id="proj-long-desc"
+              rows={5}
+              value={form.long_description}
+              onChange={(e) => setForm({ ...form, long_description: e.target.value })}
+              placeholder="Explain what you built, the architecture, challenges solved, and impact..."
+              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-themeText/70">
+              Category
+            </label>
+            <select
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-themeText/70">
+              Main Thumbnail Image
+            </label>
+            <div className="flex items-center gap-3">
+              {form.image_url && (
+                <img src={form.image_url} alt="" className="w-16 h-16 rounded-lg object-cover border border-themeBorder" />
+              )}
+              <label className="cursor-pointer px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors">
+                {uploadingImg ? "Uploading…" : form.image_url ? "Change Image" : "Upload Image"}
+                <input
+                  ref={mainImgRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleMainImageUpload(e.target.files?.[0])}
+                />
+              </label>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-themeText/70">
+              Gallery Images (3+ images for project detail)
+            </label>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {form.images.map((url, i) => (
+                <div key={i} className="relative group">
+                  <img src={url} alt="" className="w-20 h-20 rounded-lg object-cover border border-themeBorder" />
+                  <button
+                    onClick={() => removeGalleryImage(i)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+            <label className="cursor-pointer px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors inline-block">
+              {uploadingGallery ? "Uploading…" : "Add Gallery Images"}
+              <input
+                ref={galleryRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => handleGalleryUpload(e.target.files)}
+              />
+            </label>
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="proj-video" className="block text-sm font-medium text-themeText/70">
+              Video URL (YouTube/Vimeo embed)
             </label>
             <input
-              id="proj-image"
+              id="proj-video"
               type="text"
-              value={form.image_url}
-              onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+              value={form.video_url}
+              onChange={(e) => setForm({ ...form, video_url: e.target.value })}
+              placeholder="https://www.youtube.com/embed/..."
               className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
             />
           </div>
@@ -300,19 +444,11 @@ export function TabProjectsManager() {
               />
             </button>
             <label
-              htmlFor="proj-featured"
               className="text-sm font-medium text-themeText/70 cursor-pointer"
               onClick={() => setForm({ ...form, featured: !form.featured })}
             >
               Featured
             </label>
-            <input
-              id="proj-featured"
-              type="checkbox"
-              checked={form.featured}
-              onChange={() => setForm({ ...form, featured: !form.featured })}
-              className="sr-only"
-            />
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
