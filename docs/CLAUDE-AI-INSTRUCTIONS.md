@@ -77,18 +77,18 @@ After completing the checklist, create `.env.local` in your project root:
 # FIREBASE CONFIGURATION
 # From: Firebase Console → Project Settings → General → Your apps → Web app
 # ========================================
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
 
 # ========================================
 # ADMIN CREDENTIALS
 # From: Firebase Console → Authentication → Users
 # ========================================
-NEXT_PUBLIC_ADMIN_EMAIL=muhammedfahim438@gmail.com
+VITE_ADMIN_EMAIL=muhammedfahim438@gmail.com
 ADMIN_PASSWORD=your_admin_password_here
 
 # ========================================
@@ -119,7 +119,7 @@ SMTP_APP_PASSWORD=your_16_char_app_password
 ```
 ACT AS A SENIOR FULL-STACK SOFTWARE ARCHITECT & HIGH-END UI/UX DESIGNER.
 
-BUILD A PRODUCTION-READY NEXT.JS (APP ROUTER, TYPESCRIPT, TAILwind CSS) PORTFOLIO AND FULL-CMS ADMIN DASHBOARD SYSTEM WITH FIREBASE BACKEND.
+BUILD A PRODUCTION-READY REACT (VITE, JAVASCRIPT, TAILWIND CSS) PORTFOLIO AND FULL-CMS ADMIN DASHBOARD SYSTEM WITH FIREBASE BACKEND.
 
 CRITICAL INSTRUCTIONS:
 1. BEFORE GENERATING OR CREATING ANY CODE FILES, EXPLICITLY PRESENT YOUR PROPOSED ARCHITECTURE STEP AND ASK: "DO YOU WANT ME TO PROCEED WITH THIS STEP, OR DO YOU HAVE ANY MODIFICATIONS?" WAIT FOR EXPLICIT APPROVAL BEFORE WRITING CODE FOR EACH SECTION.
@@ -140,9 +140,9 @@ CRITICAL INSTRUCTIONS:
 5. Fonts: Space Grotesk (headings/display), Inter (body), JetBrains Mono (code/terminal).
 
 BUILD PHASES (each requires user approval before coding):
-  Phase 1:  Project init + dependencies + configs
-  Phase 2:  Theme system (globals.css + tailwind.config.ts)
-  Phase 3:  Firebase setup + lib files + TypeScript interfaces
+  Phase 1:  Project init + Vite dependencies + configs
+  Phase 2:  Theme system (globals.css + vite.config.js)
+  Phase 3:  Firebase setup + lib files
   Phase 4:  UI components (GlassCard, Button, Modal, ThemeToggle, AnimatedText, LoadingSpinner)
   Phase 5:  Hooks (useTheme, useAuthGuard, useSpeech, useAudioVisualizer, useTerminal, useFirestore)
   Phase 6:  Landing — SplashScreen (GSAP)
@@ -161,7 +161,7 @@ BUILD PHASES (each requires user approval before coding):
   Phase 19: Admin — Tab 3 (Skills, Certs, Workflow, Links)
   Phase 20: Admin — Tab 4 (Messages inbox)
   Phase 21: Seed script
-  Phase 22: Root layout + providers + metadata
+  Phase 22: Root entry point + providers
   Phase 23: Final polish + responsive + accessibility
 ```
 
@@ -190,17 +190,17 @@ Before starting, upload or make these files available to Claude:
 ```
 Read PORTFOLIO-MANUAL.md completely. Then begin Phase 1:
 
-Initialize a Next.js 14+ project with TypeScript and Tailwind CSS in the current directory.
+Initialize a Vite React project with JavaScript and Tailwind CSS v4 in the current directory.
 Install ALL dependencies from the manual:
   firebase, next-themes, framer-motion, gsap, @studio-freight/lenis,
   react-icons, react-hot-toast, chart.js, react-chartjs-2
 
 Create the complete file/folder structure as defined in PORTFOLIO-MANUAL.md Section 3.
-Generate config files: next.config.js, tsconfig.json, tailwind.config.ts, postcss.config.js
+Generate config files: vite.config.js, postcss.config.js
 
 IMPORTANT:
 - Do NOT write any components or pages yet — just project scaffolding
-- Use the Aurora palette in tailwind.config.ts (teal + violet, NOT indigo)
+- Use the Aurora palette in globals.css (teal + violet, NOT indigo)
 - Use HSL CSS variables in the Tailwind color mapping
 - Install GSAP via npm (gsap package)
 
@@ -223,7 +223,7 @@ Create src/app/globals.css with ALL CSS variables from PORTFOLIO-MANUAL.md Secti
 - Include .glass and .text-gradient utility classes
 - Include Lenis, scrollbar, and selection styles
 
-Update tailwind.config.ts with HSL-based theme extend (use hsl(var(--*)) pattern).
+Update vite.config.js with Tailwind CSS plugin configuration.
 
 Create src/components/providers/ThemeProvider.tsx (next-themes wrapper).
 Create src/hooks/useTheme.ts.
@@ -236,7 +236,7 @@ Verify: changing the .dark class on <html> should instantly recolor everything.
 
 **Phase 3:**
 ```
-Phase 3: Firebase setup + TypeScript types.
+Phase 3: Firebase setup + lib files + types.
 
 Create src/lib/firebase.ts (initialize app, export db, auth, storage).
 Create src/lib/firestore.ts (all CRUD functions from the manual).
@@ -267,7 +267,7 @@ RULES:
 - Use Tailwind theme tokens (bg-themeAccent, text-themeText, etc.)
 - NO hardcoded hex colors anywhere
 - "use client" directive on all
-- Proper TypeScript props interfaces
+- Proper JSDoc prop types
 ```
 
 **Phase 5:**
@@ -283,7 +283,7 @@ Create src/hooks/:
 
 RULES:
 - All hooks must be "use client"
-- Proper TypeScript return types
+- Proper JSDoc return types
 - Error handling in all Firebase operations
 ```
 
@@ -549,7 +549,7 @@ Phase 23: Final polish.
 - Verify voice intro plays in Chrome, Edge, Firefox
 - Verify GitHub heatmap loads
 - Verify radar charts render
-- Run: npm run build to check for TypeScript/build errors
+- Run: npm run build to check for build errors
 - Fix any warnings or errors
 ```
 
@@ -558,7 +558,7 @@ Phase 23: Final polish.
 ## QUICK START — Copy This as Your Very First Message
 
 ```
-I'm building a production-ready Next.js portfolio with Firebase backend for Muhammed Fahim M.
+I'm building a production-ready Vite React portfolio with Firebase backend for Muhammed Fahim M.
 
 I have completed Step 0 (setup checklist). My .env.local is configured with:
 - Firebase credentials (all 6 values)
@@ -569,11 +569,11 @@ Read PORTFOLIO-MANUAL.md and CLAUDE-AI-INSTRUCTIONS.md completely.
 
 Then start Phase 1:
 
-1. Initialize a Next.js 14 app with App Router, TypeScript, Tailwind CSS
+1. Initialize a Vite React app with JavaScript, Tailwind CSS v4
 2. Install dependencies: firebase, next-themes, framer-motion, gsap, @studio-freight/lenis, react-icons, react-hot-toast, chart.js, react-chartjs-2
 3. Create the file/folder structure as shown in the manual (Section 3)
-4. Generate config files: next.config.js, tsconfig.json, postcss.config.js
-5. Set up tailwind.config.ts with the Aurora palette (teal + violet HSL variables)
+4. Generate config files: vite.config.js, postcss.config.js
+5. Set up vite.config.js with the Aurora palette (teal + violet HSL variables)
 6. Create .env.local with placeholder values (I already have my real .env.local configured)
 
 Do NOT write any components or pages yet — just project scaffolding.

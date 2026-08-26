@@ -74,7 +74,7 @@ See `CLAUDE-AI-INSTRUCTIONS.md` → "STEP 0: SETUP CHECKLIST" for detailed instr
 
 ## 1. PROJECT OVERVIEW
 
-Build a **production-ready Next.js portfolio website + full CMS admin dashboard** with Firebase backend for **Muhammed Fahim M** — a Data Science & Full-Stack Developer from Palakkad, Kerala.
+Build a **production-ready React (Vite) portfolio website + full CMS admin dashboard** with Firebase backend for **Muhammed Fahim M** — a Data Science & Full-Stack Developer from Palakkad, Kerala.
 
 **Core Features:**
 - Animated intro splash screen with GSAP SVG staggered write-up + silhouette reveal
@@ -96,12 +96,11 @@ Build a **production-ready Next.js portfolio website + full CMS admin dashboard*
 ## 2. TECH STACK & DEPENDENCIES
 
 ### Core
-- **Next.js 14+** (App Router, TypeScript)
-- **React 18+**
-- **TypeScript 5+**
+- **Vite 6+** (Build tool)
+- **React 19+**
 
 ### Styling
-- **Tailwind CSS 3.4+** with `tailwind.config.ts` theme extend
+- **Tailwind CSS v4** (CSS-based config via `@theme inline` in `globals.css`)
 - **CSS Custom Properties** (Aurora palette — NO hardcoded hex in components)
 - **Framer Motion 11+** for page transitions, overlays, micro-interactions
 - **Lenis** for smooth scrolling
@@ -129,26 +128,22 @@ Build a **production-ready Next.js portfolio website + full CMS admin dashboard*
 ```json
 {
   "dependencies": {
-    "next": "^14.2.0",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "firebase": "^10.12.0",
-    "next-themes": "^0.3.0",
-    "framer-motion": "^11.0.0",
-    "gsap": "^3.12.0",
-    "@studio-freight/lenis": "^1.0.0",
-    "react-icons": "^5.0.0",
-    "react-hot-toast": "^2.4.0",
-    "chart.js": "^4.4.0",
-    "react-chartjs-2": "^5.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.6.1",
+    "firebase": "^12.18.0",
+    "framer-motion": "^13.1.1",
+    "gsap": "^3.15.0",
+    "chart.js": "^4.5.1",
+    "react-chartjs-2": "^5.3.1",
+    "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.7.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "@types/react": "^18.3.0",
-    "@types/node": "^20.0.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.0",
-    "autoprefixer": "^10.4.0"
+    "vite": "^6.3.5",
+    "@vitejs/plugin-react": "^4.5.2",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4"
   }
 }
 ```
@@ -166,65 +161,63 @@ portfolio/
 │   │   └── og-image.png
 │   └── fonts/
 ├── src/
-│   ├── app/
-│   │   ├── layout.tsx                  # Root layout (ThemeProvider, Lenis, Toaster)
-│   │   ├── page.tsx                    # Landing page (all sections)
-│   │   ├── globals.css                 # Aurora CSS Variables + Tailwind directives
-│   │   ├── api/
-│   │   │   └── github-contributions/
-│   │   │       └── route.ts            # GitHub API proxy for heatmap
-│   │   └── admin/
-│   │       ├── layout.tsx              # Admin layout (no Lenis, auth gate)
-│   │       ├── page.tsx                # Admin dashboard (4-tab interface)
-│   │       └── login/
-│   │           └── page.tsx            # Admin login page
 │   ├── components/
 │   │   ├── landing/
-│   │   │   ├── SplashScreen.tsx        # GSAP animated intro
-│   │   │   ├── HeroSection.tsx         # Hero + floating dock + resume modal
-│   │   │   ├── TerminalWidget.tsx      # Interactive CLI simulation
-│   │   │   ├── SkillsBentoGrid.tsx     # Skills grid + Chart.js radar charts
-│   │   │   ├── WorkflowTimeline.tsx    # 4-step pipeline (admin-configurable)
-│   │   │   ├── FeaturedProjects.tsx    # Top 3 featured projects
-│   │   │   ├── ProjectOverlay.tsx      # Fullscreen all-projects overlay
-│   │   │   ├── CertificationsSection.tsx # Badge cards + verification modals
-│   │   │   ├── GitHubHeatmap.tsx       # Live contribution heatmap
-│   │   │   └── ContactFooter.tsx       # Contact form + footer + theme switcher
+│   │   │   ├── SplashScreen.jsx        # GSAP animated intro
+│   │   │   ├── HeroSection.jsx         # Hero + floating dock + resume modal
+│   │   │   ├── TerminalWidget.jsx      # Interactive CLI simulation
+│   │   │   ├── SkillsBentoGrid.jsx     # Skills grid + Chart.js radar charts
+│   │   │   ├── WorkflowTimeline.jsx    # 4-step pipeline (admin-configurable)
+│   │   │   ├── FeaturedProjects.jsx    # Top 3 featured projects
+│   │   │   ├── ProjectOverlay.jsx      # Fullscreen all-projects overlay
+│   │   │   ├── CertificationsSection.jsx # Badge cards + verification modals
+│   │   │   ├── GitHubHeatmap.jsx       # Live contribution heatmap
+│   │   │   └── ContactFooter.jsx       # Contact form + footer + theme switcher
 │   │   ├── admin/
-│   │   │   ├── AuthGuard.tsx           # Firebase auth protection
-│   │   │   ├── AdminHeader.tsx         # Admin header with sign out
-│   │   │   ├── TabHeroConfig.tsx       # Tab 1: Hero config editor
-│   │   │   ├── TabProjectsManager.tsx  # Tab 2: Projects CRUD
-│   │   │   ├── TabSkillsLinks.tsx      # Tab 3: Skills, Certs, Workflow, Links
-│   │   │   └── TabMessages.tsx         # Tab 4: Messages inbox
+│   │   │   ├── AuthGuard.jsx           # Firebase auth protection
+│   │   │   ├── AdminHeader.jsx         # Admin header with sign out
+│   │   │   ├── TabHeroConfig.jsx       # Tab 1: Hero config editor
+│   │   │   ├── TabProjectsManager.jsx  # Tab 2: Projects CRUD
+│   │   │   ├── TabSkillsLinks.jsx      # Tab 3: Skills, Certs, Workflow, Links
+│   │   │   └── TabMessages.jsx         # Tab 4: Messages inbox
 │   │   ├── ui/
-│   │   │   ├── ThemeToggle.tsx         # Dark/Light mode toggle
-│   │   │   ├── GlassCard.tsx           # Reusable glassmorphic card
-│   │   │   ├── AnimatedText.tsx        # GSAP text reveal wrapper
-│   │   │   ├── Button.tsx              # Themed button component
-│   │   │   ├── Modal.tsx               # Reusable modal
-│   │   │   └── LoadingSpinner.tsx      # Loading state
+│   │   │   ├── ThemeToggle.jsx         # Dark/Light mode toggle
+│   │   │   ├── GlassCard.jsx           # Reusable glassmorphic card
+│   │   │   ├── AnimatedText.jsx        # GSAP text reveal wrapper
+│   │   │   ├── Button.jsx              # Themed button component
+│   │   │   ├── Modal.jsx               # Reusable modal
+│   │   │   └── LoadingSpinner.jsx      # Loading state
 │   │   └── providers/
-│   │       └── ThemeProvider.tsx        # next-themes provider wrapper
+│   │       └── ThemeProvider.jsx        # Theme provider wrapper
+│   ├── pages/
+│   │   ├── App.jsx                     # Main app with router
+│   │   ├── Landing.jsx                 # Landing page (all sections)
+│   │   ├── admin/
+│   │   │   ├── AdminLayout.jsx         # Admin layout (no Lenis, auth gate)
+│   │   │   ├── AdminDashboard.jsx      # Admin dashboard (4-tab interface)
+│   │   │   └── AdminLogin.jsx          # Admin login page
+│   │   └── api/
+│   │       └── github-contributions.js # GitHub API proxy for heatmap
 │   ├── hooks/
-│   │   ├── useTheme.ts                 # Theme toggle hook
-│   │   ├── useAuthGuard.ts             # Firebase auth hook
-│   │   ├── useFirestore.ts             # Firestore CRUD operations
-│   │   ├── useSpeech.ts                # Web Speech API hook
-│   │   ├── useAudioVisualizer.ts       # Canvas waveform hook
-│   │   └── useTerminal.ts              # Terminal command processor
+│   │   ├── useTheme.js                 # Theme toggle hook
+│   │   ├── useAuthGuard.js             # Firebase auth hook
+│   │   ├── useFirestore.js             # Firestore CRUD operations
+│   │   ├── useSpeech.js                # Web Speech API hook
+│   │   ├── useAudioVisualizer.js       # Canvas waveform hook
+│   │   └── useTerminal.js              # Terminal command processor
 │   ├── lib/
-│   │   ├── firebase.ts                 # Firebase app init
-│   │   ├── firestore.ts                # Firestore service functions
-│   │   ├── storage.ts                  # Firebase Storage functions
-│   │   └── auth.ts                     # Firebase Auth functions
-│   ├── types/
-│   │   └── index.ts                    # All TypeScript interfaces
-│   └── data/
-│       └── seed.ts                     # Seed data for Firestore population
-├── tailwind.config.ts
-├── next.config.js
-├── tsconfig.json
+│   │   ├── firebase.js                 # Firebase app init
+│   │   ├── firestore.js                # Firestore service functions
+│   │   ├── storage.js                  # Firebase Storage functions
+│   │   └── auth.js                     # Firebase Auth functions
+│   ├── styles/
+│   │   └── globals.css                 # Aurora CSS Variables + Tailwind v4 @theme
+│   ├── data/
+│   │   └── seed.js                     # Seed data for Firestore population
+│   └── main.jsx                        # App entry point
+├── vite.config.js
+├── postcss.config.js
+├── index.html                          # HTML entry point
 ├── .env.local                          # Firebase config env vars
 └── package.json
 ```
