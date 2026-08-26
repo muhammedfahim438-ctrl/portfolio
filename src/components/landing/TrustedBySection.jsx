@@ -13,7 +13,7 @@ const logos = [
   { icon: SiFlutter, name: "Flutter" },
   { icon: SiPostgresql, name: "PostgreSQL" },
   { icon: SiDocker, name: "Docker" },
-  { icon: SiAmazonaws, name: "AWS" },
+  { icon: SiGooglecloud, name: "AWS" },
   { icon: SiVercel, name: "Vercel" },
 ];
 
