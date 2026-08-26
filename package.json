@@ -2,10 +2,11 @@
   "name": "portfolio-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint"
   },
   "dependencies": {
@@ -13,22 +14,19 @@
     "firebase": "^12.18.0",
     "framer-motion": "^13.1.1",
     "gsap": "^3.15.0",
-    "next": "16.3.3",
-    "next-themes": "^0.4.6",
-    "react": "19.2.8",
+    "react": "^19.0.0",
     "react-chartjs-2": "^5.3.1",
-    "react-dom": "19.2.8",
+    "react-dom": "^19.0.0",
     "react-hot-toast": "^2.6.0",
-    "react-icons": "^5.7.0"
+    "react-icons": "^5.7.0",
+    "react-router-dom": "^7.6.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.3",
+    "@vitejs/plugin-react": "^4.5.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "vite": "^6.3.5"
   }
 }
