@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 16 · Monogram Sigil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<style>
+  :root{ --bg:#0a0e0b; --ink:#eef3ec; --muted:#93a093; --accent:#aac8a7; --acc2:#c3edc0; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  .grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  canvas{position:fixed;inset:0;z-index:1;display:block}
+  .stage-glow{position:fixed;left:50%;top:62%;transform:translate(-50%,-50%);width:70vmin;height:26vmin;border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(170,200,167,.16), transparent 70%);filter:blur(30px);z-index:0}
+  .sub{position:fixed;left:0;right:0;bottom:13vh;text-align:center;z-index:5;opacity:0}
+  .sub h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.7rem,5.5vw,3.6rem);text-transform:uppercase;letter-spacing:.24em;color:var(--ink);text-shadow:0 0 40px rgba(170,200,167,.3)}
+  .sub p{font-family:'Inter',sans-serif;font-weight:300;font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+  .start{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;display:none;gap:14px;align-items:center}
+  .start button{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:var(--acc2);border:none;border-radius:99px;padding:11px 22px;cursor:pointer}
+  .start a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+  .start a:hover{color:var(--acc2)}
+</style>
+</head>
+<body>
+  <div class="stage-glow"></div>
+  <div class="grain"></div>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 16 · MONOGRAM SIGIL</div>
+  <canvas id="cv"></canvas>
+  <div class="sub" id="sub">
+    <h2>MUHAMMED <span style="color:var(--acc2)">FAHIM</span> M</h2>
+    <p>data science &middot; full-stack developer</p>
+  </div>
+  <div class="start" id="start">
+    <button onclick="location.reload()">Replay</button>
+    <a href="index.html">other concepts</a>
+  </div>
+
+  <script type="module">
+  import * as THREE from "three";
+  import { FontLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/FontLoader.js";
+  import { TextGeometry } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/geometries/TextGeometry.js";
+
+  const canvas = document.getElementById("cv");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 120);
+  camera.position.set(0, 1.6, 9.5);
+  camera.lookAt(0, 0, 0);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  /* lights */
+  const k1 = new THREE.DirectionalLight(0xc9f2c0, 3);  k1.position.set(5, 6, 6);  group.add(k1);
+  const k2 = new THREE.DirectionalLight(0x6fb5ff, 1.3); k2.position.set(-6, 3, 5); group.add(k2);
+  const k3 = new THREE.DirectionalLight(0xffd8a8, .8);  k3.position.set(2, -4, 4); group.add(k3);
+  const amb = new THREE.AmbientLight(0xffffff, .35); group.add(amb);
+
+  /* dust */
+  const dust = new THREE.Points(
+    new THREE.BufferGeometry().setFromPoints(
+      Array.from({ length: 500 }, () => {
+        const r = 16, th = Math.random() * Math.PI * 2, ph = Math.acos(2*Math.random()-1);
+        return new THREE.Vector3(r*Math.sin(ph)*Math.cos(th), r*Math.sin(ph)*Math.sin(th), r*Math.cos(ph));
+      })
+    ),
+    new THREE.PointsMaterial({ color: 0x9bb3a0, size: .04, transparent: true, opacity: .45 })
+  );
+  scene.add(dust);
+
+  const mouse = { x: 0, y: 0 };
+  addEventListener("mousemove", e => {
+    mouse.x = (e.clientX / innerWidth - .5) * 2;
+    mouse.y = (e.clientY / innerHeight - .5) * 2;
+  });
+  addEventListener("resize", () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  const loader = new FontLoader();
+  loader.load(
+    "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_bold.typeface.json",
+    (font) => {
+      const geo = new TextGeometry("MFM", {
+        font, size: 2.4, height: .6, curveSegments: 12,
+        bevelEnabled: true, bevelThickness: .07, bevelSize: .035, bevelSegments: 3,
+      });
+      geo.center();
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: 0xaac8a7, metalness: .9, roughness: .28,
+        clearcoat: 1, clearcoatRoughness: .18,
+        emissive: 0x0e2412, emissiveIntensity: 1.4,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      group.add(mesh);
+
+      /* soft shadow blob beneath */
+      const blob = new THREE.Mesh(
+        new THREE.CircleGeometry(2.6, 48),
+        new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .45 })
+      );
+      blob.rotation.x = -Math.PI / 2; blob.position.y = -1.35; blob.scale.y = .35;
+      group.add(blob);
+
+      group.rotation.x = .12;
+      group.animate = true;
+
+      document.getElementById("sub").animate(
+        [{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "translateY(0)" }],
+        { duration: 900, delay: 600, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }
+      );
+      whileFail(20000);
+    },
+    undefined,
+    () => { /* font failed — DOM fallback already shows the name */
+      document.getElementById("sub").style.opacity = 1;
+      document.getElementById("start").style.display = "flex";
+    }
+  );
+
+  /* gentle idle spin */
+  (function loop() {
+    requestAnimationFrame(loop);
+    if (group.animate) {
+      group.rotation.y += .0016;
+      group.rotation.x = .12 + Math.sin(performance.now() / 2600) * .03;
+    }
+    const tx = mouse.x, ty = mouse.y;
+    group.position.x += (tx * .8 - group.position.x) * .03;
+    group.position.y += (-ty * .5 - group.position.y) * .03;
+    camera.position.z = 9.5 + Math.sin(performance.now() / 3000) * .4;
+    renderer.render(scene, camera);
+  })();
+
+  function whileFail(ms) { setTimeout(() => document.getElementById("start").style.display = "flex", ms); }
+  </script>
+</body>
+</html>
