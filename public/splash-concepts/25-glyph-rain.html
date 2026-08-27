@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Concept 25 · Glyph Rain</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 <style>
   :root{ --ink:#040705; --accent:#aac8a7; --acc2:#c3edc0; --text:#eef3ea; --muted:#6d8a70; }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -47,42 +47,10 @@
   </div>
   <div class="switch" onclick="skip()">skip ⇒</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.8.1/tsparticles.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.8.1/tsparticles.slim.bundle.min.js"></script>
   <script>
   const { tsParticles } = window;
   const glyphs = ["ア","カ","サ","タ","ナ","ハ","マ","ヤ","ラ","ワ","0","1","0","1","0","1","ﾁ","ﾗ","ﾑ","ﾒ","ﾐ","ﾏ"];
-  const RAIN = tsParticles.load({
-    id: "rain",
-    options: {
-      autoPlay: true,
-      background: { color: "transparent" },
-      fpsLimit: 60,
-      fullScreen: { enable: false, zIndex: 2 },
-      detectRetina: true,
-      particles: {
-        number: { value: 110, density: { enable: true } },
-        color: { value: ["#aac8a7", "#c3edc0", "#5f7a63"] },
-        shape: { type: "char", options: { char: { value: glyphs } } },
-        opacity: { value: { min: .35, max: .9 }, animation: { enable: true, speed: .6, sync: false } },
-        size: { value: { min: 5, max: 15 } },
-        move: { enable: true, direction: "bottom", speed: { min: 2, max: 5 }, straight: false, outModes: { default: "destroy" } }
-      },
-      interactivity: { detectOn: "window", events: { onHover: { enable: true, mode: "repulse" } }, modes: { repulse: { distance: 90 } } }
-    }
-  }).then(p => { window.__rain = p; });
-
-  let ready = false;
-  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 2400))]).then(() => ready = true);
-  const T0 = performance.now();
-
-  function skip() { if (!window.__skipped) { window.__skipped = true; reveal(); } }
-
-  const iv = setInterval(() => {
-    if ((ready && performance.now() - T0 > 1600) || window.__skipped) {
-      clearInterval(iv);
-      setTimeout(reveal, 250);
-    }
-  }, 60);
 
   function reveal() {
     if (window.__done) return; window.__done = true;
@@ -90,6 +58,35 @@
     document.getElementById("welcome").classList.add("in");
     try { if (window.__rain) window.__rain.destroy(); } catch (e) {}
   }
+
+  function skip() { reveal(); }
+
+  let RAIN = Promise.resolve(null);
+  try {
+    if (tsParticles && typeof tsParticles.load === "function") {
+      RAIN = tsParticles.load({
+        id: "rain",
+        options: {
+          autoPlay: true,
+          background: { color: "transparent" },
+          fpsLimit: 60,
+          fullScreen: { enable: false, zIndex: 2 },
+          detectRetina: true,
+          particles: {
+            number: { value: 110, density: { enable: true } },
+            color: { value: ["#aac8a7", "#c3edc0", "#5f7a63"] },
+            shape: { type: "char", options: { char: { value: glyphs } } },
+            opacity: { value: { min: .35, max: .9 }, animation: { enable: true, speed: .6, sync: false } },
+            size: { value: { min: 5, max: 15 } },
+            move: { enable: true, direction: "bottom", speed: { min: 2, max: 5 }, straight: false, outModes: { default: "destroy" } }
+          },
+          interactivity: { detectOn: "window", events: { onHover: { enable: true, mode: "repulse" } }, modes: { repulse: { distance: 90 } } }
+        }
+      }).then(p => { window.__rain = p; }).catch(() => {});
+    }
+  } catch (e) {}
+
+  setTimeout(reveal, 2600);
   </script>
 </body>
 </html>

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Concept 29 · Chalkboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 <style>
   :root{ --board:#1a1a14; --edge:#2a2a20; --chalk:#efece2; --dust:#9b9787; }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -62,34 +62,41 @@
     <filter id="chalk"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2"/></filter>
   </svg>
 
-  <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.cjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
   <script>
-  const rough = window.rough;
+  const roughApi = window.rough;
   const svg = document.getElementById("decor");
-  const rc = rough.svg(svg);
   const W = innerWidth, H = innerHeight;
   const solid = { stroke: "#efece2", strokeWidth: 2.4, roughness: 1.1, bowing: 0.6 };
+  let rc = null;
+  try { if (roughApi && typeof roughApi.svg === "function") rc = roughApi.svg(svg); } catch (e) {}
 
-  function drawAndReveal() {
-    svg.innerHTML = "";
-    const parts = [];
-    /* chalk frame + doodles */
-    parts.push(rc.rectangle(26, 26, W - 52, H - 52, { ...solid, fill: "rgba(255,255,255,.03)", fillWeight: 1 }));
-    parts.push(rc.circle(W/2, H/2 - 120, 60, { ...solid, strokeWidth: 1.6, stroke: "rgba(239,236,226,.5)" }));
-    parts.push(rc.circle(W/2, H/2 - 120, 96, { ...solid, strokeWidth: 1.2, stroke: "rgba(239,236,226,.32)" }));
-    parts.push(rc.polygon([[W/2 - 150, H/2 + 210], [W/2 - 40, H/2 + 240], [W/2 - 130, H/2 + 300], [W/2 - 220, H/2 + 250]], { ...solid, strokeWidth: 1.8, fill: "rgba(255,255,255,.06)" }));
-    parts.push(rc.line(70, H - 70, W - 70, H - 70, { ...solid, strokeWidth: 2 }));
-    parts.push(rc.line(70, H - 62, W - 70, H - 62, { ...solid, strokeWidth: 1, stroke: "rgba(239,236,226,.4)" }));
-    parts.forEach((p, i) => { p.style.opacity = 0; p.style.transition = "opacity .8s ease " + (i * 0.18) + "s"; svg.appendChild(p); });
-    requestAnimationFrame(() => requestAnimationFrame(() => parts.forEach(p => p.style.opacity = 1)));
-
+  function revealClasses() {
     document.getElementById("wlcm").classList.add("on");
     document.getElementById("big").classList.add("on");
     document.getElementById("csub").classList.add("on");
     document.getElementById("ctl").classList.add("on");
   }
 
-  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 800))]).then(drawAndReveal);
+  function drawAndReveal() {
+    svg.innerHTML = "";
+    const parts = [];
+    if (rc) {
+      /* chalk frame + doodles */
+      parts.push(rc.rectangle(26, 26, W - 52, H - 52, { ...solid, fill: "rgba(255,255,255,.03)", fillWeight: 1 }));
+      parts.push(rc.circle(W/2, H/2 - 120, 60, { ...solid, strokeWidth: 1.6, stroke: "rgba(239,236,226,.5)" }));
+      parts.push(rc.circle(W/2, H/2 - 120, 96, { ...solid, strokeWidth: 1.2, stroke: "rgba(239,236,226,.32)" }));
+      parts.push(rc.polygon([[W/2 - 150, H/2 + 210], [W/2 - 40, H/2 + 240], [W/2 - 130, H/2 + 300], [W/2 - 220, H/2 + 250]], { ...solid, strokeWidth: 1.8, fill: "rgba(255,255,255,.06)" }));
+      parts.push(rc.line(70, H - 70, W - 70, H - 70, { ...solid, strokeWidth: 2 }));
+      parts.push(rc.line(70, H - 62, W - 70, H - 62, { ...solid, strokeWidth: 1, stroke: "rgba(239,236,226,.4)" }));
+      parts.forEach((p, i) => { p.style.opacity = 0; p.style.transition = "opacity .8s ease " + (i * 0.18) + "s"; svg.appendChild(p); });
+      requestAnimationFrame(() => requestAnimationFrame(() => parts.forEach(p => p.style.opacity = 1)));
+    }
+    revealClasses();
+  }
+
+  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 500))]).then(drawAndReveal);
+  setTimeout(() => { if (!document.getElementById("big").classList.contains("on")) revealClasses(); }, 3500);
   addEventListener("resize", () => { if (document.getElementById("big").classList.contains("on")) drawAndReveal(); });
   </script>
 </body>
