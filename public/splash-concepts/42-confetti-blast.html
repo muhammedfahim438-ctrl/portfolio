@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 42 · Confetti Blast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<style>
+  :root{ --ink:#0b0f0c; --acc:#c3edc0; --acc2:#7fd189; --gold:#e8d59a; --cream:#f4efe0; --muted:#5f725e; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:#eef3ea;font-family:'Inter',sans-serif;overflow:hidden;cursor:default;
+    background:radial-gradient(70% 55% at 50% 44%, rgba(127,209,137,.1), transparent 70%), radial-gradient(30% 30% at 80% 12%, rgba(232,213,154,.05), transparent), #0b0f0c}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc)}
+  .stage{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:0 4vw}
+  .row{display:flex;justify-content:center;white-space:nowrap}
+  .ch{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2.4rem,11vw,6.5rem);line-height:1.05;
+    color:var(--acc);text-shadow:0 0 30px rgba(195,237,192,.3);
+    opacity:0;transform:translate(30px,18px) scale(.7) rotate(10deg);filter:blur(7px);
+    animation:popIn .65s cubic-bezier(.2,1.4,.3,1) forwards}
+  .row:last-child .ch{color:var(--cream);text-shadow:0 0 30px rgba(244,239,224,.25)}
+  @keyframes popIn{to{opacity:1;transform:none;filter:blur(0)}}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-top:26px;opacity:0;animation:fadeIn 1s ease 1.1s forwards;animation-delay:1.3s}
+  @keyframes fadeIn{to{opacity:1}}
+  .cap{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:var(--acc);margin-top:14px;opacity:0}
+  .cap.show{opacity:1;transition:opacity .6s ease}
+  .ctl{display:flex;gap:14px;margin-top:22px;opacity:0}
+  .ctl.show{opacity:1;transition:opacity .6s ease}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--muted);background:transparent;border:1px solid rgba(170,200,167,.3)}
+  .err{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:40;display:none;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.14em;color:#ffb4a6;background:rgba(40,12,8,.85);border:1px solid rgba(255,120,90,.4);border-radius:8px;padding:8px 14px;max-width:86vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (prefers-reduced-motion: reduce){
+    .ch,.tag{animation:none;opacity:1;transform:none;filter:none}
+  }
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 42 · CONFETTI BLAST</div>
+  <div class="err" id="err"></div>
+
+  <div class="stage">
+    <div class="row" id="r1"></div>
+    <div class="row" id="r2"></div>
+    <div class="tag">developer · apps · websites · software</div>
+    <div class="cap" id="cap"></div>
+    <div class="ctl" id="ctl">
+      <a class="btn" href="index.html">all concepts</a>
+      <button class="btn ghost" onclick="location.reload()">celebrate again</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+  const confetti = window.confetti;
+  const capEl = document.getElementById("cap");
+  const ctlEl = document.getElementById("ctl");
+  const errEl = document.getElementById("err");
+  window.addEventListener("error", (ev) => { errEl.textContent = "⚠ " + ev.message; errEl.style.display = "block"; });
+
+  function putRow(id, word) {
+    const row = document.getElementById(id);
+    [...word].forEach((ch, i) => {
+      const s = document.createElement("span");
+      s.className = "ch";
+      s.textContent = ch;
+      s.style.animationDelay = (i * 0.045) + "s";
+      row.appendChild(s);
+    });
+  }
+  putRow("r1", "MUHAMMED");
+  putRow("r2", "FAHIM");
+
+  let done = false;
+  function finish() {
+    if (done) return; done = true;
+    if (typeof confetti === "function") {
+      try {
+        confetti({ particleCount: 150, spread: 72, startVelocity: 42, origin: { y: 0.62, x: 0.5 }, colors: ["#c3edc0", "#7fd189", "#3c7a4a", "#e8d59a", "#f4efe0", "#ffffff"], ticks: 220 });
+        setTimeout(() => confetti({ particleCount: 70, angle: 60, spread: 60, origin: { x: 0, y: 0.55 }, colors: ["#c3edc0", "#e8d59a", "#7fd189"] }), 320);
+        setTimeout(() => confetti({ particleCount: 70, angle: 120, spread: 60, origin: { x: 1, y: 0.55 }, colors: ["#c3edc0", "#e8d59a", "#7fd189"] }), 520);
+      } catch (e) {}
+    }
+    capEl.textContent = "all systems cheerful ✓";
+    capEl.classList.add("show");
+    ctlEl.classList.add("show");
+  }
+
+  Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]).then(() => setTimeout(finish, 1500));
+  setTimeout(() => { if (!done) finish(); }, 7200);
+  </script>
+</body>
+</html>

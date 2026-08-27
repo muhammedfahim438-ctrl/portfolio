@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 38 · Pen Plotter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<style>
+  :root{ --ink:#0b0f0c; --paper:#eee9de; --inkcolor:#1d2f20; --acc:#3c7a4a; --muted:#5f725e; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:#eef3ea;font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc)}
+  .stage{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:0 4vw}
+  #paper{position:relative;width:min(880px,92vw);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+  #plot{display:block;width:100%;height:auto;border-radius:6px;background:#ece7da}
+  .nm{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--inkcolor);font-size:clamp(1.3rem,4.6vw,2.4rem);position:absolute;left:50%;bottom:12px;transform:translateX(-50%);opacity:0;width:max-content;max-width:96%}
+  .nm.on{opacity:1;transition:opacity .8s ease}
+  .cap{position:fixed;bottom:104px;left:50%;transform:translateX(-50%);z-index:12;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);text-align:center;opacity:0;white-space:nowrap}
+  .cap.show{opacity:1;transition:opacity .6s ease}
+  .ctl{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:12;display:flex;gap:14px;opacity:0}
+  .ctl.show{opacity:1;transition:opacity .6s ease}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc2,#c3edc0);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--muted);background:transparent;border:1px solid rgba(170,200,167,.3)}
+  .err{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:40;display:none;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.14em;color:#ffb4a6;background:rgba(40,12,8,.85);border:1px solid rgba(255,120,90,.4);border-radius:8px;padding:8px 14px;max-width:86vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (prefers-reduced-motion: reduce){*{transition-duration:.001s !important;animation-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 38 · PEN PLOTTER</div>
+  <div class="err" id="err"></div>
+
+  <div class="stage">
+    <div id="paper">
+      <canvas id="plot" width="880" height="360"></canvas>
+      <div class="nm" id="nm">MUHAMMED&nbsp;FAHIM</div>
+    </div>
+  </div>
+  <div class="cap" id="cap">loading pen· homing carriage…</div>
+  <div class="ctl" id="ctl">
+    <a class="btn" href="index.html">all concepts</a>
+    <button class="btn ghost" onclick="location.reload()">re-plot</button>
+  </div>
+
+  <script>
+  const cv = document.getElementById("plot");
+  const cx = cv.getContext("2d");
+  const nmOverlay = document.getElementById("nm");
+  const capEl = document.getElementById("cap");
+  const ctlEl = document.getElementById("ctl");
+  const errEl = document.getElementById("err");
+  window.addEventListener("error", (ev) => { errEl.textContent = "⚠ " + ev.message; errEl.style.display = "block"; });
+
+  const W = 880, H = 360;
+  const NAME = "MUHAMMED FAHIM";
+  let done = false;
+  function finish(label) {
+    if (done) return; done = true;
+    nmOverlay.classList.add("on");
+    capEl.textContent = label || "pen up · plot complete";
+    capEl.classList.add("show");
+    ctlEl.classList.add("show");
+  }
+
+  function sampleName() {
+    const oc = document.createElement("canvas");
+    oc.width = W; oc.height = H;
+    const g = oc.getContext("2d");
+    g.fillStyle = "#000";
+    g.textAlign = "center"; g.textBaseline = "middle";
+    g.font = "800 " + Math.round(H * 0.42) + "px Syne, sans-serif";
+    g.fillText(NAME, W / 2, H / 2);
+    const d = g.getImageData(0, 0, W, H).data;
+    const pts = [];
+    const stride = 4;
+    for (let y = 0; y < H; y += stride) {
+      for (let x = 0; x < W; x += stride) {
+        if (d[(y * W + x) * 4 + 3] > 120) pts.push([x, y]);
+      }
+    }
+    return pts;
+  }
+
+  function drawPaper() {
+    cx.fillStyle = "#ece7da";
+    cx.fillRect(0, 0, W, H);
+    cx.strokeStyle = "rgba(80,70,50,.08)";
+    cx.lineWidth = 1;
+    for (let x = 24; x < W; x += 24) { cx.beginPath(); cx.moveTo(x, 0); cx.lineTo(x, H); cx.stroke(); }
+    for (let y = 24; y < H; y += 24) { cx.beginPath(); cx.moveTo(0, y); cx.lineTo(W, y); cx.stroke(); }
+    cx.fillStyle = "#8a8f84";
+    [[20, 20], [W - 20, 20], [20, H - 20], [W - 20, H - 20]].forEach(([x, y]) => {
+      cx.beginPath(); cx.arc(x, y, 5, 0, 7); cx.fill();
+    });
+    cx.strokeStyle = "rgba(60,122,74,.28)";
+    cx.beginPath(); cx.moveTo(0, 6); cx.lineTo(W, 6); cx.stroke();
+    cx.beginPath(); cx.moveTo(0, H - 6); cx.lineTo(W, H - 6); cx.stroke();
+  }
+
+  function drawPen(x, y, lift) {
+    cx.fillStyle = "#0c1811";
+    cx.fillRect(x - 14, y - 26, 28, 22);
+    cx.strokeStyle = "rgba(0,0,0,.25)";
+    cx.strokeRect(x - 14, y - 26, 28, 22);
+    if (lift) { cx.fillStyle = "#0c1811"; cx.fillRect(x - 3, y - 6, 6, 10); return; }
+    cx.fillStyle = "#1d2f20";
+    cx.beginPath(); cx.moveTo(x - 3, y - 4); cx.lineTo(x + 3, y - 4); cx.lineTo(x, y + 3); cx.closePath(); cx.fill();
+    cx.fillStyle = "#2fae56";
+    cx.beginPath(); cx.moveTo(x - 1, y - 2); cx.lineTo(x + 1, y - 2); cx.lineTo(x, y + 2); cx.closePath(); cx.fill();
+  }
+
+  function plot() {
+    drawPaper();
+    const pts = sampleName();
+    if (pts.length < 80) { finish(); return; }
+    const colW = 3;
+    const nCols = Math.ceil(W / colW);
+    const byCol = Array.from({ length: nCols }, () => new Set());
+    pts.forEach(([x, y]) => byCol[Math.floor(x / colW)].add(y));
+
+    cx.fillStyle = "#1d2f20";
+    const tickHalf = 3.4;
+    let t0 = performance.now();
+    const DUR = 5200;
+    let penX = -30;
+
+    function frame(now) {
+      if (done) return;
+      const p = Math.min(1, (now - t0) / DUR);
+      const e = 1 - Math.pow(1 - p, 3);
+      const colIdx = Math.min(nCols - 1, Math.floor(e * nCols));
+      if (penX < 0) { penX = -30; }
+      while (penX < colIdx * colW) {
+        penX += colW;
+        const ci = Math.round(penX / colW);
+        if (ci >= 0 && ci < nCols && byCol[ci]) {
+          for (const y of byCol[ci]) {
+            cx.fillRect(penX - 1, y - tickHalf, 2, tickHalf * 2);
+          }
+        }
+      }
+      const penY = 180 + Math.sin(now / 40) * 1.5;
+      drawPaper();                          // redraw paper + rails
+      cx.fillStyle = "#1d2f20";             // re-stamp ticks fast (cheap enough)
+      for (let ci = 0; ci < colIdx; ci += 1) {
+        const s = byCol[ci];
+        if (!s) continue;
+        const px = ci * colW + 1;
+        for (const y of s) cx.fillRect(px - 1, y - tickHalf, 2, tickHalf * 2);
+      }
+      drawPen(penX + 26, penY, false);
+      if (colIdx >= nCols - 1) { completePlot(now); return; }
+      requestAnimationFrame(frame);
+    }
+
+    function completePlot(now) {
+      drawPaper();
+      for (let ci = 0; ci < nCols; ci += 1) {
+        const s = byCol[ci];
+        if (!s) continue;
+        const px = ci * colW + 1;
+        for (const y of s) cx.fillRect(px - 1, y - tickHalf, 2, tickHalf * 2);
+      }
+      drawPen(30, 26, true);
+      finish();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1000))]).then(plot);
+  setTimeout(() => { if (!done) finish(); }, 12000);
+  </script>
+</body>
+</html>
