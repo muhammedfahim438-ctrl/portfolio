@@ -15,6 +15,37 @@ export async function updateHeroData(data) {
   await updateDoc(doc(db, "site_config", "hero_data"), data);
 }
 
+const COLLECTIONS = {
+  projects: "projects",
+  skills: "skills",
+  certifications: "certifications",
+  recognition: "recognition",
+  testimonials: "testimonials",
+  trusted_by: "trusted_by",
+};
+
+export async function getCollectionDocs(name) {
+  const snap = await getDocs(collection(db, COLLECTIONS[name] ?? name));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
+export async function dedupeCollection(name) {
+  const docs = await getCollectionDocs(name);
+  const seen = new Set();
+  let removed = 0;
+  for (const item of docs) {
+    const key = String(item.title ?? item.name ?? "").trim().toLowerCase();
+    if (!key) continue;
+    if (seen.has(key)) {
+      await deleteDoc(doc(db, COLLECTIONS[name] ?? name, item.id));
+      removed += 1;
+    } else {
+      seen.add(key);
+    }
+  }
+  return { collection: name, checked: docs.length, removed };
+}
+
 // Projects
 export async function getProjects() {
   const snap = await getDocs(collection(db, "projects"));

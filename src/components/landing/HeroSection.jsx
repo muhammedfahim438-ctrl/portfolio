@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/Button";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ResumeModal } from "@/components/ui/ResumeModal";
 
-const VOICE_TEXT =
+const DEFAULT_TITLE = "Hi, I'm Muhammed Fahim M";
+const DEFAULT_VOICE_TEXT =
   "Hi! I'm Muhammed Fahim M, a Data Science and Full-Stack Developer from Kerala, India. I build production APIs, ML models, and scalable web apps. Let's connect!";
 
 const ROLE_PILLS = [
@@ -26,8 +27,44 @@ export function HeroSection() {
   const [showCursor, setShowCursor] = useState(true);
   const [resumeOpen, setResumeOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState("");
+  const [fullTitle, setFullTitle] = useState(DEFAULT_TITLE);
+  const [voiceText, setVoiceText] = useState(DEFAULT_VOICE_TEXT);
+  const [social, setSocial] = useState({
+    github: "https://github.com/muhammedfahim438-ctrl",
+    linkedin: "https://linkedin.com/in/muhammed-fahim-m",
+    email: "muhammedfahim438@gmail.com",
+  });
 
-  const fullTitle = "Hi, I'm Muhammed Fahim M";
+  useEffect(() => {
+    let mounted = true;
+    async function fetchData() {
+      try {
+        const [hero, socialData] = await Promise.all([
+          getHeroData(),
+          getSocialData(),
+        ]);
+        if (!mounted) return;
+        if (hero) {
+          if (hero.title) setFullTitle(hero.title);
+          if (hero.voice_text) setVoiceText(hero.voice_text);
+        }
+        if (socialData) {
+          setSocial((prev) => ({
+            github: socialData.github || prev.github,
+            linkedin: socialData.linkedin || prev.linkedin,
+            email: socialData.email || prev.email,
+          }));
+          if (socialData.resume_pdf_url) setResumeUrl(socialData.resume_pdf_url);
+        }
+      } catch {
+        // fallback to defaults below
+      }
+    }
+    fetchData();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     let i = 0;
@@ -40,31 +77,13 @@ export function HeroSection() {
       }
     }, 80);
     return () => clearInterval(interval);
-  }, []);
+  }, [fullTitle]);
 
   useEffect(() => {
     const cursorInterval = setInterval(() => {
       setShowCursor((prev) => !prev);
     }, 530);
     return () => clearInterval(cursorInterval);
-  }, []);
-
-  useEffect(() => {
-    let mounted = true;
-    async function fetchResume() {
-      try {
-        const data = await getSocialData();
-        if (mounted && data?.resume_pdf_url) {
-          setResumeUrl(data.resume_pdf_url);
-        }
-      } catch {
-        // fallback to /resume.pdf below
-      }
-    }
-    fetchResume();
-    return () => {
-      mounted = false;
-    };
   }, []);
 
   const activeResumeUrl = resumeUrl || "/resume.pdf";
@@ -114,7 +133,7 @@ export function HeroSection() {
 
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => (speaking ? stop() : speak(VOICE_TEXT))}
+                  onClick={() => (speaking ? stop() : speak(voiceText))}
                   className="flex items-center gap-2 px-4 py-2 rounded-full bg-themeBg-secondary border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors text-sm"
                   aria-label={speaking ? "Stop speaking" : "Play voice intro"}
                 >
@@ -172,7 +191,7 @@ export function HeroSection() {
         >
           <div className="glass rounded-full px-6 py-3 flex items-center gap-4">
             <a
-              href="https://github.com/muhammedfahim438-ctrl"
+              href={social.github}
               target="_blank"
               rel="noopener noreferrer"
               className="text-themeText-secondary hover:text-themeAccent transition-colors"
@@ -181,7 +200,7 @@ export function HeroSection() {
               <FaGithub className="w-5 h-5" />
             </a>
             <a
-              href="https://linkedin.com/in/muhammed-fahim-m"
+              href={social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="text-themeText-secondary hover:text-themeAccent transition-colors"
@@ -190,7 +209,7 @@ export function HeroSection() {
               <FaLinkedin className="w-5 h-5" />
             </a>
             <a
-              href="mailto:muhammedfahim438@gmail.com"
+              href={`mailto:${social.email}`}
               className="text-themeText-secondary hover:text-themeAccent transition-colors"
               aria-label="Email"
             >

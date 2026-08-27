@@ -1,7 +1,32 @@
 import {
-  doc, setDoc, addDoc, collection,
+  doc, setDoc, addDoc, collection, getDocs, query, where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+
+async function keyFieldFor(name) {
+  switch (name) {
+    case "skills":
+    case "trusted_by":
+      return "name";
+    default:
+      return "title";
+  }
+}
+
+async function seedNoDuplicates(name, items) {
+  const keyField = await keyFieldFor(name);
+  const existing = await getDocs(
+    query(collection(db, name), where(keyField, "in", items.map((i) => i[keyField])))
+  );
+  const existingKeys = new Set(existing.docs.map((d) => d.data()[keyField]));
+  let added = 0;
+  for (const item of items) {
+    if (existingKeys.has(item[keyField])) continue;
+    await addDoc(collection(db, name), item);
+    added += 1;
+  }
+  console.log(`Seeded ${added} ${name} (${items.length - added} already present)`);
+}
 
 export async function seedHeroConfig() {
   const data = {
@@ -174,10 +199,7 @@ export async function seedProjects() {
     },
   ];
 
-  for (const project of projects) {
-    await addDoc(collection(db, "projects"), project);
-  }
-  console.log("Seeded 12 projects");
+  await seedNoDuplicates("projects", projects);
 }
 
 export async function seedSkills() {
@@ -215,10 +237,7 @@ export async function seedSkills() {
     { name: "Redis", category: "Tools & DevOps", icon_url: "", level: 75 },
   ];
 
-  for (const skill of skills) {
-    await addDoc(collection(db, "skills"), skill);
-  }
-  console.log("Seeded 31 skills");
+  await seedNoDuplicates("skills", skills);
 }
 
 export async function seedCertifications() {
@@ -230,10 +249,7 @@ export async function seedCertifications() {
     { title: "Linguaskill Certification", issuer: "Cambridge Assessment English", issue_date: "2026", credential_url: "", badge_image_url: "" },
   ];
 
-  for (const cert of certs) {
-    await addDoc(collection(db, "certifications"), cert);
-  }
-  console.log("Seeded 5 certifications");
+  await seedNoDuplicates("certifications", certs);
 }
 
 export async function seedRecognition() {
@@ -264,10 +280,7 @@ export async function seedRecognition() {
     },
   ];
 
-  for (const item of items) {
-    await addDoc(collection(db, "recognition"), item);
-  }
-  console.log("Seeded 4 recognition items");
+  await seedNoDuplicates("recognition", items);
 }
 
 export async function seedTestimonials() {
@@ -302,10 +315,7 @@ export async function seedTestimonials() {
     },
   ];
 
-  for (const item of items) {
-    await addDoc(collection(db, "testimonials"), item);
-  }
-  console.log("Seeded 4 testimonials");
+  await seedNoDuplicates("testimonials", items);
 }
 
 export async function seedTrustedBy() {
@@ -320,10 +330,7 @@ export async function seedTrustedBy() {
     { name: "Vercel", icon_url: "" },
   ];
 
-  for (const item of items) {
-    await addDoc(collection(db, "trusted_by"), item);
-  }
-  console.log("Seeded 8 trusted_by items");
+  await seedNoDuplicates("trusted_by", items);
 }
 
 export async function seedProfile() {
