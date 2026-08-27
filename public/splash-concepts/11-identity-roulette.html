@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 11 · Identity Roulette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --bg:#0b0f0c; --ink:#eef3ec; --muted:#93a093; --accent:#aac8a7; --acc2:#c3edc0; --line:#2b372b; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:
+    radial-gradient(900px 480px at 80% -10%, rgba(170,200,167,.08), transparent 60%),
+    var(--bg);
+    color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .stage{position:fixed;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+  .slot-wrap{position:relative;height:1.35em;overflow:hidden;width:min(90vw,980px);margin-bottom:6vh;opacity:0;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 82%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 82%,transparent 100%)}
+  .slot{position:absolute;inset:0;transform:translateY(0);will-change:transform}
+  .slot .word{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,8.5vw,6.5rem);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);transition:color .4s}
+  .name{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.6rem,10vw,8rem);text-transform:uppercase;letter-spacing:.05em;line-height:1;opacity:0;will-change:transform,opacity}
+  .name .alt{color:var(--acc2)}
+  .rule{width:min(480px,70vw);height:1px;background:var(--line);margin:6vh auto 0;position:relative;overflow:hidden}
+  .rule::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--acc2),transparent);transform:translateX(-100%);animation:sweep 2.2s .8s ease forwards}
+  @keyframes sweep{to{transform:translateX(100%)}}
+  .start{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:7;display:none;gap:14px;align-items:center}
+  .start button{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:var(--acc2);border:none;border-radius:99px;padding:11px 22px;cursor:pointer}
+  .start a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+  .start a:hover{color:var(--acc2)}
+</style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 11 · IDENTITY ROULETTE</div>
+
+  <div class="stage">
+    <div class="slot-wrap" id="slotwrap">
+      <div class="slot" id="slot"></div>
+    </div>
+    <h1 class="name" id="name">MUHAMMED<span class="alt"> FAHIM </span>M</h1>
+    <div class="rule"></div>
+  </div>
+
+  <div class="start" id="start">
+    <button onclick="location.reload()">Replay</button>
+    <a href="index.html">other concepts</a>
+  </div>
+
+  <script>
+  const words = ["DEVELOPER","SCIENTIST","ENGINEER","BUILDER","MAKER","THINKER"];
+  const slot = document.getElementById("slot");
+  const slotWrap = document.getElementById("slotwrap");
+
+  function tick(el, i) {
+    el.style.transition = "none";
+    el.style.transform = "translateY(-100%)";
+    el.textContent = words[i % words.length];
+    void el.offsetWidth;
+    el.style.transition = "transform .45s cubic-bezier(.3,.7,.3,1), opacity .45s";
+    el.style.transform = "translateY(0)";
+  }
+
+  let round = 0;
+  document.getElementById("slotwrap").animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: 200, fill: "forwards" });
+
+  const spins = setInterval(() => {
+    tick(slot, round++);
+    if (round > 4 + Math.floor(Math.random() * 2)) {   /* random short stop */
+      clearInterval(spins);
+      setTimeout(() => { slot.textContent = "DATA SCIENCE × FULL-STACK"; slot.style.color = "var(--ink)"; slot.style.transform = "translateY(0) scale(1)"; }, 460);
+      setTimeout(revealName, 600);
+    }
+  }, 260);
+
+  function revealName() {
+    const name = document.getElementById("name");
+    name.animate(
+      [
+        { opacity: 0, transform: "translateY(26px)", filter: "blur(6px)" },
+        { opacity: 1, transform: "translateY(0)", filter: "blur(0)" }
+      ],
+      { duration: 1100, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }
+    );
+  }
+
+  setTimeout(() => document.getElementById("start").style.display = "flex", 5600);
+  </script>
+</body>
+</html>

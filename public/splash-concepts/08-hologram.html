@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 08 · Hologram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --bg:#0a0e0b; --ink:#eef3ec; --muted:#93a093; --accent:#aac8a7; --acc2:#c3edc0; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:
+    radial-gradient(1000px 520px at 50% 30%, rgba(170,200,167,.10), transparent 60%),
+    var(--bg);
+    color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  /* hologram frame */
+  .frame{position:fixed;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .base{position:absolute;left:50%;bottom:14vh;transform:translateX(-50%);width:60vmin;height:18px;border-radius:99px;background:radial-gradient(ellipse at center, rgba(195,237,192,.5), transparent 70%);filter:blur(2px);opacity:0}
+  .beam{position:absolute;left:50%;bottom:calc(14vh + 8px);transform:translateX(-50%);width:2px;height:22vmin;background:linear-gradient(to top, rgba(195,237,192,.5), transparent);opacity:0}
+  .holo{position:relative;text-align:center;opacity:0;will-change:transform,opacity}
+  .holo h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.6rem,10vw,8rem);text-transform:uppercase;letter-spacing:.04em;line-height:1.05;color:#f4faf3;
+    text-shadow:0 0 18px rgba(170,200,167,.8), -6px 0 24px rgba(120,255,180,.35), 6px 0 24px rgba(90,220,255,.28)}
+  .holo h1 .alt{color:var(--acc2);text-shadow:0 0 22px rgba(195,237,192,1), -6px 0 26px rgba(120,255,180,.45), 6px 0 26px rgba(90,220,255,.34)}
+  .holo .echo{position:absolute;inset:0;font:inherit;color:transparent;-webkit-text-stroke:1px rgba(195,237,192,.28);transform:translate(9px,9px);letter-spacing:.04em;user-select:none;pointer-events:none}
+  .flicker{position:absolute;inset:0;pointer-events:none;overflow:hidden;mix-blend-mode:screen;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,0) 0 9px, rgba(195,237,192,.14) 9px 11px);
+    animation:scan 2.6s linear infinite}
+  @keyframes scan{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+  .glitchline{position:absolute;left:0;right:0;height:3px;background:rgba(195,237,192,.85);filter:blur(.5px);box-shadow:0 0 18px rgba(195,237,192,.9);opacity:0}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);margin-top:34px;opacity:0;display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
+  .tag b{color:var(--acc2);font-weight:500}
+  .start{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:7;display:none;gap:14px;align-items:center}
+  .start button{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:var(--acc2);border:none;border-radius:99px;padding:11px 22px;cursor:pointer}
+  .start a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+  .start a:hover{color:var(--acc2)}
+</style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 08 · HOLOGRAM</div>
+
+  <div class="frame">
+    <div class="base" id="base"></div>
+    <div class="beam" id="beam"></div>
+
+    <div class="holo" id="holo">
+      <span class="echo" id="echo">MUHAMMED FAHIM M</span>
+      <h1 id="name">MUHAMMED<em class="alt" style="font-style:normal"> FAHIM </em>M</h1>
+      <div class="glitchline" id="gline"></div>
+      <div class="flicker"></div>
+    </div>
+
+    <div class="tag" id="tag">
+      <span>ID <b>#001</b></span>
+      <span>STATUS <b style="color:#78c27a">ONLINE</b></span>
+      <span>ROLE <b>BUILDER</b></span>
+    </div>
+  </div>
+
+  <div class="start" id="start">
+    <button onclick="location.reload()">Replay</button>
+    <a href="index.html">other concepts</a>
+  </div>
+
+  <script>
+    const holo = document.getElementById("holo");
+    const gline = document.getElementById("gline");
+
+    setTimeout(() => {
+      document.getElementById("base").animate(
+        [{ opacity: 0 }, { opacity: 1 }], { duration: 900, fill: "forwards" });
+      document.getElementById("beam").animate(
+        [{ opacity: 0 }, { opacity: .8 }], { duration: 1100, fill: "forwards" });
+      holo.animate(
+        [
+          { opacity: 0, transform: "translateY(30px) scale(.96)", filter: "blur(8px)" },
+          { opacity: 1, transform: "translateY(0) scale(1) scaleY(1)", filter: "blur(0)" }
+        ],
+        { duration: 1300, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }
+      );
+    }, 250);
+
+    /* hologram wobble + glitch line */
+    let t = 0;
+    (function wobble() {
+      requestAnimationFrame(wobble);
+      t += .03;
+      holo.style.transform = `translateY(0) scaleY(${1 + Math.sin(t * 1.7) * .006}) scale(${1 + Math.sin(t * .9) * .004})`;
+      holo.style.filter = `brightness(${1 + Math.sin(t * 3.1) * .06})`;
+    })();
+
+    setTimeout(() => {
+      document.getElementById("tag").animate(
+        [{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" });
+    }, 1200);
+
+    /* random scanline glitch */
+    setInterval(() => {
+      gline.style.opacity = Math.random() > .5 ? 1 : 0;
+      if (gline.style.opacity === "1") {
+        gline.style.top = `${Math.random() * 100}%`;
+        setTimeout(() => gline.style.opacity = 0, 220);
+      }
+    }, 900);
+
+    setTimeout(() => document.getElementById("start").style.display = "flex", 2800);
+  </script>
+</body>
+</html>

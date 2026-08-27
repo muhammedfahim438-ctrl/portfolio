@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 07 · Neon Horizon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --bg:#0a0d0c; --ink:#eef3ec; --muted:#93a093; --accent:#aac8a7; --acc2:#c3edc0; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  /* scene */
+  .scene{position:fixed;inset:0;perspective:520px;overflow:hidden}
+  .horizon{position:absolute;left:0;right:0;bottom:34%;height:2px;background:linear-gradient(90deg,transparent,var(--acc2),transparent);box-shadow:0 0 30px 4px rgba(195,237,192,.6);z-index:2;opacity:0}
+  .sun{position:absolute;left:50%;bottom:calc(34% - 4px);transform:translateX(-50%);z-index:1;
+    width:min(52vmin,440px);aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle at 50% 45%, rgba(238,243,236,1) 0%, rgba(195,237,192,.9) 28%, rgba(170,200,167,.18) 55%, rgba(10,13,12,0) 72%);
+    filter:blur(2px);opacity:0;
+    animation:sunpulse 5s ease-in-out infinite}
+  @keyframes sunpulse{0%,100%{filter:blur(2px) brightness(1)}50%{filter:blur(1.2px) brightness(1.15)}}
+  .grid{position:absolute;left:-30%;right:-30%;bottom:-18%;height:72%;z-index:3;opacity:0;
+    background:
+      repeating-linear-gradient(90deg, rgba(170,200,167,.28) 0 2px, transparent 2px 56px),
+      repeating-linear-gradient(0deg, rgba(170,200,167,.28) 0 2px, transparent 2px 56px);
+    transform:rotateX(72deg);transform-origin:top center;mask-image:linear-gradient(to top,rgba(0,0,0,.9) 40%,transparent 100%);-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.9) 40%,transparent 100%)}
+  .scene.g2 .grid{animation:gridmove 1.1s linear infinite}
+  @keyframes gridmove{from{background-position:0 0}to{background-position:0 56px}}
+  .frontblur{position:absolute;left:-10%;right:-10%;bottom:-30%;height:55%;z-index:4;background:rgba(5,7,6,.55);backdrop-filter:blur(1.5px);transform:rotateX(72deg);transform-origin:top center}
+  /* name */
+  .name{position:fixed;left:0;right:0;top:50%;transform:translateY(-50%);z-index:5;text-align:center;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.4rem,9vw,7.5rem);letter-spacing:.06em;text-transform:uppercase;color:#f6faf5;text-shadow:0 0 14px rgba(195,237,192,.85),0 0 46px rgba(170,200,167,.55),0 0 90px rgba(170,200,167,.4);opacity:0;line-height:1.05;will-change:transform,opacity}
+  .name .alt{color:var(--acc2);text-shadow:0 0 16px rgba(195,237,192,1),0 0 55px rgba(170,200,167,.7)}
+  .kicker{position:fixed;left:0;right:0;top:calc(50% + clamp(14px,4vw,30px));text-align:center;z-index:6;font-family:'Inter',sans-serif;font-weight:300;font-size:.74rem;letter-spacing:.5em;text-transform:uppercase;color:var(--muted);opacity:0}
+  .start{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:7;display:none;gap:14px;align-items:center}
+  .start button{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:var(--acc2);border:none;border-radius:99px;padding:11px 22px;cursor:pointer}
+  .start a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+  .start a:hover{color:var(--acc2)}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 07 · NEON HORIZON</div>
+
+  <div class="scene" id="scene">
+    <div class="sun" id="sun"></div>
+    <div class="horizon" id="horizon"></div>
+    <div class="grid" id="grid"></div>
+    <div class="frontblur"></div>
+  </div>
+
+  <h1 class="name" id="name">MUHAMMED<span class="alt"> FAHIM </span>M</h1>
+  <div class="kicker" id="kicker">Data Science &amp; Full-Stack Developer · Kerala</div>
+
+  <div class="start" id="start">
+    <button onclick="location.reload()">Replay</button>
+    <a href="index.html">other concepts</a>
+  </div>
+
+  <script>
+    const name = document.getElementById("name");
+    const kicker = document.getElementById("kicker");
+    const scene = document.getElementById("scene");
+
+    /* reveal sequence */
+    setTimeout(() => name.animate(
+      [
+        { opacity: 0, transform: "translateY(120px) scale(1.15)" },
+        { opacity: 1, transform: "translateY(0) scale(1)" }
+      ],
+      { duration: 1400, delay: 350, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }
+    ), 200);
+    setTimeout(() => {
+      scene.classList.add("g2");
+      [{e:document.getElementById("grid")},{e:document.getElementById("horizon")}].forEach(o => o.e.animate(
+        [{ opacity: 0 }, { opacity: 1 }], { duration: 800, fill: "forwards" }));
+      document.getElementById("sun").animate(
+        [{ opacity: 0 }, { opacity: 1 }], { duration: 1400, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" });
+    }, 300);
+    setTimeout(() => kicker.animate(
+      [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }],
+      { duration: 700, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }), 1300);
+    setTimeout(() => document.getElementById("start").style.display = "flex", 2600);
+
+    /* chromatic edge drift with cursor */
+    addEventListener("mousemove", e => {
+      const x = (e.clientX / innerWidth - .5) * 6, y = (e.clientY / innerHeight - .5) * 4;
+      name.style.translate = `${x}px ${y}px`;
+      scene.style.translate = `${x * -.3}px 0`;
+    });
+  </script>
+</body>
+</html>
