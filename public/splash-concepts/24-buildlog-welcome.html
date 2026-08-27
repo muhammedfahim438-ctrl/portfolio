@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 24 · Build Log → Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css" />
+<style>
+  :root{
+    --ink:#0d120e; --glass:#101712; --line:#22301f; --accent:#aac8a7; --acc2:#c3edc0;
+    --text:#eef3ea; --muted:#77997d; --dim:#3e563f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:40;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  .bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(60% 50% at 50% 42%, rgba(170,200,167,.10), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 1px, transparent 1px 3px)}
+  .gridfx{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background:linear-gradient(rgba(170,200,167,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(170,200,167,.05) 1px, transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(70% 60% at 50% 45%, #000 30%, transparent 75%);
+    -webkit-mask-image:radial-gradient(70% 60% at 50% 45%, #000 30%, transparent 75%)}
+
+  /* ============ TERMINAL ============ */
+  .stage{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center}
+  .terminal-win{position:relative;width:min(680px,92vw);border:1px solid var(--line);border-radius:14px;background:rgba(16,23,18,.92);
+    box-shadow:0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(170,200,167,.04), 0 0 60px rgba(170,200,167,.06);
+    transition:opacity .45s ease, transform .5s cubic-bezier(.16,1,.3,1)}
+  .terminal-win.go{opacity:0;transform:translateY(-14px) scale(.985)}
+  .titlebar{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid var(--line);background:rgba(10,15,12,.6);border-radius:13px 13px 0 0}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+  .tt{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;color:var(--muted)}
+  .tt i{font-style:normal;color:var(--accent)}
+  .ttrs{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+  #term{margin:0;padding:16px 18px 14px;height:300px}
+  .term-foot{display:flex;justify-content:space-between;padding:9px 18px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;background:rgba(10,15,12,.35);border-radius:0 0 13px 13px}
+
+  /* ============ WELCOME ============ */
+  .welcome{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 5vw;opacity:0;pointer-events:none}
+  .welcome.in{opacity:1;pointer-events:auto;transition:opacity .8s ease .15s}
+  .logohint{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.5em;color:var(--accent);text-transform:uppercase;margin-bottom:26px}
+  .nmline{overflow:hidden}
+  .nm{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2.8rem,11vw,7rem);line-height:1.02;letter-spacing:.04em;color:var(--text);position:relative}
+  .nm .caret{display:inline-block;width:.55em;height:.9em;background:var(--acc2);vertical-align:-.08em;margin-left:.04em;animation:blink 1s steps(2,end) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .nm.nok .caret{display:none}
+  .nm em{font-style:normal;color:var(--accent)}
+  .role{font-family:'Inter',sans-serif;font-size:clamp(.85rem,2.4vw,1.15rem);letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:24px}
+  .role b{color:var(--acc2);font-weight:500}
+  .tag{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(1.1rem,3vw,1.6rem);color:var(--muted);margin-top:16px}
+  .ctl{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;justify-content:center}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink);background:var(--acc2);border:none;border-radius:99px;padding:14px 28px;cursor:pointer;transition:transform .25s ease, box-shadow .25s ease;text-decoration:none}
+  .btn:hover{transform:scale(1.05);box-shadow:0 12px 30px rgba(170,200,167,.25)}
+  .link{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);border-radius:99px;padding:13px 26px;cursor:pointer;transition:color .25s,border-color .25s;text-decoration:none;display:inline-flex;align-items:center}
+  .link:hover{color:var(--acc2);border-color:var(--accent)}
+  .status{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:20;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;opacity:0;transition:opacity .6s ease}
+  .status.on{opacity:1}
+  .status b{color:var(--acc2);font-weight:500}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 24 · BUILD LOG → WELCOME</div>
+  <div class="bgfx"></div>
+  <div class="gridfx"></div>
+
+  <div class="stage" id="stage">
+    <div class="terminal-win" id="termwin">
+      <div class="titlebar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="tt"><i>fahim</i>@portfolio — zsh</span>
+        <span class="ttrs">24 fps · #0d120e</span>
+      </div>
+      <div id="term"></div>
+      <div class="term-foot"><span>whoami ▸ authenticated</span><span>branch ▸ main</span></div>
+    </div>
+  </div>
+
+  <div class="welcome" id="welcome">
+    <div class="logohint">portfolio v2026</div>
+    <div class="nmline"><h1 class="nm" id="nm">MUHAMMED<em> FAHIM</em><span class="caret" id="caret"></span></h1></div>
+    <div class="role">Developer <b>·</b> Apps · Websites · Software Solutions</div>
+    <div class="tag">“I build software that ships.”</div>
+    <div class="ctl">
+      <button class="btn" onclick="location.reload()">replay boot ▸</button>
+      <a class="link" href="index.html">all concepts</a>
+    </div>
+  </div>
+
+  <div class="status" id="status">root@portfolio: <b>~</b> ready<span style="color:var(--acc2)"> ✓</span></div>
+
+  <script type="module">
+  import { Terminal } from "https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.mjs";
+  import { FitAddon } from "https://cdn.jsdelivr.net/npm/@xterm/fit@0.10.0/lib/fit.mjs";
+
+  const term = new Terminal({
+    cursorBlink: true,
+    cursorStyle: "block",
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 14.5,
+    lineHeight: 1.35,
+    disableStdin: true,
+    theme: {
+      background: "rgba(0,0,0,0)",
+      foreground: "#c3edc0",
+      cursor: "#c3edc0",
+      cursorAccent: "#0d120e",
+      selectionBackground: "rgba(170,200,167,.25)"
+    }
+  });
+  const fit = new FitAddon();
+  term.loadAddon(fit);
+  term.open(document.getElementById("term"));
+  const doFit = () => { try { fit.fit(); } catch (e) {} };
+  doFit();
+  addEventListener("resize", doFit);
+  term.writeln("");
+  term.writeln("\x1b[90m┌─ portfolio terminal ────────────────────────────────┐\x1b[0m");
+
+  const type = (text, each = 26) => new Promise(res => {
+    let i = 0;
+    const fn = () => {
+      term.write(text[i] === undefined ? "" : text[i]);
+      i++;
+      if (i >= text.length) res(); else setTimeout(fn, each);
+    };
+    fn();
+  });
+  const out = (text) => term.writeln("\x1b[1;32m" + text + "\x1b[0m");
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const PROMPT = "\x1b[1;32mfahim\x1b[0m\x1b[90m@portfolio\x1b[0m:\x1b[1;36m~%\x1b[0m ";
+
+  /* real readiness: fonts + a cinematic beat */
+  let buildReady = false;
+  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 2400))])
+    .then(() => buildReady = true);
+
+  (async function boot() {
+    await sleep(350);
+    await type(PROMPT + "whoami"); term.writeln("");
+    await sleep(220);
+    out("muhammed fahim");
+
+    await sleep(420);
+    await type(PROMPT + "stack --check"); term.writeln("");
+    await sleep(220);
+    out("react ▸ node ▸ firebase ▸ vite");
+
+    await sleep(420);
+    await type(PROMPT + "build --portfolio"); term.writeln("");
+    await sleep(180);
+
+    /* progress that can only finish once truly loaded */
+    const bar = "\x1b[1;33m▓\x1b[0m", empty = "░", w = 14;
+    let p = 0;
+    const draw = () => {
+      const filled = Math.floor((p / 100) * w);
+      term.write("\r  assembling portfolio  \x1b[1;32m[" +
+        bar.repeat(filled) + empty.repeat(w - filled) +
+        "\x1b[0m] " + String(p).padStart(3, " ") + "%");
+    };
+    draw();
+    while (p < 100) {
+      await sleep(52);
+      const target = buildReady ? 100 : Math.min(62, p + 2 + Math.random() * 5);
+      if (target > p) p = target;
+      draw();
+    }
+    term.write("\r\x1b[2K");
+    out("  done — welcome.");
+    term.writeln("");
+    term.write("\x1b[90m└──────────────────────────────────────────────────────┘\x1b[0m");
+
+    await sleep(650);
+    reveal();
+  })();
+
+  function reveal() {
+    const win = document.getElementById("termwin");
+    win.classList.add("go");
+    const nm = document.getElementById("nm");
+    const caret = document.getElementById("caret");
+    const welcome = document.getElementById("welcome");
+    const status = document.getElementById("status");
+    setTimeout(() => {
+      welcome.classList.add("in");
+      status.classList.add("on");
+      setTimeout(() => {
+        nm.classList.add("nok");
+        caret.remove();
+      }, 1800);
+    }, 500);
+  }
+  </script>
+</body>
+</html>
