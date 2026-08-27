@@ -3,9 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { getHeroData, updateHeroData } from "@/lib/firestore";
-import { uploadFile } from "@/lib/storage";
 import { Button } from "@/components/ui/Button";
 import { ImageCropModal } from "@/components/ui/ImageCropModal";
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 const defaultHero = {
   title: "",
@@ -20,7 +28,6 @@ export function TabHeroConfig() {
   const [saving, setSaving] = useState(false);
   const [cropOpen, setCropOpen] = useState(false);
   const [cropSrc, setCropSrc] = useState("");
-  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -67,16 +74,10 @@ export function TabHeroConfig() {
 
   async function handleCropComplete(file) {
     if (!file) return;
-    setUploadingPhoto(true);
-    try {
-      const url = await uploadFile(file, `hero/${Date.now()}-photo.png`);
-      setForm((prev) => ({ ...prev, photo_url: url }));
-      toast.success("Photo uploaded");
-    } catch {
-      toast.error("Failed to upload photo");
-    } finally {
-      setUploadingPhoto(false);
-    }
+    downloadBlob(file, "my-picture.png");
+    toast.success(
+      "Cropped photo saved to Downloads — place it at public/my-picture.png and redeploy."
+    );
   }
 
   if (loading) {
@@ -136,22 +137,28 @@ export function TabHeroConfig() {
             <label htmlFor="hero-photo" className="block text-sm font-medium text-themeText/70">
               Profile Photo
             </label>
+            <p className="text-xs text-themeText/50">
+              The site uses the local file{" "}
+              <code className="text-themeAccent">public/my-picture.png</code>{" "}
+              by default. Leave the field empty to use it, or enter an override
+              URL/path.
+            </p>
             <div className="flex items-center gap-2">
               <input
                 id="hero-photo"
                 type="text"
                 value={form.photo_url}
                 onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
+                placeholder="/my-picture.png"
                 className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
               />
             </div>
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                disabled={uploadingPhoto}
-                className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors disabled:opacity-50"
+                className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
               >
-                {uploadingPhoto ? "Uploading…" : "Upload & Crop Photo"}
+                Crop New Photo (Save Locally)
               </button>
               <input
                 ref={fileInputRef}
@@ -160,14 +167,6 @@ export function TabHeroConfig() {
                 className="hidden"
                 onChange={handleFileSelected}
               />
-              {form.photo_url && (
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-                >
-                  Replace
-                </button>
-              )}
             </div>
           </div>
 
@@ -179,16 +178,14 @@ export function TabHeroConfig() {
         <div className="glass space-y-6">
           <h2 className="text-xl font-semibold text-themeText">Preview</h2>
           <div className="flex flex-col items-center gap-4 text-center">
-            {form.photo_url && (
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 blur-xl" />
-                <img
-                  src={form.photo_url}
-                  alt="Hero preview"
-                  className="relative h-44 w-44 rounded-full object-cover border-2 border-themeAccent/50"
-                />
-              </div>
-            )}
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 blur-xl" />
+              <img
+                src={form.photo_url || "/my-picture.png"}
+                alt="Hero preview"
+                className="relative h-44 w-44 rounded-full object-cover border-2 border-themeAccent/50"
+              />
+            </div>
             <div>
               <h3 className="text-2xl font-bold text-themeText">
                 {form.title || "Your Name"}

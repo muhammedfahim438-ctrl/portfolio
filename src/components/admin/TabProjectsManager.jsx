@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { getProjects, addProject, updateProject, deleteProject } from "@/lib/firestore";
-import { uploadFile } from "@/lib/storage";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
@@ -32,10 +31,7 @@ export function TabProjectsManager() {
   const [tagsInput, setTagsInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
-  const [uploadingImg, setUploadingImg] = useState(false);
-  const [uploadingGallery, setUploadingGallery] = useState(false);
-  const mainImgRef = useRef(null);
-  const galleryRef = useRef(null);
+  const [galleryInput, setGalleryInput] = useState("");
 
   const load = useCallback(async () => {
     try {
@@ -130,43 +126,18 @@ export function TabProjectsManager() {
     }
   }
 
-  async function handleMainImageUpload(file) {
-    if (!file) return;
-    setUploadingImg(true);
-    try {
-      const url = await uploadFile(file, `projects/main/${Date.now()}_${file.name}`);
-      setForm((prev) => ({ ...prev, image_url: url }));
-      toast.success("Main image uploaded");
-    } catch {
-      toast.error("Failed to upload image");
-    } finally {
-      setUploadingImg(false);
-    }
-  }
-
-  async function handleGalleryUpload(files) {
-    if (!files?.length) return;
-    setUploadingGallery(true);
-    try {
-      const urls = [];
-      for (const file of files) {
-        const url = await uploadFile(file, `projects/gallery/${Date.now()}_${file.name}`);
-        urls.push(url);
-      }
-      setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
-      toast.success(`${urls.length} image(s) uploaded`);
-    } catch {
-      toast.error("Failed to upload images");
-    } finally {
-      setUploadingGallery(false);
-    }
-  }
-
   function removeGalleryImage(index) {
     setForm((prev) => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
     }));
+  }
+
+  function addGalleryUrl() {
+    const url = galleryInput.trim();
+    if (!url) return;
+    setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
+    setGalleryInput("");
   }
 
   if (loading) {
@@ -328,19 +299,20 @@ export function TabProjectsManager() {
               Main Thumbnail Image
             </label>
             <div className="flex items-center gap-3">
-              {form.image_url && (
+              {form.image_url ? (
                 <img src={form.image_url} alt="" className="w-16 h-16 rounded-lg object-cover border border-themeBorder" />
+              ) : (
+                <div className="w-16 h-16 rounded-lg border border-dashed border-themeBorder flex items-center justify-center text-xs text-themeText/40">
+                  none
+                </div>
               )}
-              <label className="cursor-pointer px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors">
-                {uploadingImg ? "Uploading…" : form.image_url ? "Change Image" : "Upload Image"}
-                <input
-                  ref={mainImgRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleMainImageUpload(e.target.files?.[0])}
-                />
-              </label>
+              <input
+                type="text"
+                value={form.image_url}
+                onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                placeholder="/projects/xyz.png or https://…"
+                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              />
             </div>
           </div>
 
@@ -361,17 +333,24 @@ export function TabProjectsManager() {
                 </div>
               ))}
             </div>
-            <label className="cursor-pointer px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors inline-block">
-              {uploadingGallery ? "Uploading…" : "Add Gallery Images"}
+            <div className="flex items-center gap-2">
               <input
-                ref={galleryRef}
-                type="file"
-                accept="image/*"
-                multiple
-                className="hidden"
-                onChange={(e) => handleGalleryUpload(e.target.files)}
+                type="text"
+                value={galleryInput}
+                onChange={(e) => setGalleryInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") addGalleryUrl();
+                }}
+                placeholder="Paste image URL and press Enter / Add"
+                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
               />
-            </label>
+              <button
+                onClick={addGalleryUrl}
+                className="px-4 py-2.5 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors shrink-0"
+              >
+                Add URL
+              </button>
+            </div>
           </div>
 
           <div className="space-y-1.5">

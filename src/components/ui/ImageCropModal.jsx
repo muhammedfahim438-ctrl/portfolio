@@ -20,7 +20,7 @@ async function cropImage(imageSrc, crop, zoom, rotation = 0) {
   const rotatedW = image.width * cos + image.height * sin;
   const rotatedH = image.width * sin + image.height * cos;
 
-  const size = 512;
+  const size = 1024;
   canvas.width = size;
   canvas.height = size;
 

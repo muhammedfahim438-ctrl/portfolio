@@ -9,7 +9,6 @@ import {
   updateTestimonial,
   deleteTestimonial,
 } from "@/lib/firestore";
-import { uploadFile } from "@/lib/storage";
 import { Button } from "@/components/ui/Button";
 
 const emptyForm = {
@@ -27,7 +26,7 @@ export function TabTestimonials() {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
-  const [uploadFor, setUploadFor] = useState(null);
+  const [avatarDrafts, setAvatarDrafts] = useState({});
 
   const load = useCallback(async () => {
     try {
@@ -119,20 +118,17 @@ export function TabTestimonials() {
     }
   }
 
-  async function handleAvatarUpload(id, file) {
-    if (!file) return;
-    setUploadFor(id);
+  async function handleAvatarSave(id) {
+    const url = (avatarDrafts[id] ?? "").trim();
     try {
-      const url = await uploadFile(file, `testimonials/${id}/${file.name}`);
       await updateTestimonial(id, { avatar_url: url });
       setItems((prev) =>
         prev.map((t) => (t.id === id ? { ...t, avatar_url: url } : t))
       );
-      toast.success("Avatar uploaded");
+      setAvatarDrafts((prev) => ({ ...prev, [id]: url }));
+      toast.success(url ? "Avatar URL saved" : "Avatar cleared");
     } catch {
-      toast.error("Failed to upload avatar");
-    } finally {
-      setUploadFor(null);
+      toast.error("Failed to save avatar URL");
     }
   }
 
@@ -217,6 +213,20 @@ export function TabTestimonials() {
           </div>
         </div>
 
+        <div className="space-y-1.5">
+          <label htmlFor="t-avatar" className="block text-sm font-medium text-themeText/70">
+            Avatar Image URL
+          </label>
+          <input
+            id="t-avatar"
+            type="text"
+            value={form.avatar_url}
+            onChange={(e) => setForm({ ...form, avatar_url: e.target.value })}
+            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            placeholder="https://… or /assets/avatar.png"
+          />
+        </div>
+
         <div className="flex items-center gap-3 pt-1">
           <Button onClick={editing ? handleSaveEdit : handleAdd} disabled={adding || savingEdit}>
             {adding || savingEdit ? "Saving…" : editing ? "Save Changes" : "Add Testimonial"}
@@ -283,16 +293,26 @@ export function TabTestimonials() {
                   </p>
                 </div>
 
-                <div className="flex flex-col items-end gap-2 shrink-0">
-                  <label className="cursor-pointer px-2 py-1 text-xs rounded bg-themeBg-secondary border border-themeBorder text-themeText/60 hover:text-themeAccent hover:border-themeAccent transition-colors">
-                    {uploadFor === item.id ? "Uploading…" : "Avatar"}
+                <div className="flex flex-col gap-1.5 shrink-0">
+                  <div className="flex items-center gap-2">
                     <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => handleAvatarUpload(item.id, e.target.files?.[0])}
+                      value={avatarDrafts[item.id] ?? item.avatar_url ?? ""}
+                      onChange={(e) =>
+                        setAvatarDrafts((prev) => ({ ...prev, [item.id]: e.target.value }))
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleAvatarSave(item.id);
+                      }}
+                      placeholder="Avatar image URL"
+                      className="w-44 rounded-md bg-themeInput px-2 py-1 text-xs text-themeText border border-themeBorder outline-none focus:border-themeAccent"
                     />
-                  </label>
+                    <button
+                      onClick={() => handleAvatarSave(item.id)}
+                      className="text-xs text-green-400 hover:text-green-300 font-medium"
+                    >
+                      Save
+                    </button>
+                  </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => startEdit(item)}

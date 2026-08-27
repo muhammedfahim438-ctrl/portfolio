@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import {
   getSkills,
@@ -14,7 +14,6 @@ import {
   getSocialData,
   updateSocialData,
 } from "@/lib/firestore";
-import { uploadFile } from "@/lib/storage";
 import { Button } from "@/components/ui/Button";
 
 const CATEGORIES = [
@@ -301,8 +300,7 @@ function CertificationsManager() {
   const [year, setYear] = useState("");
   const [credentialUrl, setCredentialUrl] = useState("");
   const [adding, setAdding] = useState(false);
-  const badgeInputRef = useRef(null);
-  const [uploadingBadge, setUploadingBadge] = useState(null);
+  const [badgeDrafts, setBadgeDrafts] = useState({});
 
   const load = useCallback(async () => {
     try {
@@ -357,20 +355,17 @@ function CertificationsManager() {
     }
   }
 
-  async function handleBadgeUpload(certId, file) {
-    if (!file) return;
-    setUploadingBadge(certId);
+  async function handleBadgeSave(certId) {
+    const url = (badgeDrafts[certId] ?? "").trim();
     try {
-      const url = await uploadFile(file, `certifications/${certId}/${file.name}`);
       await updateCertification(certId, { badge_image_url: url });
       setCerts((prev) =>
         prev.map((c) => (c.id === certId ? { ...c, badge_image_url: url } : c))
       );
-      toast.success("Badge image uploaded");
+      setBadgeDrafts((prev) => ({ ...prev, [certId]: url }));
+      toast.success(url ? "Badge URL saved" : "Badge cleared");
     } catch {
-      toast.error("Failed to upload badge image");
-    } finally {
-      setUploadingBadge(null);
+      toast.error("Failed to save badge URL");
     }
   }
 
@@ -401,22 +396,34 @@ function CertificationsManager() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <label className="cursor-pointer px-2 py-1 text-xs rounded bg-themeBg-secondary border border-themeBorder text-themeText/60 hover:text-themeAccent hover:border-themeAccent transition-colors">
-                  {uploadingBadge === cert.id ? "Uploading…" : "Badge"}
+              <div className="flex flex-col gap-1.5 shrink-0">
+                <div className="flex items-center gap-2">
                   <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handleBadgeUpload(cert.id, e.target.files?.[0])}
+                    value={badgeDrafts[cert.id] ?? cert.badge_image_url ?? ""}
+                    onChange={(e) =>
+                      setBadgeDrafts((prev) => ({ ...prev, [cert.id]: e.target.value }))
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleBadgeSave(cert.id);
+                    }}
+                    placeholder="Badge image URL"
+                    className="w-44 rounded-md bg-themeInput px-2 py-1 text-xs text-themeText border border-themeBorder outline-none focus:border-themeAccent"
                   />
-                </label>
-                <button
-                  onClick={() => handleDelete(cert.id)}
-                  className="text-red-400 hover:text-red-300 text-sm px-2 py-1"
-                >
-                  Delete
-                </button>
+                  <button
+                    onClick={() => handleBadgeSave(cert.id)}
+                    className="text-xs text-green-400 hover:text-green-300 font-medium"
+                  >
+                    Save
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleDelete(cert.id)}
+                    className="text-xs text-red-400 hover:text-red-300"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -487,8 +494,6 @@ function SocialLinksManager() {
   const [form, setForm] = useState(emptySocial);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploadingResume, setUploadingResume] = useState(false);
-  const resumeInputRef = useRef(null);
 
   useEffect(() => {
     async function load() {
@@ -524,21 +529,6 @@ function SocialLinksManager() {
       toast.error("Failed to save social data");
     } finally {
       setSaving(false);
-    }
-  }
-
-  async function handleResumeUpload(file) {
-    if (!file) return;
-    setUploadingResume(true);
-    try {
-      const url = await uploadFile(file, `resume/${file.name}`);
-      setForm((prev) => ({ ...prev, resume_pdf_url: url }));
-      await updateSocialData({ resume_pdf_url: url });
-      toast.success("Resume uploaded");
-    } catch {
-      toast.error("Failed to upload resume");
-    } finally {
-      setUploadingResume(false);
     }
   }
 
@@ -582,30 +572,32 @@ function SocialLinksManager() {
 
       <div className="border-t border-themeBorder pt-4 space-y-3">
         <h3 className="text-sm font-medium text-themeText/70">Resume PDF</h3>
-        <div className="flex items-center gap-3">
-          {form.resume_pdf_url ? (
-            <a
-              href={form.resume_pdf_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-themeAccent hover:underline truncate max-w-xs"
-            >
-              Current resume ✓
-            </a>
-          ) : (
-            <span className="text-sm text-themeText/40">No resume uploaded</span>
-          )}
-          <label className="cursor-pointer px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors">
-            {uploadingResume ? "Uploading…" : "Upload PDF"}
-            <input
-              ref={resumeInputRef}
-              type="file"
-              accept=".pdf"
-              className="hidden"
-              onChange={(e) => handleResumeUpload(e.target.files?.[0])}
-            />
+        <p className="text-xs text-themeText/50">
+          The site uses the local file{" "}
+          <code className="text-themeAccent">public/resume.pdf</code> by default. Leave
+          the field empty to use it, or enter an override URL/path.
+        </p>
+        <div className="space-y-1.5">
+          <label htmlFor="social-resume" className="block text-sm font-medium text-themeText/70">
+            Resume URL (override)
           </label>
+          <input
+            id="social-resume"
+            type="text"
+            value={form.resume_pdf_url}
+            onChange={(e) => setForm({ ...form, resume_pdf_url: e.target.value })}
+            placeholder="/resume.pdf"
+            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+          />
         </div>
+        <a
+          href={form.resume_pdf_url || "/resume.pdf"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block text-sm text-themeAccent hover:underline"
+        >
+          Preview resume ✓
+        </a>
       </div>
 
       <Button onClick={handleSave} disabled={saving}>
