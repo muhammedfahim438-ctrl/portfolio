@@ -89,7 +89,7 @@ export function ProjectDetailModal({ isOpen, onClose, project }) {
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-8">
+            <div className="flex-1 overflow-y-auto p-6 space-y-8" data-lenis-prevent>
               {/* Media Section */}
               {(hasImages || hasVideo) && (
                 <div className="space-y-4">

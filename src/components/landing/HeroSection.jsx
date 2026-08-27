@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiMail, FiFileText, FiVolume2, FiMic } from "react-icons/fi";
+import { FiMail, FiFileText, FiVolume2, FiMic, FiArrowDown } from "react-icons/fi";
 import { useSpeech } from "@/hooks/useSpeech";
 import { getSocialData, getHeroData } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ResumeModal } from "@/components/ui/ResumeModal";
+import { ScenicScene } from "@/components/landing/ScenicScene";
 
 const DEFAULT_TITLE = "Hi, I'm Muhammed Fahim M";
 const DEFAULT_VOICE_TEXT =
@@ -91,7 +92,8 @@ export function HeroSection() {
   return (
     <>
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        <div className="container mx-auto px-4 md:px-8 py-20">
+        <ScenicScene variant="hero" />
+        <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
@@ -178,6 +180,8 @@ export function HeroSection() {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/10 to-themeSecondary/10 border border-themeBorder flex items-center justify-center overflow-hidden">
                   <PhotoImage />
                 </div>
+
+                <RotatingBadge />
               </div>
             </motion.div>
           </div>
@@ -225,6 +229,20 @@ export function HeroSection() {
             </button>
           </div>
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col items-center gap-3"
+        >
+          <span className="text-[10px] tracking-[0.35em] uppercase text-themeText-secondary">
+            Scroll
+          </span>
+          <div className="w-6 h-10 rounded-full border-2 border-themeBorder flex items-start justify-center p-1.5">
+            <div className="w-1 h-2 rounded-full bg-themeAccent animate-scroll-dot" />
+          </div>
+        </motion.div>
       </section>
 
       <ResumeModal
@@ -250,6 +268,42 @@ function AnimatedSpeechText({ speaking, currentText }) {
         <span className="animate-pulse text-themeAccent">|</span>
       )}
     </motion.p>
+  );
+}
+
+function RotatingBadge() {
+  return (
+    <div
+      className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 z-10 flex h-24 w-24 md:h-28 md:w-28 items-center justify-center rounded-full bg-themeBg/90 glass"
+      data-cursor-hover
+    >
+      <svg
+        viewBox="0 0 100 100"
+        className="absolute inset-0 h-full w-full origin-center animate-spin-slow p-1"
+        aria-hidden="true"
+      >
+        <defs>
+          <path
+            id="hero-badge-circle"
+            d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"
+          />
+        </defs>
+        <text
+          fontSize="10.5"
+          letterSpacing="2.4"
+          fontWeight="600"
+          fill="var(--themeText)"
+          className="uppercase"
+          style={{ fontFamily: "ui-monospace, monospace" }}
+        >
+          <textPath href="#hero-badge-circle">
+            Scroll to explore {/* */}
+            &#8226; Let&apos;s connect &#8226;
+          </textPath>
+        </text>
+      </svg>
+      <FiArrowDown className="h-4 w-4 text-themeAccent" />
+    </div>
   );
 }
 

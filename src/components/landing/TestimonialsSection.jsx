@@ -44,7 +44,7 @@ export function TestimonialsSection() {
   const current = items[index];
 
   return (
-    <section className="py-24 px-4">
+    <section id="testimonials" className="py-24 px-4">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

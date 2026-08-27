@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiMail, FiPhone, FiMapPin, FiSend } from "react-icons/fi";
+import { FiMail, FiPhone, FiMapPin, FiSend, FiArrowUp } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { sendMessage, getSocialData } from "@/lib/firestore";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { ScenicScene } from "@/components/landing/ScenicScene";
 
 const MARQUEE_ITEMS = [
   "Data Science",
@@ -29,11 +30,11 @@ const REASONS = [
 ];
 
 const NAV_LINKS = [
-  { label: "About", href: "#" },
-  { label: "Skills", href: "#" },
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
-  { label: "Certifications", href: "#" },
-  { label: "Testimonials", href: "#" },
+  { label: "Certifications", href: "#certifications" },
+  { label: "Testimonials", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -123,7 +124,11 @@ export function ContactFooter() {
         </div>
       </section>
 
-      <section id="contact" className="py-24 px-4">
+      <div className="relative overflow-hidden">
+        <ScenicScene variant="footer" />
+
+        <div className="relative z-10">
+          <section id="contact" className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -382,11 +387,23 @@ export function ContactFooter() {
               >
                 <FiMail className="w-5 h-5" />
               </a>
+              <button
+                onClick={() => {
+                  if (window.__lenis) window.__lenis.scrollTo(0);
+                  else window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-themeBorder text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors"
+                aria-label="Go to top"
+              >
+                <FiArrowUp className="w-4 h-4" />
+              </button>
               <ThemeToggle />
             </div>
           </div>
         </div>
-      </footer>
+        </footer>
+        </div>
+      </div>
     </>
   );
 }

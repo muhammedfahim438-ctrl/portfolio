@@ -149,6 +149,45 @@ html.lenis, html.lenis body {
   animation-play-state: paused;
 }
 
+/* Scenery: rotating badge + drifting orbs */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(18px, -26px) scale(1.08); }
+  66% { transform: translate(-16px, 16px) scale(0.95); }
+}
+
+.animate-orb {
+  animation: orb-drift 16s ease-in-out infinite;
+}
+
+/* Scenery: faint dot-grid texture */
+.scene-dots {
+  background-image: radial-gradient(var(--themeBorder) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse at center, black 25%, transparent 78%);
+}
+
+/* Scroll indicator */
+@keyframes scroll-dot {
+  0% { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(14px); opacity: 0; }
+}
+
+.animate-scroll-dot {
+  animation: scroll-dot 1.8s ease-in-out infinite;
+}
+
 /* Custom Cursor */
 .custom-cursor {
   pointer-events: none;

@@ -26,6 +26,7 @@ function LandingPage() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       touchMultiplier: 2,
     });
+    window.__lenis = lenis;
 
     function raf(time) {
       lenis.raf(time);
@@ -34,7 +35,10 @@ function LandingPage() {
 
     requestAnimationFrame(raf);
 
-    return () => lenis.destroy();
+    return () => {
+      window.__lenis = undefined;
+      lenis.destroy();
+    };
   }, []);
 
   return (

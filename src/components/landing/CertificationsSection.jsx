@@ -42,6 +42,7 @@ export function CertificationsSection() {
 
   const shown = certs.slice(0, visibleCount);
   const remaining = certs.length - visibleCount;
+  const allShown = visibleCount >= certs.length;
 
   const handleVerify = (cert) => {
     setActiveCert(cert);
@@ -50,7 +51,7 @@ export function CertificationsSection() {
 
   return (
     <>
-      <section className="py-24 px-4">
+      <section id="certifications" className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -129,24 +130,22 @@ export function CertificationsSection() {
                 ))}
               </motion.div>
 
-              {remaining > 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="text-center mt-10"
-                >
+              <div className="text-center mt-10">
+                <p className="text-sm text-themeText-secondary mb-4">
+                  Showing {shown.length} of {certs.length} certifications
+                </p>
+                {!allShown && (
                   <button
-                    onClick={() => setVisibleCount((c) => c + VISIBLE_COUNT)}
+                    onClick={() => setVisibleCount(certs.length)}
                     className="inline-flex items-center gap-2 px-8 py-3 rounded-xl border border-themeBorder text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors font-medium"
                   >
-                    View More
+                    View All
                     <span className="font-mono text-xs text-themeAccent">
                       +{remaining}
                     </span>
                   </button>
-                </motion.div>
-              )}
+                )}
+              </div>
             </>
           )}
         </div>
