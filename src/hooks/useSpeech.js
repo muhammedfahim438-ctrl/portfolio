@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from "react";
 
 export function useSpeech() {
   const [speaking, setSpeaking] = useState(false);
+  const [currentText, setCurrentText] = useState("");
   const utteranceRef = useRef(null);
 
   const speak = useCallback((text) => {
@@ -19,9 +20,31 @@ export function useSpeech() {
     const englishVoice = voices.find((v) => v.lang.startsWith("en"));
     if (englishVoice) utterance.voice = englishVoice;
 
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
+    let words = text.split(/\s+/);
+    let wordCount = 0;
+
+    utterance.onstart = () => {
+      setSpeaking(true);
+      setCurrentText("");
+      wordCount = 0;
+    };
+
+    utterance.onboundary = (event) => {
+      if (event.name === "word") {
+        wordCount += 1;
+        setCurrentText(words.slice(0, wordCount).join(" "));
+      }
+    };
+
+    utterance.onend = () => {
+      setSpeaking(false);
+      setCurrentText(text);
+    };
+
+    utterance.onerror = () => {
+      setSpeaking(false);
+      setCurrentText("");
+    };
 
     utteranceRef.current = utterance;
     window.speechSynthesis.speak(utterance);
@@ -30,8 +53,9 @@ export function useSpeech() {
   const stop = useCallback(() => {
     window.speechSynthesis.cancel();
     setSpeaking(false);
+    setCurrentText("");
     utteranceRef.current = null;
   }, []);
 
-  return { speak, stop, speaking };
+  return { speak, stop, speaking, currentText };
 }

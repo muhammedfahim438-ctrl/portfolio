@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiMail, FiFileText } from "react-icons/fi";
+import { FiMail, FiFileText, FiVolume2, FiMic } from "react-icons/fi";
 import { useSpeech } from "@/hooks/useSpeech";
+import { getSocialData, getHeroData } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ResumeModal } from "@/components/ui/ResumeModal";
@@ -20,7 +21,7 @@ const ROLE_PILLS = [
 ];
 
 export function HeroSection() {
-  const { speak, stop, speaking } = useSpeech();
+  const { speak, stop, speaking, currentText } = useSpeech();
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [resumeOpen, setResumeOpen] = useState(false);
@@ -47,6 +48,26 @@ export function HeroSection() {
     }, 530);
     return () => clearInterval(cursorInterval);
   }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    async function fetchResume() {
+      try {
+        const data = await getSocialData();
+        if (mounted && data?.resume_pdf_url) {
+          setResumeUrl(data.resume_pdf_url);
+        }
+      } catch {
+        // fallback to /resume.pdf below
+      }
+    }
+    fetchResume();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const activeResumeUrl = resumeUrl || "/resume.pdf";
 
   return (
     <>
@@ -97,20 +118,15 @@ export function HeroSection() {
                   className="flex items-center gap-2 px-4 py-2 rounded-full bg-themeBg-secondary border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors text-sm"
                   aria-label={speaking ? "Stop speaking" : "Play voice intro"}
                 >
-                  <svg
-                    className={`w-4 h-4 ${speaking ? "animate-pulse text-themeAccent" : ""}`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                    <line x1="12" y1="19" x2="12" y2="23" />
-                    <line x1="8" y1="23" x2="16" y2="23" />
-                  </svg>
+                  {speaking ? (
+                    <FiVolume2 className="w-4 h-4 animate-pulse text-themeAccent" />
+                  ) : (
+                    <FiMic className="w-4 h-4" />
+                  )}
                   {speaking ? "Stop" : "Play Voice"}
                 </button>
+
+                <AnimatedSpeechText speaking={speaking} currentText={currentText} />
               </div>
 
               <div className="flex flex-wrap gap-4 pt-2">
@@ -141,7 +157,7 @@ export function HeroSection() {
               <div className="relative w-72 h-72 md:w-96 md:h-96">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/20 to-themeSecondary/20 blur-2xl" />
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/10 to-themeSecondary/10 border border-themeBorder flex items-center justify-center overflow-hidden">
-                  <img src="/my-picture.png" alt="Muhammed Fahim M" className="w-full h-full object-cover" />
+                  <PhotoImage />
                 </div>
               </div>
             </motion.div>
@@ -195,8 +211,57 @@ export function HeroSection() {
       <ResumeModal
         isOpen={resumeOpen}
         onClose={() => setResumeOpen(false)}
-        resumeUrl={resumeUrl}
+        resumeUrl={activeResumeUrl}
       />
     </>
+  );
+}
+
+function AnimatedSpeechText({ speaking, currentText }) {
+  if (!speaking && !currentText) return null;
+
+  return (
+    <motion.p
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex-1 min-w-0 text-sm text-themeText/70 italic leading-relaxed"
+    >
+      <span className="text-themeAccent font-medium">▸</span> {currentText}
+      {speaking && (
+        <span className="animate-pulse text-themeAccent">|</span>
+      )}
+    </motion.p>
+  );
+}
+
+function PhotoImage() {
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [imgFailed, setImgFailed] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const data = await getHeroData();
+        if (mounted && data?.photo_url) setPhotoUrl(data.photo_url);
+      } catch {
+        // fallback to bundled image
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const src = (photoUrl && !imgFailed) ? photoUrl : "/my-picture.png";
+
+  return (
+    <img
+      src={src}
+      alt="Muhammed Fahim M"
+      onError={() => setImgFailed(true)}
+      className="w-full h-full object-cover"
+    />
   );
 }

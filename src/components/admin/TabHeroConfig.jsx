@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { getHeroData, updateHeroData } from "@/lib/firestore";
+import { uploadFile } from "@/lib/storage";
 import { Button } from "@/components/ui/Button";
+import { ImageCropModal } from "@/components/ui/ImageCropModal";
 
 const defaultHero = {
   title: "",
@@ -16,6 +18,10 @@ export function TabHeroConfig() {
   const [form, setForm] = useState(defaultHero);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [cropOpen, setCropOpen] = useState(false);
+  const [cropSrc, setCropSrc] = useState("");
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     async function load() {
@@ -50,6 +56,29 @@ export function TabHeroConfig() {
     }
   }
 
+  function handleFileSelected(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setCropSrc(url);
+    setCropOpen(true);
+    e.target.value = "";
+  }
+
+  async function handleCropComplete(file) {
+    if (!file) return;
+    setUploadingPhoto(true);
+    try {
+      const url = await uploadFile(file, `hero/${Date.now()}-photo.png`);
+      setForm((prev) => ({ ...prev, photo_url: url }));
+      toast.success("Photo uploaded");
+    } catch {
+      toast.error("Failed to upload photo");
+    } finally {
+      setUploadingPhoto(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-themeText/50">
@@ -59,90 +88,128 @@ export function TabHeroConfig() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
-      <div className="glass space-y-6">
-        <h2 className="text-xl font-semibold text-themeText">Edit Hero Section</h2>
+    <>
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="glass space-y-6">
+          <h2 className="text-xl font-semibold text-themeText">Edit Hero Section</h2>
 
-        <div className="space-y-1.5">
-          <label htmlFor="hero-title" className="block text-sm font-medium text-themeText/70">
-            Title
-          </label>
-          <input
-            id="hero-title"
-            type="text"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="hero-subtitle" className="block text-sm font-medium text-themeText/70">
-            Subtitle
-          </label>
-          <input
-            id="hero-subtitle"
-            type="text"
-            value={form.subtitle}
-            onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="hero-voice" className="block text-sm font-medium text-themeText/70">
-            Voice Text
-          </label>
-          <textarea
-            id="hero-voice"
-            rows={4}
-            value={form.voice_text}
-            onChange={(e) => setForm({ ...form, voice_text: e.target.value })}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="hero-photo" className="block text-sm font-medium text-themeText/70">
-            Photo URL
-          </label>
-          <input
-            id="hero-photo"
-            type="text"
-            value={form.photo_url}
-            onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
-          />
-        </div>
-
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? "Saving…" : "Save Changes"}
-        </Button>
-      </div>
-
-      <div className="glass space-y-6">
-        <h2 className="text-xl font-semibold text-themeText">Preview</h2>
-        <div className="flex flex-col items-center gap-4 text-center">
-          {form.photo_url && (
-            <img
-              src={form.photo_url}
-              alt="Hero preview"
-              className="h-40 w-40 rounded-full object-cover border-2 border-themeBorder"
+          <div className="space-y-1.5">
+            <label htmlFor="hero-title" className="block text-sm font-medium text-themeText/70">
+              Title
+            </label>
+            <input
+              id="hero-title"
+              type="text"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
             />
-          )}
-          <div>
-            <h3 className="text-2xl font-bold text-themeText">
-              {form.title || "Your Name"}
-            </h3>
-            <p className="mt-1 text-themeText/60">{form.subtitle || "Subtitle goes here"}</p>
           </div>
-          {form.voice_text && (
-            <p className="max-w-sm text-sm text-themeText/50 italic">
-              &ldquo;{form.voice_text}&rdquo;
-            </p>
-          )}
+
+          <div className="space-y-1.5">
+            <label htmlFor="hero-subtitle" className="block text-sm font-medium text-themeText/70">
+              Subtitle
+            </label>
+            <input
+              id="hero-subtitle"
+              type="text"
+              value={form.subtitle}
+              onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
+              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="hero-voice" className="block text-sm font-medium text-themeText/70">
+              Voice Text
+            </label>
+            <textarea
+              id="hero-voice"
+              rows={4}
+              value={form.voice_text}
+              onChange={(e) => setForm({ ...form, voice_text: e.target.value })}
+              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="hero-photo" className="block text-sm font-medium text-themeText/70">
+              Profile Photo
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                id="hero-photo"
+                type="text"
+                value={form.photo_url}
+                onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
+                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              />
+            </div>
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingPhoto}
+                className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors disabled:opacity-50"
+              >
+                {uploadingPhoto ? "Uploading…" : "Upload & Crop Photo"}
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileSelected}
+              />
+              {form.photo_url && (
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
+                >
+                  Replace
+                </button>
+              )}
+            </div>
+          </div>
+
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? "Saving…" : "Save Changes"}
+          </Button>
+        </div>
+
+        <div className="glass space-y-6">
+          <h2 className="text-xl font-semibold text-themeText">Preview</h2>
+          <div className="flex flex-col items-center gap-4 text-center">
+            {form.photo_url && (
+              <div className="relative">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 blur-xl" />
+                <img
+                  src={form.photo_url}
+                  alt="Hero preview"
+                  className="relative h-44 w-44 rounded-full object-cover border-2 border-themeAccent/50"
+                />
+              </div>
+            )}
+            <div>
+              <h3 className="text-2xl font-bold text-themeText">
+                {form.title || "Your Name"}
+              </h3>
+              <p className="mt-1 text-themeText/60">{form.subtitle || "Subtitle goes here"}</p>
+            </div>
+            {form.voice_text && (
+              <p className="max-w-sm text-sm text-themeText/50 italic">
+                &ldquo;{form.voice_text}&rdquo;
+              </p>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      <ImageCropModal
+        open={cropOpen}
+        imageSrc={cropSrc}
+        onClose={() => setCropOpen(false)}
+        onCropComplete={handleCropComplete}
+      />
+    </>
   );
 }

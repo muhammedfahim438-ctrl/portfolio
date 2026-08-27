@@ -2,10 +2,29 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getHeroData } from "@/lib/firestore";
 
 export function SplashScreen() {
   const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [imgFailed, setImgFailed] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const data = await getHeroData();
+        if (mounted && data?.photo_url) setPhotoUrl(data.photo_url);
+      } catch {
+        // fallback to bundled image
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,7 +64,12 @@ export function SplashScreen() {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 border border-themeBorder flex items-center justify-center overflow-hidden"
             >
-              <img src="/my-picture.png" alt="Muhammed Fahim M" className="w-full h-full object-cover" />
+              <img
+                src={(photoUrl && !imgFailed) ? photoUrl : "/my-picture.png"}
+                alt="Muhammed Fahim M"
+                onError={() => setImgFailed(true)}
+                className="w-full h-full object-cover"
+              />
             </motion.div>
           </div>
 
