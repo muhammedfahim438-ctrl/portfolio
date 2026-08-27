@@ -110,7 +110,7 @@ export function HeroSection() {
                 Welcome to my portfolio
               </motion.p>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight uppercase tracking-wide">
                 {typedText}
                 <span
                   className={`inline-block w-[3px] h-[1em] bg-themeAccent align-middle ml-1 transition-opacity ${

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 06 · Magnetic Enter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --bg:#0e120e; --ink:#eef3ec; --muted:#93a093; --accent:#aac8a7; --acc2:#c3edc0; --line:#2b372b; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:
+    radial-gradient(900px 500px at 20% -10%, rgba(170,200,167,.08), transparent 60%),
+    var(--bg);
+    color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  .hint{position:fixed;top:22px;right:26px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;animation:blink 2.4s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+  .stage{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .elf-label{font-family:'Inter',sans-serif;font-weight:300;font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;color:var(--muted);margin-bottom:34px;opacity:0}
+  .name{display:flex;justify-content:center;flex-wrap:wrap;gap:.06em;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.6rem,10.5vw,8.5rem);text-transform:uppercase;letter-spacing:.02em;line-height:1.05}
+  .name .ch{display:inline-block;will-change:transform;transition:none;color:var(--ink)}
+  .name .ch.alt{color:var(--acc2)}
+  .name .sp{width:.32em}
+  /* enter ring */
+  .ring{position:relative;width:150px;height:150px;margin-top:56px;opacity:0;cursor:pointer}
+  .ring svg.circ{position:absolute;inset:0;width:100%;height:100%;animation:spin 16s linear infinite}
+  .ring .circ text{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;fill:var(--muted);text-transform:uppercase}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .core{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .core .dot{display:flex;align-items:center;justify-content:center;width:82px;height:82px;border-radius:99px;border:1px solid rgba(195,237,192,.4);background:rgba(195,237,192,.06);transition:transform .35s cubic-bezier(.2,1.4,.3,1),background .35s,box-shadow .35s}
+  .core .dot span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--acc2);transform:translateY(2px)}
+  .core .dot:hover{transform:scale(1.12);background:rgba(195,237,192,.14);box-shadow:0 0 40px rgba(195,237,192,.28)}
+  .flash{position:fixed;inset:0;z-index:9;background:var(--acc2);opacity:0;pointer-events:none}
+  .start{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:6;display:none;gap:14px;align-items:center}
+  .start button{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:var(--acc2);border:none;border-radius:99px;padding:11px 22px;cursor:pointer}
+  .start a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+  .start a:hover{color:var(--acc2)}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 06 · MAGNETIC ENTER</div>
+  <div class="hint">move your cursor over the name</div>
+  <div class="flash" id="flash"></div>
+
+  <div class="stage">
+    <div class="elf-label" id="label">Muhammed Fahim M · Portfolio</div>
+    <div class="name" id="name">MUHAMMED FAHIM M</div>
+
+    <div class="ring" id="ring" title="Enter portfolio">
+      <svg class="circ" viewBox="0 0 150 150">
+        <defs><path id="cp" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/></defs>
+        <text><textPath href="#cp">ENTER PORTFOLIO • STEP INSIDE • ENTER PORTFOLIO • STEP INSIDE • </textPath></text>
+      </svg>
+      <div class="core"><div class="dot"><span>ENTER</span></div></div>
+    </div>
+  </div>
+
+  <div class="start" id="start">
+    <button onclick="location.reload()">Replay</button>
+    <a href="index.html">other concepts</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script>
+    const name = document.getElementById("name");
+    const cells = [];
+    [..."MUHAMMED FAHIM M"].forEach((c, i) => {
+      const s = document.createElement("span");
+      s.textContent = c;
+      s.className = "ch";
+      const alt = (i >= 9 && i <= 13);
+      if (c === " ") s.className = "ch sp";
+      else if (alt) s.classList.add("alt");
+      name.appendChild(s);
+      cells.push(s);
+    });
+
+    gsap.set(cells, { opacity: 0, scale: 1.6, filter: "blur(10px)" });
+
+    /* reveal */
+    const tl = gsap.timeline({ defaults: { ease: "back.out(1.8)" } });
+    tl.to("#label", { opacity: 1, duration: .5 })
+      .to(cells, { opacity: 1, scale: 1, filter: "blur(0px)", duration: .8, stagger: .035 }, "-=.2")
+      .to("#ring", { opacity: 1, marginTop: 56, duration: .6, ease: "power2.out" }, "-=.3");
+
+    /* magnetic physics */
+    const quick = cells.map(el => gsap.quickTo(el, "x", { duration: .9, ease: "power3.out",  lagSmoothing: 0 }));
+    const quickY= cells.map(el => gsap.quickTo(el, "y", { duration: .9, ease: "power3.out",  lagSmoothing: 0 }));
+    addEventListener("mousemove", e => {
+      cells.forEach((el, i) => {
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        let dx = e.clientX - cx, dy = e.clientY - cy;
+        const d = Math.hypot(dx, dy);
+        const max = 26, radius = 240;
+        const pull = Math.max(0, 1 - d / radius);
+        const ang = Math.atan2(dy, dx);
+        const force = pull * max;
+        quick[i](Math.cos(ang) * force);
+        quickY[i](Math.sin(ang) * force);
+      });
+    });
+
+    /* enter ring effects */
+    const ring = document.getElementById("ring");
+    const core = ring.querySelector(".dot");
+    gsap.quickTo(core, "scale", { duration: .3, ease: "power3.out" });
+
+    /* magnetize the ring too */
+    let rx = 0, ry = 0;
+    addEventListener("mousemove", e => {
+      const r = ring.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const d = Math.hypot(e.clientX - cx, e.clientY - cy);
+      if (d < 160) {
+        rx = (e.clientX - cx) * .35; ry = (e.clientY - cy) * .35;
+        core.style.transform = `translate(${rx}px, ${ry}px) scale(1.1)`;
+      } else {
+        core.style.transform = `translate(0px, 0px) scale(1)`;
+      }
+    });
+
+    ring.addEventListener("click", () => {
+      const flash = document.getElementById("flash");
+      flash.animate(
+        [{ opacity: 0 }, { opacity: 1, scale: 1.02 }, { opacity: 0 }],
+        { duration: 950, easing: "cubic-bezier(.05,.7,.5,1)" }
+      );
+      gsap.to(".stage", { opacity: 0, duration: .5, onComplete: () => {
+        document.getElementById("start").style.display = "flex";
+      }});
+    });
+  </script>
+</body>
+</html>

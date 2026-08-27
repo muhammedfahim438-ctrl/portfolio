@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 02 · Split Reveal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --bg:#0e120e; --ink:#eef3ec; --muted:#93a093; --accent:#aac8a7; --acc2:#c3edc0; --line:#2b372b; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:
+    radial-gradient(1100px 500px at 80% -10%, rgba(170,200,167,.10), transparent 60%),
+    var(--bg);
+    color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:5;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}
+  .hud a:hover{color:var(--acc2)}
+  /* fine counter top-right */
+  .counter{position:fixed;top:20px;right:26px;z-index:5;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:.1em}
+  .counter b{color:var(--acc2);font-weight:500}
+  .stage{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+  .kicker{font-family:'Inter',sans-serif;font-weight:300;font-size:.72rem;letter-spacing:.55em;text-transform:uppercase;color:var(--muted);margin-bottom:30px;opacity:0}
+  .line{display:flex;justify-content:center;flex-wrap:wrap;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3rem,13vw,10.5rem);line-height:1.02;text-transform:uppercase;letter-spacing:.03em;transform-origin:center;perspective:800px}
+  .line .ch{display:inline-block;will-change:transform,opacity,filter}
+  .line .ch.alt{color:var(--accent)}
+  .shimmer{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:overlay;
+    background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+    transform:translateX(-130%);will-change:transform}
+  .wrap{position:relative;padding:0 6vw}
+  .tagline{font-family:'Inter',sans-serif;font-weight:300;font-size:.82rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-top:34px;opacity:0}
+  .start{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:6;display:none;gap:14px;align-items:center}
+  .start button{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:var(--acc2);border:none;border-radius:99px;padding:11px 22px;cursor:pointer}
+  .start a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+  .start a:hover{color:var(--acc2)}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 02 · SPLIT REVEAL</div>
+  <div class="counter"><b id="cnt">000</b></div>
+
+  <div class="stage">
+    <div class="kicker" id="kicker">Folio · Twenty Twenty-Six</div>
+    <div class="wrap">
+      <h1 class="line" id="line" aria-label="MUHAMMED FAHIM M"></h1>
+      <div class="shimmer" id="shimmer"></div>
+    </div>
+    <div class="tagline" id="tagline">Data Science &amp; Full-Stack Development</div>
+  </div>
+
+  <div class="start" id="start">
+    <button onclick="location.reload()">Replay</button>
+    <a href="index.html">other concepts</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script>
+    const text = "MUHAMMED FAHIM M";
+    const line = document.getElementById("line");
+    const chars = text.split("").map(c => {
+      const s = document.createElement("span");
+      s.className = "ch" + (c === " " ? " sp" : "");
+      if (c === " ") s.innerHTML = "&nbsp;";
+      else s.textContent = c;
+      line.appendChild(s);
+      return s;
+    });
+    // highlight FAHIM
+    chars.forEach((s, i) => {
+      const isAlt = (i >= 9 && i <= 13);
+      if (s.classList.contains("sp")) return;
+      if (isAlt) s.classList.add("alt");
+    });
+
+    const els = [...line.querySelectorAll(".ch:not(.sp)")];
+    gsap.set(els, { opacity: 0, rotationY: -95, y: 60, scale: .85, filter: "blur(16px)" });
+
+    const counter = { v: 0 };
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.to("#kicker", { opacity: 1, y: 0, duration: .5, delay: .2 })
+      .to(els, {
+        opacity: 1, rotationY: 0, y: 0, scale: 1, filter: "blur(0px)",
+        duration: .9, stagger: 0.045, ease: "back.out(1.6)"
+      }, "-=.1")
+      .fromTo("#shimmer", { xPercent: -230 }, { xPercent: 250, duration: 1.1, ease: "power2.inOut" }, "-=.55")
+      .to("#tagline", { opacity: 1, y: 0, duration: .6 }, "-=.2")
+      .to(counter, {
+        v: 100, duration: 2.1, ease: "power2.inOut", onUpdate() {
+          document.getElementById("cnt").textContent = String(Math.round(counter.v)).padStart(3, "0");
+        }
+      }, 0)
+      .add(() => { document.getElementById("start").style.display = "flex"; }, "+=.4");
+  </script>
+</body>
+</html>
