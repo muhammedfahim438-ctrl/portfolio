@@ -276,21 +276,29 @@ export async function seedTestimonials() {
       quote: "Fahim built a production-grade SaaS API that handles 619,000+ villages with Redis caching, JWT auth, and tiered rate limiting. Impressive technical depth.",
       author: "TechFifo Team",
       role: "Engineering Team",
+      rating: 5,
+      avatar_url: "",
     },
     {
       quote: "The VitaSense AI project achieved 98.2% accuracy in diabetes prediction using ensemble ML models. A solid demonstration of ML engineering skills.",
       author: "Bluestock Fintech",
       role: "Data Analytics Team",
+      rating: 5,
+      avatar_url: "",
     },
     {
       quote: "UniPath is a well-designed Flutter app with OTP authentication, appointment booking, and AI chatbot. Great mobile development capabilities.",
       author: "College Project Review",
       role: "Academic Panel",
+      rating: 4,
+      avatar_url: "",
     },
     {
       quote: "Clean code, meaningful documentation, and production-ready deployments. Fahim's work stands out in both quality and presentation.",
       author: "Open Source Community",
       role: "GitHub Collaborators",
+      rating: 5,
+      avatar_url: "",
     },
   ];
 

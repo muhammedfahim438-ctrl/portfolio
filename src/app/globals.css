@@ -232,3 +232,190 @@ html.lenis, html.lenis body {
 .preloader-progress {
   transition: width 0.1s ease-out;
 }
+
+/* Editorial header type (Gamalieldas-pattern) */
+.theme-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--themeTextSecondary);
+}
+
+.theme-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--themeText);
+}
+
+.theme-display em {
+  font-style: italic;
+  font-weight: 400;
+  background: linear-gradient(135deg, var(--themeGradientStart), var(--themeGradientEnd));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.theme-lede {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--themeTextSecondary);
+  max-width: 56ch;
+}
+
+.link-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--themeText);
+  text-decoration: none;
+  border-bottom: 1px solid var(--themeBorder);
+  padding-bottom: 2px;
+  width: max-content;
+  transition: gap 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.link-cta:hover {
+  gap: 0.7rem;
+  color: var(--themeAccent);
+}
+
+/* Project Row Cards (single-column stack) */
+.project-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--themeBorder);
+  border-radius: 18px;
+  background: var(--themeBgSecondary);
+  color: var(--themeText);
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color 0.4s ease, border-color 0.4s ease,
+    transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.project-row:hover {
+  background: var(--themeSurface);
+  border-color: var(--themeAccent);
+  transform: translateY(-4px);
+}
+
+.project-row__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--themeGradientStart), var(--themeGradientEnd));
+}
+
+.project-row__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.4s ease;
+}
+
+.project-row:hover .project-row__img {
+  transform: scale(1.05);
+}
+
+.project-row__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  min-width: 0;
+}
+
+.project-row__tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+}
+
+.project-row__tags li {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--themeTextSecondary);
+  border: 1px solid var(--themeBorder);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.project-row:hover .project-row__tags li {
+  color: var(--themeText);
+  border-color: var(--themeAccent);
+}
+
+.project-row__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  color: var(--themeText);
+}
+
+.project-row__title em {
+  font-style: italic;
+  font-weight: 400;
+  background: linear-gradient(135deg, var(--themeGradientStart), var(--themeGradientEnd));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.project-row__desc {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--themeTextSecondary);
+  line-height: 1.55;
+}
+
+.project-row__arrow {
+  font-size: 1.5rem;
+  color: var(--themeTextSecondary);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.3s;
+}
+
+.project-row:hover .project-row__arrow {
+  transform: translate(4px, -4px);
+  color: var(--themeAccent);
+}
+
+@media (max-width: 768px) {
+  .project-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .project-row__arrow {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .project-row__tags li:nth-child(n + 4) {
+    display: none;
+  }
+}

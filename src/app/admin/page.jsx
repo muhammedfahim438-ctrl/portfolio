@@ -5,12 +5,14 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { TabHeroConfig } from "@/components/admin/TabHeroConfig";
 import { TabProjectsManager } from "@/components/admin/TabProjectsManager";
 import { TabSkillsLinks } from "@/components/admin/TabSkillsLinks";
+import { TabTestimonials } from "@/components/admin/TabTestimonials";
 import { TabMessages } from "@/components/admin/TabMessages";
 
 const tabs = [
   { id: "hero", label: "Hero & Config" },
   { id: "projects", label: "Projects" },
   { id: "skills", label: "Skills & Links" },
+  { id: "testimonials", label: "Testimonials" },
   { id: "messages", label: "Messages" },
 ];
 
@@ -41,6 +43,7 @@ export default function AdminPage() {
           {activeTab === "hero" && <TabHeroConfig />}
           {activeTab === "projects" && <TabProjectsManager />}
           {activeTab === "skills" && <TabSkillsLinks />}
+          {activeTab === "testimonials" && <TabTestimonials />}
           {activeTab === "messages" && <TabMessages />}
         </div>
       </div>
