@@ -41,7 +41,7 @@
   .tt{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;color:var(--muted)}
   .tt i{font-style:normal;color:var(--accent)}
   .ttrs{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
-  #term{margin:0;padding:16px 18px 14px;height:300px}
+  #term{margin:0;padding:16px 18px 14px;min-height:200px}
   .term-foot{display:flex;justify-content:space-between;padding:9px 18px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;background:rgba(10,15,12,.35);border-radius:0 0 13px 13px}
 
   /* ============ WELCOME ============ */
@@ -98,10 +98,8 @@
 
   <div class="status" id="status">root@portfolio: <b>~</b> ready<span style="color:var(--acc2)"> ✓</span></div>
 
-  <script type="module">
-  import { Terminal } from "https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.mjs";
-  import { FitAddon } from "https://cdn.jsdelivr.net/npm/@xterm/fit@0.10.0/lib/fit.mjs";
-
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.js"></script>
+  <script>
   const term = new Terminal({
     cursorBlink: true,
     cursorStyle: "block",
@@ -117,12 +115,15 @@
       selectionBackground: "rgba(170,200,167,.25)"
     }
   });
-  const fit = new FitAddon();
-  term.loadAddon(fit);
   term.open(document.getElementById("term"));
-  const doFit = () => { try { fit.fit(); } catch (e) {} };
-  doFit();
-  addEventListener("resize", doFit);
+  const layout = () => {
+    const host = document.getElementById("term");
+    const w = host.clientWidth - 36;
+    const cols = Math.max(30, Math.floor(w / 8.4));
+    term.resize(cols, 9);
+  };
+  layout();
+  addEventListener("resize", layout);
   term.writeln("");
   term.writeln("\x1b[90m┌─ portfolio terminal ────────────────────────────────┐\x1b[0m");
 
