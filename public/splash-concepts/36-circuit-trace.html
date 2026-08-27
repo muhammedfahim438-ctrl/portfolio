@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 36 · Circuit Trace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<style>
+  :root{ --ink:#0a0d0a; --accent:#aac8a7; --acc2:#c3edc0; --text:#eef3ea; --muted:#5f725e; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;cursor:default;
+    background:radial-gradient(70% 50% at 50% 30%, rgba(170,200,167,.07), transparent 75%),
+      linear-gradient(90deg, rgba(170,200,167,.03) 1px, transparent 1px) 0 0/44px 44px,
+      linear-gradient(rgba(170,200,167,.03) 1px, transparent 1px) 0 0/44px 44px, #0a0d0a}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc2)}
+  svg#circuit{position:fixed;top:8%;left:50%;transform:translateX(-50%);width:min(1040px,96vw);height:auto;z-index:5;opacity:0;transition:opacity .6s ease}
+  svg#circuit.on{opacity:1}
+  .trace{fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linecap:round}
+  .trace.lite{stroke-width:1.4;opacity:.8}
+  .pad{fill:var(--acc2)}
+  .node{fill:var(--accent);opacity:.9}
+  .chip{fill:none;stroke:var(--acc2);stroke-width:1.6;opacity:.7}
+  .wrap{position:fixed;left:0;right:0;top:52%;z-index:10;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:0 4vw}
+  .nmrow{display:flex;gap:.06em;perspective:500px}
+  .char{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2.4rem,10vw,5.8rem);color:var(--muted);opacity:.35;transition:color .5s ease,opacity .5s ease,text-shadow .5s ease,transform .5s ease}
+  .powered .char{color:var(--text);opacity:1;text-shadow:0 0 22px rgba(195,237,192,.5), 0 0 60px rgba(170,200,167,.3)}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-top:38px;opacity:0}
+  .sub.show{opacity:1;transition:opacity .6s ease}
+  .ctl{display:flex;gap:14px;margin-top:26px;opacity:0}
+  .ctl.show{opacity:1;transition:opacity .6s ease}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc2);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--muted);background:transparent;border:1px solid rgba(170,200,167,.3)}
+  .err{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:40;display:none;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.14em;color:#ffb4a6;background:rgba(40,12,8,.85);border:1px solid rgba(255,120,90,.4);border-radius:8px;padding:8px 14px;max-width:86vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 36 · CIRCUIT TRACE</div>
+  <div class="err" id="err"></div>
+
+  <svg id="circuit" viewBox="0 0 1040 300" preserveAspectRatio="xMidYMid meet">
+    <rect class="chip" x="470" y="60" width="96" height="180" rx="8"/>
+    <path class="trace" id="main" d="M-40 150 H 210 L 268 112 L 326 150 H 470 M 566 150 H 700 L 756 196 L 812 150 H 1080"/>
+    <path class="trace lite" d="M 210 150 V 250 H 326 M 700 150 V 60 H 756 M 268 112 V 60 H 326"/>
+    <path class="trace lite" d="M 566 150 V -10"/>
+    <circle class="pad" cx="210" cy="150" r="7"/><circle class="pad" cx="326" cy="150" r="7"/>
+    <circle class="pad" cx="470" cy="150" r="9"/><circle class="pad" cx="566" cy="150" r="9"/>
+    <circle class="node" cx="700" cy="150" r="6"/><circle class="node" cx="812" cy="150" r="6"/>
+    <circle class="pad" cx="326" cy="250" r="6"/><circle class="pad" cx="700" cy="60" r="6"/><circle class="pad" cx="756" cy="60" r="6"/>
+    <circle r="6" fill="#c3edc0"><animateMotion dur="1.9s" repeatCount="indefinite" path="M-40 150 H 210 L 268 112 L 326 150 H 470 M 566 150 H 700 L 756 196 L 812 150 H 1080"/></circle>
+  </svg>
+
+  <div class="wrap">
+    <div class="nmrow" id="nmrow">MUHAMMED&nbsp;FAHIM</div>
+    <div class="sub" id="sub">tracing name…</div>
+    <div class="ctl" id="ctl">
+      <a class="btn" href="index.html">all concepts</a>
+      <button class="btn ghost" onclick="location.reload()">re-trace</button>
+    </div>
+  </div>
+
+  <script>/* vivus loaded below */</script>
+  <script src="https://cdn.jsdelivr.net/npm/vivus@0.4.5/dist/vivus.min.js"></script>
+  <script>
+  const vivusCtor = window.Vivus;
+  const circuitEl = document.getElementById("circuit");
+  const nmrowEl = document.getElementById("nmrow");
+  const subEl = document.getElementById("sub");
+  const ctlEl = document.getElementById("ctl");
+  const errEl = document.getElementById("err");
+  window.addEventListener("error", (ev) => { errEl.textContent = "⚠ " + ev.message; errEl.style.display = "block"; });
+
+  nmrowEl.textContent = "";
+  [..."MUHAMMED FAHIM"].forEach((c) => {
+    const s = document.createElement("span");
+    s.className = "char";
+    s.textContent = c === " " ? "\u00A0" : c;
+    nmrowEl.appendChild(s);
+  });
+  const chars = [...nmrowEl.children];
+  chars.forEach((c, i) => { c.style.transitionDelay = (0.12 + i * 0.04) + "s"; });
+
+  let done = false;
+  function finish() {
+    if (done) return; done = true;
+    nmrowEl.classList.add("powered");
+    subEl.textContent = "trace complete · powered on ✓";
+    subEl.classList.add("show");
+    ctlEl.classList.add("show");
+  }
+
+  function trace() {
+    circuitEl.classList.add("on");
+    if (vivusCtor) {
+      try {
+        new Vivus(circuitEl, { type: "sync", duration: 90, start: "autostart", animTimingFunction: Vivus.EASE_OUT },
+          () => finish());
+      } catch (e) { finish(); }
+    } else { finish(); }
+  }
+
+  Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]).then(trace);
+  setTimeout(() => { if (!done) finish(); }, 6000);
+  </script>
+</body>
+</html>

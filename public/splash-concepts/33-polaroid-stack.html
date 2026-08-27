@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 33 · Polaroid Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<style>
+  :root{ --ink:#0d140e; --paper:#f6f3eb; --ink2:#121a14; --acc:#3c7a4a; --acc2:#c3edc0; --muted:#6d8a70; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;overflow:hidden;cursor:default;background:
+    radial-gradient(60% 50% at 50% 42%, rgba(60,122,74,.14), transparent 70%),
+    radial-gradient(30% 30% at 82% 18%, rgba(195,237,192,.05), transparent 70%), #0d140e}
+  .hud{position:fixed;top:22px;left:24px;z-index:40;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc2)}
+  .flash{position:fixed;inset:0;z-index:5;background:#fff;opacity:0;pointer-events:none}
+  .stage{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center}
+  .card{position:relative;background:var(--paper);color:var(--ink2);padding:16px 16px 22px;border-radius:4px;
+    width:min(310px,64vw);box-shadow:0 24px 60px rgba(0,0,0,.55), 0 4px 14px rgba(0,0,0,.35);
+    will-change:transform;margin:0 -46px}
+  .card .photo{width:100%;aspect-ratio:10/8;border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+  .card:nth-child(1) .photo{background:linear-gradient(150deg,#d9c9a6,#8e7d5a)}
+  .card:nth-child(2) .photo{background:linear-gradient(150deg,#a8b8a4,#5f6f5a)}
+  .card:nth-child(3) .photo{background:linear-gradient(150deg,#b9adc9,#6f6583)}
+  .card:nth-child(4) .photo{background:linear-gradient(150deg,#a8b7c2,#5d6b74)}
+  .card.final .photo{background:linear-gradient(160deg,#101c12,#3c7a4a 60%,#0d140e);}
+  .card .cap{font-family:'Instrument Serif',serif;font-size:1.25rem;text-align:center;margin-top:14px;letter-spacing:.02em;color:#3a362c}
+  .card.final .cap{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:#0d140e}
+  .name{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;color:#dff0e0;font-size:clamp(1.5rem,5vw,2.1rem);line-height:1.06;text-align:center;letter-spacing:.01em;text-shadow:0 3px 14px rgba(0,0,0,.5)}
+  .name em{font-style:normal;color:#c3edc0}
+  .tape{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-3deg);width:92px;height:26px;background:rgba(230,220,190,.85);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  .sub{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);z-index:30;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);opacity:0}
+  .ctl{position:fixed;bottom:44px;left:50%;transform:translateX(-50%);z-index:40;display:flex;gap:14px;opacity:0}
+  .ctl.show{opacity:1;transition:opacity .6s ease}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc2);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--muted);background:transparent;border:1px solid rgba(170,200,167,.3)}
+  .err{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:50;display:none;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.14em;color:#ffb4a6;background:rgba(40,12,8,.85);border:1px solid rgba(255,120,90,.4);border-radius:8px;padding:8px 14px;max-width:86vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 33 · POLAROID STACK</div>
+  <div class="flash" id="flash"></div>
+  <div class="stage" id="stage">
+    <div class="card"><span class="tape"></span><div class="photo"><span style="font-family:'Instrument Serif';font-size:2.2rem;color:#fff8;position:absolute">welcome</span></div><div class="cap">from the lab</div></div>
+    <div class="card"><span class="tape"></span><div class="photo"><span style="font-family:'Instrument Serif';font-size:2.2rem;color:#fff8;position:absolute">hello</span></div><div class="cap">ship fast</div></div>
+    <div class="card"><span class="tape"></span><div class="photo"><span style="font-family:'Instrument Serif';font-size:2.2rem;color:#fff8;position:absolute">salaam</span></div><div class="cap">code clean</div></div>
+    <div class="card"><span class="tape"></span><div class="photo"><span style="font-family:'Instrument Serif';font-size:2.2rem;color:#fff8;position:absolute">hey</span></div><div class="cap">build things</div></div>
+    <div class="card final"><span class="tape"></span><div class="photo"><div class="name">MUHAMMED<br /><em>FAHIM</em></div></div><div class="cap">developer · apps · websites · software</div></div>
+  </div>
+  <div class="sub" id="sub">shutter clicked · keep this one</div>
+  <div class="ctl" id="ctl">
+    <a class="btn" href="index.html">all concepts</a>
+    <button class="btn ghost" onclick="location.reload()">re-shoot</button>
+  </div>
+  <div class="err" id="err"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/motion@12.9.1/dist/motion.js"></script>
+  <script>
+  const { Motion } = window;
+  const cards = [...document.querySelectorAll(".card")];
+  const subEl = document.getElementById("sub");
+  const ctlEl = document.getElementById("ctl");
+  const flashEl = document.getElementById("flash");
+  const errEl = document.getElementById("err");
+  window.addEventListener("error", (ev) => { errEl.textContent = "⚠ " + ev.message; errEl.style.display = "block"; });
+
+  const final = cards[cards.length - 1];
+  let done = false;
+  function finish(label) {
+    if (done) return; done = true;
+    subEl.style.opacity = 1;
+    if (label) subEl.textContent = label;
+    ctlEl.classList.add("show");
+  }
+
+  function spread() {
+    const full = cards.length;
+    cards.forEach((c, i) => {
+      const targetRot = (i - (full - 1) / 2) * 7;
+      const targetY = -Math.abs(i - 2) * 26;
+      const targetX = (i - (full - 1) / 2) * 46;
+      const isFinal = i === full - 1;
+      c.style.zIndex = i + 1;
+      if (!Motion) {
+        c.style.transform = "translateX(" + targetX + "px) translateY(" + targetY + "px) rotate(" + targetRot + "deg)";
+        return;
+      }
+      c.style.transform = "translateX(" + (110 + Math.random() * 30) + "vw) translateY(" + (Math.random() * 52 - 20) + "vh) rotate(" + (targetRot + (Math.random() * 46 - 23)) + "deg) scale(.9)";
+      Motion.animate(c, {
+        translateX: targetX, translateY: targetY, rotate: targetRot, scale: isFinal ? 1 : 0.94,
+        opacity: [0, 1]
+      }, { type: "spring", stiffness: 130, damping: 20, delay: Motion.stagger(0.34, { from: "end", start: 0.15 }) });
+    });
+
+    if (Motion) {
+      Motion.animate(flashEl, { opacity: [0, 0.85, 0] }, { duration: 0.5, ease: "easeOut" });
+    }
+
+    setTimeout(liftFinal, 3000);
+  }
+
+  function liftFinal() {
+    if (done) return;
+    const others = cards.filter(c => c !== final);
+    if (Motion) {
+      others.forEach((c, i) => Motion.animate(c, { opacity: 0.5, scale: 0.88, rotate: (i - 1) * 6 }, { duration: 0.8 }));
+      Motion.animate(final, { scale: 1.06, translateY: -20 }, { type: "spring", stiffness: 300, damping: 22 });
+    }
+    setTimeout(() => finish("welcome to muhammed fahim"), 700);
+  }
+
+  Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1000))]).then(spread);
+  setTimeout(() => { if (!done) finish(); }, 5200);
+  </script>
+</body>
+</html>

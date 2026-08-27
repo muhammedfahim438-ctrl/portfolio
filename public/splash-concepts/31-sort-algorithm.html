@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 31 · Sort Algorithm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<style>
+  :root{ --ink:#0d120e; --accent:#aac8a7; --acc2:#c3edc0; --text:#eef3ea; --muted:#6d8a70; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc2)}
+  .bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(55% 45% at 50% 45%, rgba(170,200,167,.08), transparent 70%)}
+  .capsule{position:fixed;top:0;left:0;width:44px;height:44px;z-index:2;border-radius:9px;background:linear-gradient(160deg,#2c3a2e,#16201a 70%);border:1px solid rgba(170,200,167,.28);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--muted);will-change:transform}
+  .capsule.hot{border-color:rgba(195,237,192,.75);color:var(--acc2)}
+  .wrap{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:0 4vw}
+  .row{display:flex;gap:.08em;perspective:600px}
+  .char{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2.4rem,10vw,6rem);color:var(--accent);opacity:0;will-change:transform}
+  .char.on{color:var(--text);opacity:1;text-shadow:0 0 24px rgba(195,237,192,.4)}
+  .rowcap{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-top:38px;min-height:1.2em;opacity:0}
+  .rowcap.show{opacity:1;transition:opacity .5s ease}
+  .ctl{display:flex;gap:14px;margin-top:28px;opacity:0}
+  .ctl.show{opacity:1;transition:opacity .6s ease}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc2);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--muted);background:transparent;border:1px solid rgba(170,200,167,.3)}
+  .err{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:40;display:none;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.14em;color:#ffb4a6;background:rgba(40,12,8,.85);border:1px solid rgba(255,120,90,.4);border-radius:8px;padding:8px 14px;max-width:86vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 31 · SORT ALGORITHM</div>
+  <div class="bgfx"></div>
+  <div id="caps"></div>
+  <div class="err" id="err"></div>
+
+  <div class="wrap">
+    <div class="row" id="row"></div>
+    <div class="rowcap" id="cap">holding capsules · awaiting algorithm</div>
+    <div class="ctl" id="ctl">
+      <a class="btn" href="index.html">all concepts</a>
+      <button class="btn ghost" onclick="location.reload()">re-sort</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
+  <script>
+  const NAME = "MUHAMMED FAHIM";
+  const { Matter, anime } = window;
+  const rowEl = document.getElementById("row");
+  const capEl = document.getElementById("cap");
+  const ctlEl = document.getElementById("ctl");
+  const errEl = document.getElementById("err");
+  window.addEventListener("error", (ev) => { errEl.textContent = "⚠ " + ev.message; errEl.style.display = "block"; });
+
+  const chars = [...NAME].map((c) => {
+    const s = document.createElement("span");
+    s.className = "char";
+    s.textContent = c === " " ? "\u00A0" : c;
+    rowEl.appendChild(s);
+    return s;
+  });
+
+  let phase = "boot";
+  function complete(label) {
+    if (phase === "done") return;
+    phase = "done";
+    capEl.classList.add("show");
+    capEl.textContent = label + " · welcome ✓";
+    ctlEl.classList.add("show");
+  }
+
+  const W = innerWidth, H = innerHeight;
+  const capCtn = document.getElementById("caps");
+
+  function startPhysics(noCaps) {
+    if (!Matter || !anime) { finalize(); return; }
+    const { Engine, Bodies, Body, Composite, Events } = Matter;
+    const engine = Engine.create();
+    engine.gravity.y = 1.35;
+    const world = engine.world;
+    const R = Math.min(46, Math.floor(W / 16));
+    const count = 10;
+    const bodies = [], els = [];
+    for (let i = 0; i < count; i++) {
+      const x = R * 0.5 + Math.random() * (W - R);
+      const y = -R * (1.6 + Math.random() * 1.4) - (i * 46);
+      const b = Bodies.rectangle(x, y, R * 0.8, R * 0.8, { restitution: 0.35, friction: 0.5, angle: (Math.random() - 0.5) * 1.6 });
+      const el = document.createElement("div");
+      el.className = "capsule";
+      el.textContent = i + 1;
+      capCtn.appendChild(el);
+      Composite.add(world, b);
+      bodies.push(b); els.push(el);
+    }
+    const floor = Bodies.rectangle(W / 2, H + 50, W * 3, 140, { isStatic: true });
+    const lw = Bodies.rectangle(-40, H / 2, 120, H * 2, { isStatic: true });
+    const rw = Bodies.rectangle(W + 40, H / 2, 120, H * 2, { isStatic: true });
+    Composite.add(world, [floor, lw, rw]);
+
+    let done = false;
+    Events.on(engine, "collisionStart", () => { if (!done) { done = true; setTimeout(() => { if (phase === "tumble") goSort(); }, 900); } });
+
+    function step() {
+      if (phase !== "tumble") return;
+      Engine.update(engine, 16.6);
+      bodies.forEach((b, i) => {
+        const el = els[i];
+        el.style.transform = "translate(" + b.position.x.toFixed(1) + "px," + b.position.y.toFixed(1) + "px) rotate(" + b.angle.toFixed(2) + "rad)";
+      });
+      requestAnimationFrame(step);
+    }
+
+    phase = "tumble";
+    capEl.classList.add("show");
+    capEl.textContent = "unsorted heap · sorting…";
+    capEl.style.opacity = 1;
+    requestAnimationFrame(step);
+    setTimeout(() => { if (phase === "tumble") goSort(); }, 3800);
+    document.addEventListener("keydown", () => { if (phase === "tumble") goSort(); }, { once: true });
+
+    function goSort() {
+      phase = "sorted";
+      finalize();
+    }
+  }
+
+  function finalize() {
+    if (phase === "fin") return; phase = "fin";
+    if (anime) {
+      chars.forEach((el, i) => {
+        el.style.transform = "translate(" + (Math.random() * 900 - 450).toFixed(0) + "px," + (Math.random() * 600 - 300).toFixed(0) + "px) scale(.3) rotate(" + (Math.random() * 90 - 45).toFixed(0) + "deg)";
+      });
+      anime.animate(chars, {
+        translateX: 0, translateY: 0, scale: 1, rotate: 0,
+        opacity: [0, 1],
+        duration: 900, delay: anime.stagger(45), ease: "outBack"
+      });
+    } else {
+      chars.forEach(el => el.style.opacity = 1);
+    }
+    setTimeout(() => chars.forEach(el => el.classList.add("on")), 600);
+    setTimeout(() => complete("sorted · 13 comparisons"), 950);
+  }
+
+  Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]).then(() => startPhysics());
+  setTimeout(() => { if (phase === "boot" || phase === "tumble") finalize(); }, 6000);
+  </script>
+</body>
+</html>
