@@ -14,8 +14,9 @@
   --color-themeInput: var(--themeInput);
 
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Syne', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-accent: 'Instrument Serif', Georgia, serif;
 
   --radius-glass: 0.75rem;
 }
@@ -457,4 +458,59 @@ html.lenis, html.lenis body {
   .project-row__tags li:nth-child(n + 4) {
     display: none;
   }
+}
+
+/* Accent word (Instrument Serif italic) */
+.accent-word {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Gradient shimmer sweep */
+@keyframes shimmer-slide {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--themeGradientStart) 20%,
+    var(--themeGradientEnd) 42%,
+    var(--themeGradientStart) 64%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 220% 100%;
+  animation: shimmer-slide 5s ease-in-out infinite;
+}
+
+/* Animated underline links (Luxfolio micro-motion) */
+.link-underline {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }

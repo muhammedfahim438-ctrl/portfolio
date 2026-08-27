@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import { sendMessage, getSocialData } from "@/lib/firestore";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ScenicScene } from "@/components/landing/ScenicScene";
+import { SplitText } from "@/components/ui/SplitText";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const MARQUEE_ITEMS = [
   "Data Science",
@@ -130,30 +132,45 @@ export function ContactFooter() {
         <div className="relative z-10">
           <section id="contact" className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
-          <motion.div
+          <motion.header
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mb-14"
+            className="mb-16 text-center"
           >
-            <p className="theme-eyebrow mb-4">Get in Touch</p>
-            <h2 className="theme-display">
-              Let&apos;s build something{" "}
-              <em>together.</em>
-            </h2>
-            <p className="text-themeText-secondary mt-5 leading-relaxed max-w-2xl">
+            <p className="theme-eyebrow mb-4">Contact</p>
+            <SplitText
+              text="LET&apos;S CONNECT"
+              accentWord="CONNECT"
+              className="mx-auto font-display font-bold uppercase leading-[0.95] tracking-tight text-4xl sm:text-5xl md:text-7xl"
+            />
+            <p className="text-themeText-secondary mt-6 leading-relaxed max-w-2xl mx-auto">
               Fill in the form below and I&apos;ll get back to you within 24
               hours.
             </p>
-          </motion.div>
+            <MagneticButton className="mt-10 inline-block">
+              <button
+                onClick={() => {
+                  const el = document.getElementById("contact-form");
+                  if (window.__lenis) window.__lenis.scrollTo(el);
+                  else el?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-themeAccent to-themeSecondary px-9 py-4 font-display font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
+              >
+                Start a Project <span aria-hidden>↗</span>
+              </button>
+            </MagneticButton>
+          </motion.header>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <motion.div
+              id="contact-form"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="scroll-mt-24"
             >
               {sent ? (
                 <motion.div
@@ -346,7 +363,7 @@ export function ContactFooter() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-themeText-secondary hover:text-themeAccent transition-colors"
+                className="link-underline text-sm text-themeText-secondary hover:text-themeAccent transition-colors"
               >
                 {link.label}
               </a>

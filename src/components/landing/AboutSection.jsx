@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { SplitText } from "@/components/ui/SplitText";
+import { WordHighlight } from "@/components/ui/WordHighlight";
 
 const stats = [
   { label: "Years Experience", value: 2, suffix: "+" },
@@ -54,21 +56,12 @@ export function AboutSection() {
           <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
             About Me
           </p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient mb-8">
-            Building the Future with Data
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">
+            <SplitText as="span" text="Building the Future with Data" accentWord="Data" />
           </h2>
           <div className="max-w-3xl space-y-4 text-themeText-secondary leading-relaxed">
-            <p>
-              I&apos;m a Data Science and Full-Stack Developer from Kerala, India, passionate about
-              building production-grade APIs, ML models, and scalable web applications. Currently
-              pursuing my BSc in Data Science at Nehru Arts and Science College with a CGPA of 8.17.
-            </p>
-            <p>
-              From parsing 619,000+ villages into a SaaS API to achieving 98.2% accuracy in diabetes
-              prediction, I thrive at the intersection of data engineering, machine learning, and
-              full-stack development. I believe in clean code, meaningful data, and products that solve
-              real problems.
-            </p>
+            <WordHighlight text="I'm a Data Science and Full-Stack Developer from Kerala, India, passionate about building production-grade APIs, ML models, and scalable web applications. Currently pursuing my BSc in Data Science at Nehru Arts and Science College with a CGPA of 8.17." />
+            <WordHighlight text="From parsing 619,000+ villages into a SaaS API to achieving 98.2% accuracy in diabetes prediction, I thrive at the intersection of data engineering, machine learning, and full-stack development. I believe in clean code, meaningful data, and products that solve real problems." />
           </div>
         </motion.div>
 

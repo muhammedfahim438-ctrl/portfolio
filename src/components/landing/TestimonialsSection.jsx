@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { FaStar, FaQuoteRight } from "react-icons/fa";
 import { getTestimonials } from "@/lib/firestore";
+import { SplitText } from "@/components/ui/SplitText";
 
 const AUTOPLAY_MS = 6000;
 
@@ -54,9 +55,10 @@ export function TestimonialsSection() {
           className="mb-12 text-center"
         >
           <p className="theme-eyebrow mb-3">What People Say</p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient">
-            Testimonials
-          </h2>
+          <SplitText
+            text="Testimonials"
+            className="text-3xl md:text-5xl font-display font-bold text-gradient"
+          />
         </motion.div>
 
         {loading ? (

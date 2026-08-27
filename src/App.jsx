@@ -11,7 +11,6 @@ import { CertificationsSection } from "@/components/landing/CertificationsSectio
 import { RecognitionSection } from "@/components/landing/RecognitionSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { TrustedBySection } from "@/components/landing/TrustedBySection";
-import { CTASection } from "@/components/landing/CTASection";
 import { ContactFooter } from "@/components/landing/ContactFooter";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { AuthGuard } from "@/components/admin/AuthGuard";
@@ -54,7 +53,6 @@ function LandingPage() {
       <RecognitionSection />
       <TestimonialsSection />
       <TrustedBySection />
-      <CTASection />
       <ContactFooter />
     </main>
   );

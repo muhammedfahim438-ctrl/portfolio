@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import { getProjects } from "@/lib/firestore";
+import { SplitText } from "@/components/ui/SplitText";
 
 const TABS = ["All", "Backend", "Frontend", "Mobile", "Data", "AI/ML", "Tools"];
 
@@ -58,7 +59,7 @@ export function ProjectOverlay({ isOpen, onClose, onSelectProject }) {
           >
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl md:text-3xl font-display font-bold text-gradient">
-                All Projects
+                <SplitText as="span" text="All Projects" accentWord="Projects" />
               </h2>
               <button
                 onClick={onClose}

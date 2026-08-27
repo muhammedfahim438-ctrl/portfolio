@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { TbCertificate } from "react-icons/tb";
 import { Modal } from "@/components/ui/Modal";
 import { getCertifications } from "@/lib/firestore";
+import { SplitText } from "@/components/ui/SplitText";
 
 const VISIBLE_COUNT = 3;
 
@@ -61,9 +62,10 @@ export function CertificationsSection() {
             className="mb-16"
           >
             <p className="theme-eyebrow mb-3">Credentials</p>
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient">
-              Certifications
-            </h2>
+            <SplitText
+              text="Certifications"
+              className="text-3xl md:text-5xl font-display font-bold text-gradient"
+            />
           </motion.div>
 
           {loading ? (

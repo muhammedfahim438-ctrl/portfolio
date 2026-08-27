@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FiAward, FiStar, FiTrendingUp, FiZap } from "react-icons/fi";
+import { SplitText } from "@/components/ui/SplitText";
 
 const recognitions = [
   {
@@ -54,9 +55,10 @@ export function RecognitionSection() {
           <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
             Achievements
           </p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient">
-            Recognition
-          </h2>
+          <SplitText
+            text="Recognition"
+            className="text-3xl md:text-5xl font-display font-bold text-gradient"
+          />
         </motion.div>
 
         <motion.div

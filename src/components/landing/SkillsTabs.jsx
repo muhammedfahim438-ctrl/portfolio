@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SplitText } from "@/components/ui/SplitText";
 import {
   SiPython, SiDjango, SiReact, SiNextdotjs, SiFlutter,
   SiPostgresql, SiMysql, SiMongodb, SiDocker, SiGooglecloud,
@@ -89,9 +90,11 @@ export function SkillsTabs() {
           <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
             Expertise
           </p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-gradient">
-            Technical Skills
-          </h2>
+          <SplitText
+            text="Technical Skills"
+            accentWord="Skills"
+            className="text-3xl md:text-5xl font-display font-bold text-gradient"
+          />
         </motion.div>
 
         <div className="flex flex-wrap gap-3 mb-12">
