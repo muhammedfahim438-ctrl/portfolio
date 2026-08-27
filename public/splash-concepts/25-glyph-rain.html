@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 25 · Glyph Rain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{ --ink:#040705; --accent:#aac8a7; --acc2:#c3edc0; --text:#eef3ea; --muted:#6d8a70; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc2)}
+  #rain{position:fixed;inset:0;z-index:2;transition:opacity 1s ease}
+  .veil{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(80% 60% at 50% 45%, transparent 40%, rgba(4,7,5,.85) 100%)}
+  .scan{position:fixed;inset:0;z-index:4;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(195,237,192,.03) 2px 3px)}
+  .welcome{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 5vw;opacity:0;pointer-events:none}
+  .welcome.in{opacity:1;pointer-events:auto;transition:opacity .9s ease}
+  .kick{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.5em;color:var(--accent);text-transform:uppercase;margin-bottom:22px}
+  .nm{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2.6rem,10vw,6.4rem);line-height:1.03;letter-spacing:.03em}
+  .nm em{font-style:normal;color:var(--accent)}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:20px}
+  .ctl{display:flex;gap:14px;margin-top:34px}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc2);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .switch{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:12;font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);border:1px solid rgba(170,200,167,.25);border-radius:99px;padding:8px 16px;cursor:pointer;background:rgba(4,7,5,.6)}
+  .switch:hover{color:var(--acc2)}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 25 · GLYPH RAIN</div>
+  <div id="rain"></div>
+  <div class="veil"></div>
+  <div class="scan"></div>
+
+  <div class="welcome" id="welcome">
+    <div class="kick">// system.clear()</div>
+    <div class="nm">MUHAMMED<em> FAHIM</em></div>
+    <div class="sub">the rain parts · the name remains</div>
+    <div class="ctl">
+      <a class="btn" href="index.html">all concepts</a>
+      <button class="btn" onclick="location.reload()" style="background:var(--accent)">replay</button>
+    </div>
+  </div>
+  <div class="switch" onclick="skip()">skip ⇒</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.8.1/tsparticles.slim.min.js"></script>
+  <script>
+  const { tsParticles } = window;
+  const glyphs = ["ア","カ","サ","タ","ナ","ハ","マ","ヤ","ラ","ワ","0","1","0","1","0","1","ﾁ","ﾗ","ﾑ","ﾒ","ﾐ","ﾏ"];
+  const RAIN = tsParticles.load({
+    id: "rain",
+    options: {
+      autoPlay: true,
+      background: { color: "transparent" },
+      fpsLimit: 60,
+      fullScreen: { enable: false, zIndex: 2 },
+      detectRetina: true,
+      particles: {
+        number: { value: 110, density: { enable: true } },
+        color: { value: ["#aac8a7", "#c3edc0", "#5f7a63"] },
+        shape: { type: "char", options: { char: { value: glyphs } } },
+        opacity: { value: { min: .35, max: .9 }, animation: { enable: true, speed: .6, sync: false } },
+        size: { value: { min: 5, max: 15 } },
+        move: { enable: true, direction: "bottom", speed: { min: 2, max: 5 }, straight: false, outModes: { default: "destroy" } }
+      },
+      interactivity: { detectOn: "window", events: { onHover: { enable: true, mode: "repulse" } }, modes: { repulse: { distance: 90 } } }
+    }
+  }).then(p => { window.__rain = p; });
+
+  let ready = false;
+  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 2400))]).then(() => ready = true);
+  const T0 = performance.now();
+
+  function skip() { if (!window.__skipped) { window.__skipped = true; reveal(); } }
+
+  const iv = setInterval(() => {
+    if ((ready && performance.now() - T0 > 1600) || window.__skipped) {
+      clearInterval(iv);
+      setTimeout(reveal, 250);
+    }
+  }, 60);
+
+  function reveal() {
+    if (window.__done) return; window.__done = true;
+    document.getElementById("rain").style.opacity = 0;
+    document.getElementById("welcome").classList.add("in");
+    try { if (window.__rain) window.__rain.destroy(); } catch (e) {}
+  }
+  </script>
+</body>
+</html>

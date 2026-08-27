@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 30 · Morse Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root{ --ink:#0b0b0a; --paper:#f4f4f0; --dim:#9b9b95; --faint:#57574f; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase}
+  .hud a{color:var(--dim);text-decoration:none}.hud a:hover{color:var(--paper)}
+  .wrap{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:0 5vw}
+  .code{font-family:'JetBrains Mono',monospace;font-size:clamp(1.6rem,5vw,2.6rem);letter-spacing:.6em;color:var(--dim);min-height:2.4em;display:flex;align-items:center;justify-content:center;padding-left:.6em}
+  .code span{display:inline-block;animation:pop .18s ease}
+  .code .dash{width:1.4em;height:8px;background:var(--paper);border-radius:2px;margin-top:-4px}
+  .code .dot{width:14px;height:14px;border-radius:50%;background:var(--paper);flex-shrink:0}
+  @keyframes pop{from{transform:scale(.4);opacity:.2}to{transform:scale(1);opacity:1}}
+  .typedline{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:clamp(1.5rem,5vw,2.8rem);letter-spacing:.42em;color:var(--paper);margin-top:40px;min-height:1.4em;padding-left:.42em;border-bottom:1px dashed var(--faint);padding-bottom:8px;max-width:94vw;word-break:break-all}
+  .typedline .ti-cursor{color:var(--paper)}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.34em;color:var(--dim);text-transform:uppercase;margin-top:26px;opacity:0}
+  .tag.on{opacity:1;transition:opacity .6s ease}
+  .nm{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2rem,8.5vw,5.2rem);line-height:1.05;margin-top:26px;opacity:0;letter-spacing:.02em}
+  .nm.on{opacity:1;transition:opacity .8s ease}
+  .ctl{display:flex;gap:12px;margin-top:28px;opacity:0}
+  .ctl.on{opacity:1;transition:opacity .6s ease}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);background:var(--paper);border:none;border-radius:8px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--paper);background:transparent;border:1px solid var(--faint)}
+  .volume{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:20;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);border:1px solid var(--faint);border-radius:99px;padding:9px 16px;cursor:pointer;background:rgba(11,11,10,.7)}
+  .volume.on{color:var(--paper);border-color:var(--paper)}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 30 · MORSE WELCOME</div>
+  <div class="wrap">
+    <div class="code" id="code"></div>
+    <div class="typedline" id="typed"></div>
+    <div class="tag" id="tag">decoding in morse · 20 wpm</div>
+  </div>
+  <div class="volume" id="vol">♪ sound: off</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typeit@8.8.5/dist/index.umd.js"></script>
+  <script>
+  const { Tone, TypeIt } = window;
+  const MORSE = {
+    "M":"--","U":"..-","H":"....","A":".-","E":".","D":"-..",
+    "F":"..-.","I":".."
+  };
+  const NAME = "MUHAMMED FAHIM";
+  const codeEl = document.getElementById("code");
+  const tagEl = document.getElementById("tag");
+  const volEl = document.getElementById("vol");
+
+  let soundOn = false, synth = null;
+  volEl.addEventListener("click", () => {
+    soundOn = !soundOn;
+    volEl.textContent = soundOn ? "♪ sound: on" : "♪ sound: off";
+    volEl.classList.toggle("on", soundOn);
+    if (soundOn) {
+      try {
+        Tone.start();
+        synth = new Tone.Synth({ oscillator: { type: "sine" }, envelope: { attack: .001, decay: .06, sustain: 0, release: .03 } }).toDestination();
+      } catch (e) {}
+    }
+  });
+
+  const unit = 170; /* ms per dit */
+  const durOf = (c) => (MORSE[c].split("").reduce((s, g) => s + (g === "-" ? 3 : 1), MORSE[c].length - 1) + 3) * unit;
+
+  function beep(kind, delayMs) {
+    if (!soundOn || !synth) return;
+    try { synth.triggerAttackRelease(kind === "-" ? "E5" : "G5", kind === "-" ? "8n" : "16n", Tone.now() + delayMs / 1000); } catch (e) {}
+  }
+
+  function showMorse(c) {
+    codeEl.innerHTML = "";
+    const glyphs = MORSE[c].split("");
+    let offset = 0;
+    glyphs.forEach((g, i) => {
+      const span = document.createElement("span");
+      span.className = g === "-" ? "dash" : "dot";
+      codeEl.appendChild(span);
+      beep(g, offset);
+      offset += unit * (g === "-" ? 3 : 1) + unit;
+    });
+  }
+
+  function end() {
+    codeEl.innerHTML = "";
+    tagEl.textContent = "identity received ✓";
+    tagEl.classList.add("on");
+    const wrapEl = document.querySelector(".wrap");
+    const nm = document.createElement("div");
+    nm.className = "nm on";
+    nm.innerHTML = "MUHAMMED FAHIM";
+    wrapEl.insertBefore(nm, tagEl);
+    setTimeout(() => {
+      const ctl = document.createElement("div");
+      ctl.className = "ctl on";
+      ctl.innerHTML = '<a class="btn" href="index.html">all concepts</a><button class="btn ghost" onclick="location.reload()">re-transmit</button>';
+      wrapEl.appendChild(ctl);
+    }, 500);
+  }
+
+  async function run() {
+    const typed = new TypeIt("#typed", { speed: 34, cursor: true, cursorChar: "▮" });
+    const letters = NAME.split("");
+    const timings = letters.map(durOf);
+    typed.type(letters[0]).pause(timings[0]);
+    for (let i = 1; i < letters.length; i++) typed.type(letters[i]).pause(timings[i]);
+    typed.go();
+
+    for (let i = 0; i < letters.length; i++) {
+      showMorse(letters[i]);
+      await new Promise(r => setTimeout(r, timings[i] + 90));
+    }
+    await new Promise(r => setTimeout(r, 420));
+    end();
+  }
+
+  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 700))]).then(run);
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 27 · Machine Stitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root{ --ink:#12150f; --accent:#aac8a7; --acc2:#c3edc0; --text:#eef3ea; --muted:#6d8a70; --thread:#dff0b8; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;cursor:default}
+  .hud{position:fixed;top:22px;left:24px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .hud a{color:var(--muted);text-decoration:none}.hud a:hover{color:var(--acc2)}
+  .bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(60% 50% at 50% 45%, rgba(170,200,167,.07), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.013) 0 1px, transparent 1px 3px)}
+  #svgLayer{position:fixed;inset:0;z-index:5;pointer-events:none}
+  .namewrap{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:0 4vw}
+  .textline{display:flex;gap:.06em}
+  .char{font-family:'Syne',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(2.2rem,9vw,5.6rem);color:var(--muted);opacity:.4;transition:color .25s ease,opacity .25s ease,text-shadow .25s ease}
+  .char.on{color:var(--text);opacity:1;text-shadow:0 0 26px rgba(195,237,192,.45)}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:var(--muted);margin-top:34px;opacity:.8}
+  .ctl{display:flex;gap:14px;margin-top:26px;opacity:0;transition:opacity .6s ease}
+  .ctl.show{opacity:1}
+  .btn{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);background:var(--acc2);border:none;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+  .btn.ghost{color:var(--muted);background:transparent;border:1px solid rgba(170,200,167,.3)}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s !important;transition-duration:.001s !important}}
+</style>
+</head>
+<body>
+  <div class="hud"><a href="index.html">⬅ All concepts</a>&nbsp;&nbsp;/&nbsp;&nbsp;CONCEPT 27 · MACHINE STITCH</div>
+  <div class="bgfx"></div>
+  <svg id="svgLayer"></svg>
+
+  <div class="namewrap">
+    <div class="textline" id="textline"></div>
+    <div class="sub" id="sub">needle in motion · thread reserved</div>
+    <div class="ctl" id="ctl">
+      <a class="btn" href="index.html">all concepts</a>
+      <button class="btn ghost" onclick="location.reload()">re-stitch</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2.4/dist/svg.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+  <script>
+  const { SVG, gsap, MotionPathPlugin } = window;
+  gsap.registerPlugin(MotionPathPlugin);
+
+  const NAME = "MUHAMMED FAHIM";
+  const line = document.getElementById("textline");
+  const chars = [...NAME].map((c) => {
+    const s = document.createElement("span");
+    s.className = "char nosep";            /* nosep guard, not applied */
+    s.textContent = c;
+    s.classList.remove("nosep");
+    line.appendChild(s);
+    return s;
+  });
+
+  const svg = SVG().addTo("#svgLayer").size("100%","100%").attr({overflow:"visible"});
+  window.__svg = svg;
+
+  let needle = null, thread = null, punctures = [], points = [];
+  function computePoints() {
+    return chars.map((el, i) => {
+      const r = el.getBoundingClientRect();
+      return [r.left + r.width / 2, r.top + r.height / 2 + Math.sin(i * 1.7) * 7];
+    });
+  }
+  function buildTrail() {
+    svg.clear();
+    points = computePoints();
+    /* thread line under the letters */
+    const d = points.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+    thread = svg.path(d).stroke({ color: "rgba(195,237,192,.5)", width: 1.6, dasharray: "3 6", linecap: "round" }).fill("none");
+    /* stitch punctures */
+    punctures = points.map(p =>
+      svg.circle(5).center(p[0], p[1]).attr({ fill: "#1a2015", stroke: "rgba(195,237,192,.6)", "stroke-width": 1.2 }));
+    /* needle + eye */
+    needle = svg.circle(11).center(points[0][0], points[0][1]).attr({ fill: "#c3edc0", stroke: "#0d120e", "stroke-width": 1.5 });
+    svg.circle(3.2).center(points[0][0], points[0][1]).attr({ fill: "#0d120e" });
+  }
+
+  function run() {
+    buildTrail();
+    chars.forEach(el => { el.classList.remove("on"); el.style.opacity = .4; });
+    document.getElementById("sub").textContent = "sewing identity…";
+    let lastIdx = -1;
+    gsap.to(needle.node, {
+      motionPath: { path: points, align: "none" },
+      duration: 3.4,
+      ease: "none",
+      onUpdate() {
+        const p = this.progress * chars.length;
+        const idx = Math.floor(p);
+        if (idx !== lastIdx) {
+          lastIdx = idx;
+          if (idx < chars.length && idx >= 0) {
+            chars[idx].classList.add("on");
+            if (punctures[idx]) punctures[idx].attr({ fill: "#c3edc0" });
+          }
+        }
+      },
+      onComplete() {
+        document.getElementById("sub").textContent = "thread secured · welcome ✓";
+        const ctl = document.getElementById("ctl");
+        ctl.classList.add("show");
+      }
+    });
+  }
+
+  Promise.all([document.fonts.ready, new Promise(r => setTimeout(r, 900))]).then(() => {
+    requestAnimationFrame(run);
+  });
+  addEventListener("resize", () => { if (window.__done) { buildTrail(); chars.forEach(el => el.classList.add("on")); } });
+  </script>
+</body>
+</html>
