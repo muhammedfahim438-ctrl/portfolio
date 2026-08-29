@@ -258,25 +258,25 @@ export async function seedRecognition() {
       title: "Top Contributor",
       description: "Recognized for building a SaaS API serving 619,000+ villages with production-grade architecture",
       icon: "award",
-      color: "#aac8a7",
+      color: "#ff2d2d",
     },
     {
       title: "ML Excellence",
       description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) in diabetes prediction using ensemble models",
       icon: "trending-up",
-      color: "#c3edc0",
+      color: "#b91c28",
     },
     {
       title: "Hackathon Winner",
       description: "Built UniPath — a cross-platform Flutter app for college counselling & wellness",
       icon: "zap",
-      color: "#aac8a7",
+      color: "#ff2d2d",
     },
     {
       title: "Open Source Advocate",
       description: "13+ public repositories on GitHub with production-grade projects and documentation",
       icon: "star",
-      color: "#c3edc0",
+      color: "#b91c28",
     },
   ];
 

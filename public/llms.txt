@@ -1,0 +1,12 @@
+# Muhammed Fahim M
+
+> Full-Stack Developer & Data Science enthusiast from Kerala, India.
+> Building production APIs, ML models, and scalable web apps.
+
+Important URLs:
+- [Home](https://muhammed-fahim-portfolio.vercel.app/)
+- [GitHub](https://github.com/muhammedfahim438-ctrl)
+- [LinkedIn](https://linkedin.com/in/muhammed-fahim-m)
+- [Resume](https://muhammed-fahim-portfolio.vercel.app/resume.pdf)
+
+For the full machine-readable profile, see llms-full.txt.

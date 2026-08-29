@@ -8,12 +8,16 @@ import { TabProjectsManager } from "@/components/admin/TabProjectsManager";
 import { TabSkillsLinks } from "@/components/admin/TabSkillsLinks";
 import { TabTestimonials } from "@/components/admin/TabTestimonials";
 import { TabMessages } from "@/components/admin/TabMessages";
+import { TabContent } from "@/components/admin/TabContent";
+import { TabSettings } from "@/components/admin/TabSettings";
 import { getCollectionDocs, dedupeCollection } from "@/lib/firestore";
 import { seedAll } from "@/data/seed";
 
 const tabs = [
   { id: "hero", label: "Hero & Config" },
   { id: "projects", label: "Projects" },
+  { id: "content", label: "Content" },
+  { id: "settings", label: "Settings" },
   { id: "skills", label: "Skills & Links" },
   { id: "testimonials", label: "Testimonials" },
   { id: "messages", label: "Messages" },
@@ -26,6 +30,12 @@ const CLEANUP_COLLECTIONS = [
   "recognition",
   "testimonials",
   "trusted_by",
+  "services",
+  "work_steps",
+  "experience",
+  "open_source",
+  "now_log",
+  "marquee",
 ];
 
 export default function AdminPage() {
@@ -149,6 +159,8 @@ export default function AdminPage() {
         <div className="glass rounded-2xl p-6">
           {activeTab === "hero" && <TabHeroConfig />}
           {activeTab === "projects" && <TabProjectsManager />}
+          {activeTab === "content" && <TabContent />}
+          {activeTab === "settings" && <TabSettings />}
           {activeTab === "skills" && <TabSkillsLinks />}
           {activeTab === "testimonials" && <TabTestimonials />}
           {activeTab === "messages" && <TabMessages />}

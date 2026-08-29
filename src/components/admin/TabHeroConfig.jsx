@@ -1,19 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { getHeroData, updateHeroData } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
-import { ImageCropModal } from "@/components/ui/ImageCropModal";
-
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const defaultHero = {
   title: "",
@@ -26,9 +17,6 @@ export function TabHeroConfig() {
   const [form, setForm] = useState(defaultHero);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [cropOpen, setCropOpen] = useState(false);
-  const [cropSrc, setCropSrc] = useState("");
-  const fileInputRef = useRef(null);
 
   useEffect(() => {
     async function load() {
@@ -63,21 +51,8 @@ export function TabHeroConfig() {
     }
   }
 
-  function handleFileSelected(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setCropSrc(url);
-    setCropOpen(true);
-    e.target.value = "";
-  }
-
-  async function handleCropComplete(file) {
-    if (!file) return;
-    downloadBlob(file, "my-picture.png");
-    toast.success(
-      "Cropped photo saved to Downloads — place it at public/my-picture.png and redeploy."
-    );
+  function handlePhotoChange(url) {
+    setForm((prev) => ({ ...prev, photo_url: url }));
   }
 
   if (loading) {
@@ -138,36 +113,11 @@ export function TabHeroConfig() {
               Profile Photo
             </label>
             <p className="text-xs text-themeText/50">
-              The site uses the local file{" "}
-              <code className="text-themeAccent">public/my-picture.png</code>{" "}
-              by default. Leave the field empty to use it, or enter an override
-              URL/path.
+              Leave empty to use the built-in{" "}
+              <code className="text-themeAccent">public/my-picture.png</code>, upload a new
+              one here, or paste an image URL.
             </p>
-            <div className="flex items-center gap-2">
-              <input
-                id="hero-photo"
-                type="text"
-                value={form.photo_url}
-                onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
-                placeholder="/my-picture.png"
-                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
-              />
-            </div>
-            <div className="flex items-center gap-3 pt-2">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-              >
-                Crop New Photo (Save Locally)
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileSelected}
-              />
-            </div>
+            <ImageUploader value={form.photo_url} onChange={handlePhotoChange} label="Profile Photo" />
           </div>
 
           <Button onClick={handleSave} disabled={saving}>
@@ -200,13 +150,6 @@ export function TabHeroConfig() {
           </div>
         </div>
       </div>
-
-      <ImageCropModal
-        open={cropOpen}
-        imageSrc={cropSrc}
-        onClose={() => setCropOpen(false)}
-        onCropComplete={handleCropComplete}
-      />
     </>
   );
 }

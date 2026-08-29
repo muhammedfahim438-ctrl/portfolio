@@ -15,6 +15,44 @@ export async function updateHeroData(data) {
   await updateDoc(doc(db, "site_config", "hero_data"), data);
 }
 
+// Generic single-doc site config (splash, availability, about, marquee, footer, etc.)
+export async function getConfig(key, fallback = null) {
+  const snap = await getDoc(doc(db, "site_config", key));
+  return snap.exists() ? snap.data() : fallback;
+}
+
+export async function setConfig(key, data) {
+  await setDoc(doc(db, "site_config", key), data || {}, { merge: true });
+}
+
+// Generic single-doc profile config (e.g. profile/social_data)
+export async function getProfile(key) {
+  const snap = await getDoc(doc(db, "profile", key));
+  return snap.exists() ? snap.data() : null;
+}
+
+export async function setProfileConfig(key, data) {
+  await setDoc(doc(db, "profile", key), data || {}, { merge: true });
+}
+
+// Generic collection CRUD (experience, open_source, now_log, services, work_steps, ...)
+export async function getCollection(name) {
+  const snap = await getDocs(collection(db, name));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
+export async function addItem(name, data) {
+  return addDoc(collection(db, name), data);
+}
+
+export async function updateItem(name, id, data) {
+  return updateDoc(doc(db, name, id), data);
+}
+
+export async function deleteItem(name, id) {
+  return deleteDoc(doc(db, name, id));
+}
+
 const COLLECTIONS = {
   projects: "projects",
   skills: "skills",

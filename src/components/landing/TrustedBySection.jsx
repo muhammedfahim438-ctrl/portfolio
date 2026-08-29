@@ -1,10 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { FiCode } from "react-icons/fi";
 import {
   SiPython, SiReact, SiDjango, SiFlutter,
   SiPostgresql, SiDocker, SiGooglecloud, SiVercel,
 } from "react-icons/si";
+import { getCollection } from "@/lib/firestore";
+import { resolveIcon } from "@/lib/iconMap";
 
 const logos = [
   { icon: SiPython, name: "Python" },
@@ -18,6 +22,21 @@ const logos = [
 ];
 
 export function TrustedBySection() {
+  const [brands, setBrands] = useState(logos);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const data = await getCollection("trusted_by");
+        if (mounted && Array.isArray(data) && data.length) setBrands(data);
+      } catch {
+        // static fallback
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <section className="py-16 px-4 border-y border-themeBorder">
       <div className="max-w-6xl mx-auto">
@@ -32,15 +51,16 @@ export function TrustedBySection() {
 
         <div className="relative overflow-hidden">
           <div className="animate-logo-scroll inline-flex gap-12 items-center">
-            {[...logos, ...logos].map((logo, i) => {
-              const Icon = logo.icon;
+            {[...brands, ...brands].map((logo, i) => {
+              const iconKey = logo.icon;
+              const Icon = typeof iconKey === "string" ? resolveIcon(iconKey) : (iconKey || FiCode);
               return (
                 <div
                   key={i}
                   className="flex items-center gap-2 text-themeText-secondary/40 hover:text-themeAccent transition-colors duration-300 shrink-0"
                   data-cursor-hover
                 >
-                  <Icon className="w-8 h-8" />
+                  <Icon aria-hidden="true" className="w-8 h-8" />
                   <span className="text-sm font-medium hidden md:inline">{logo.name}</span>
                 </div>
               );

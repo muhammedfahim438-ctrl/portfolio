@@ -134,8 +134,8 @@ export function SkillsTabs() {
                   className="glass rounded-2xl p-6 flex flex-col items-center justify-center gap-3 hover:shadow-lg hover:shadow-themeAccent/10 hover:border-themeAccent/30 transition-all duration-300 group cursor-default"
                   data-cursor-hover
                 >
-                  <Icon className="w-8 h-8 text-themeText-secondary group-hover:text-themeAccent transition-colors duration-300" />
-                  <span className="text-xs font-medium text-themeText-secondary group-hover:text-themeText transition-colors text-center">
+                  <Icon aria-hidden="true" className="w-8 h-8 text-themeText-secondary group-hover:text-themeAccent transition-colors duration-300" />
+                  <span className="font-mono text-xs font-medium text-themeText-secondary group-hover:text-themeText transition-colors text-center">
                     {skill.name}
                   </span>
                 </motion.div>

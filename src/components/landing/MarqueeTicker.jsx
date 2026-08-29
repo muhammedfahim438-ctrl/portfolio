@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { getCollection } from "@/lib/firestore";
 
 const MARQUEE_ITEMS = [
   "Data Science",
@@ -20,11 +22,28 @@ const MARQUEE_ITEMS = [
 ];
 
 export function MarqueeTicker() {
+  const [items, setItems] = useState(MARQUEE_ITEMS);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const data = await getCollection("marquee");
+        if (mounted && Array.isArray(data) && data.length) {
+          setItems(data.map((d) => (typeof d === "string" ? d : d.text || d.title || "")).filter(Boolean));
+        }
+      } catch {
+        // static fallback
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <section className="py-8 border-y border-themeBorder overflow-hidden">
       <div className="relative whitespace-nowrap">
         <div className="animate-marquee inline-flex gap-8">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+          {[...items, ...items].map((item, i) => (
             <span
               key={i}
               className="text-sm md:text-base font-mono tracking-wider text-themeText-secondary/60 select-none uppercase"

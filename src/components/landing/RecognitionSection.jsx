@@ -1,8 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FiAward, FiStar, FiTrendingUp, FiZap } from "react-icons/fi";
+import { FiAward, FiCode, FiStar, FiTrendingUp, FiZap } from "react-icons/fi";
 import { SplitText } from "@/components/ui/SplitText";
+import { getCollection } from "@/lib/firestore";
+import { resolveIcon } from "@/lib/iconMap";
+
+const COLORS = ["from-themeAccent to-themeSecondary", "from-themeSecondary to-themeAccent"];
 
 const recognitions = [
   {
@@ -42,6 +47,21 @@ const cardVariants = {
 };
 
 export function RecognitionSection() {
+  const [items, setItems] = useState(recognitions);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const data = await getCollection("recognition");
+        if (mounted && Array.isArray(data) && data.length) setItems(data);
+      } catch {
+        // static fallback
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <section id="recognition" className="py-24 px-4">
       <div className="max-w-6xl mx-auto">
@@ -68,8 +88,10 @@ export function RecognitionSection() {
           viewport={{ once: true, margin: "-80px" }}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {recognitions.map((item) => {
-            const Icon = item.icon;
+          {items.map((item, idx) => {
+            const iconKey = item.icon;
+            const Icon = typeof iconKey === "string" ? resolveIcon(iconKey) : (iconKey || FiCode);
+            const color = item.color || COLORS[idx % COLORS.length];
             return (
               <motion.div
                 key={item.title}
@@ -77,7 +99,7 @@ export function RecognitionSection() {
                 whileHover={{ y: -4 }}
                 className="glass rounded-2xl p-6 flex gap-4"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shrink-0`}>
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shrink-0`}>
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -85,7 +107,7 @@ export function RecognitionSection() {
                     {item.title}
                   </h3>
                   <p className="text-themeText-secondary text-sm leading-relaxed">
-                    {item.description}
+                    {item.desc || item.description}
                   </p>
                 </div>
               </motion.div>
