@@ -220,20 +220,6 @@ html.lenis, html.lenis body {
   top: 100px;
 }
 
-/* Testimonial Slider */
-.swiper-testimonial {
-  overflow: visible !important;
-}
-
-.swiper-testimonial .swiper-slide {
-  opacity: 0.4;
-  transition: opacity 0.3s ease;
-}
-
-.swiper-testimonial .swiper-slide-active {
-  opacity: 1;
-}
-
 /* Certification Card Hover */
 .cert-card:hover .cert-badge {
   transform: scale(1.05);

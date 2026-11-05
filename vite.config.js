@@ -15,8 +15,8 @@ export default defineConfig({
         manualChunks: {
           react: ["react", "react-dom", "react-router-dom"],
           firebase: ["firebase/app", "firebase/auth", "firebase/firestore", "firebase/storage"],
-          motion: ["framer-motion", "gsap", "lenis", "split-type"],
-          ui: ["react-hot-toast", "react-icons", "react-easy-crop", "swiper"],
+          motion: ["framer-motion", "lenis"],
+          ui: ["react-hot-toast", "react-icons"],
         },
       },
     },
