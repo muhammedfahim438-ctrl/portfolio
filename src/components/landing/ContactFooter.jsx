@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { FiMail, FiPhone, FiMapPin, FiSend, FiDownload } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiMail, FiPhone, FiMapPin, FiSend, FiArrowUp } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { sendMessage, getSocialData } from "@/lib/firestore";
 import {
@@ -16,37 +16,19 @@ import {
   EMAIL_REGEX,
   MIN_FORM_FILL_MS,
 } from "@/lib/constants";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { ScenicScene } from "@/components/landing/ScenicScene";
 import { SplitText } from "@/components/ui/SplitText";
-import { MagneticButton } from "@/components/ui/MagneticButton";
-
-const MARQUEE_ITEMS = [
-  "Data Science",
-  "Full-Stack Development",
-  "Machine Learning",
-  "REST APIs",
-  "Python",
-  "Django",
-  "React.js",
-  "Flutter",
-  "PostgreSQL",
-  "Power BI",
-];
 
 const REASONS = [
-  "Hire Me — Project Work",
-  "Project Collaboration",
-  "Speaking / Event Invitation",
-  "Just Saying Hello",
+  "HIRE ME — PROJECT WORK",
+  "PROJECT COLLABORATION",
+  "SPEAKING / EVENT INVITATION",
+  "JUST SAYING HELLO",
 ];
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Certifications", href: "#certifications" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Work", href: "#work" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -98,13 +80,11 @@ export function ContactFooter() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // --- honeypot: a real user never sees or fills this field ---
     if (website.trim()) {
       toast.error("Failed to send message. Please try again.");
       return;
     }
 
-    // --- minimum fill time: bots submit instantly ---
     const filledFor =
       formStartedAt.current === null ? 0 : Date.now() - formStartedAt.current;
     if (filledFor < MIN_FORM_FILL_MS) {
@@ -122,7 +102,6 @@ export function ContactFooter() {
       return;
     }
 
-    // --- length caps: mirror exactly what firestore.rules enforces ---
     if (senderName.length > MESSAGE_LIMITS.sender_name) {
       toast.error(`Name must be ${MESSAGE_LIMITS.sender_name} characters or fewer.`);
       return;
@@ -163,9 +142,7 @@ export function ContactFooter() {
       formStartedAt.current = null;
     } catch (err) {
       if (err?.code === "permission-denied") {
-        toast.error(
-          "You have already sent a message today. Please try again tomorrow, or email me directly."
-        );
+        toast.error("You have already sent a message today. Please try again tomorrow, or email me directly.");
       } else {
         toast.error("Failed to send message. Please try again.");
       }
@@ -174,202 +151,128 @@ export function ContactFooter() {
     }
   };
 
+  const scrollToForm = () => {
+    const el = document.getElementById("contact-form");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else if (window.__lenis) {
+      window.__lenis.scrollTo("#contact-form");
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
-      <section className="py-12 border-t border-themeBorder overflow-hidden">
-        <div className="relative whitespace-nowrap">
-          <div className="animate-marquee inline-flex gap-8">
-            {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
-              <span
-                key={i}
-                className="text-5xl md:text-7xl font-display font-bold text-themeBorder/30 select-none"
-              >
-                {item}
-                <span className="mx-8 text-themeAccent/30">✦</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="relative overflow-hidden">
-        <ScenicScene variant="footer" />
-
-        <div className="relative z-10">
-          <section id="contact" className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <motion.header
-            initial={{ opacity: 0, y: 20 }}
+      <section id="contact" className="py-20 px-4 border-t border-themeBorder bg-themeBg overflow-hidden">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-16 text-center"
+            transition={{ duration: 0.7 }}
+            className="mb-16 text-start max-w-4xl"
           >
-            <p className="theme-eyebrow mb-4">Contact</p>
-            <SplitText
-              text="LET&apos;S CONNECT"
-              accentWord="CONNECT"
-              className="mx-auto font-display font-bold uppercase leading-[0.95] tracking-tight text-4xl sm:text-5xl md:text-7xl"
-            />
-            <p className="text-themeText-secondary mt-6 leading-relaxed max-w-2xl mx-auto">
-              Fill in the form below and I&apos;ll get back to you within 24
-              hours.
-            </p>
-            <MagneticButton className="mt-10 inline-block">
-              <button
-                onClick={() => {
-                  const el = document.getElementById("contact-form");
-                  if (window.__lenis) window.__lenis.scrollTo(el);
-                  else el?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-themeAccent to-themeSecondary px-9 py-4 font-display font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
-              >
-                Start a Project <span aria-hidden>↗</span>
-              </button>
-            </MagneticButton>
-          </motion.header>
+            <div className="flex items-center gap-3 border-l-4 border-themeAccent pl-4 mb-4">
+              <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
+                Get In Touch
+              </span>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <SplitText
+              text="Let's Build Something"
+              accentWord="Build"
+              className="font-display font-black uppercase leading-[0.95] tracking-[-0.02em] text-[clamp(2rem,6vw,3rem)] text-themeText"
+            />
+
+            <p className="text-themeText-secondary leading-relaxed text-base max-w-lg mt-4">
+              I'm open to freelance work, contract roles, and full-time opportunities.
+              Tell me about your idea and I'll get back within 24 hours.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-6">
+              <button
+                onClick={scrollToForm}
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-colors"
+              >
+                Start a Project
+                <FiSend className="w-4 h-4 ml-1.5" />
+              </button>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeBorder bg-transparent text-themeText font-display font-semibold hover:border-themeAccent hover:text-themeAccent transition-colors"
+              >
+                Download Resume
+                <FiDownload className="w-4 h-4 ml-1.5" />
+              </a>
+            </div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <motion.div
               id="contact-form"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.7 }}
               className="scroll-mt-24"
             >
               {sent ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="glass rounded-2xl p-10 text-center"
+                  className="rounded-none p-10 border-2 border-themeBorder bg-themeSurface/30 text-center"
                 >
-                  <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-themeAccent/15 flex items-center justify-center">
-                    <FiSend className="w-6 h-6 text-themeAccent" />
+                  <div className="w-12 h-12 mx-auto mb-4 border-2 border-themeAccent flex items-center justify-center text-themeAccent">
+                    <FiSend className="w-6 h-6" />
                   </div>
-                  <h3 className="font-display font-semibold text-themeText text-2xl mb-2">
-                    Message sent!
+                  <h3 className="font-display font-bold text-themeText text-xl mb-2 uppercase">
+                    Message Sent
                   </h3>
                   <p className="text-themeText-secondary">
-                    Thanks for reaching out. I&apos;ll get back to you within
-                    24 hours.
+                    Thanks for reaching out. I'll get back to you within 24 hours.
                   </p>
                   <button
                     onClick={() => setSent(false)}
-                    className="mt-6 px-5 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
+                    className="mt-6 px-5 py-2 rounded-none border-2 border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
                   >
                     Send Another
                   </button>
                 </motion.div>
               ) : (
-                <form
-                  onSubmit={handleSubmit}
-                  onFocus={markFormStart}
-                  onMouseDown={markFormStart}
-                  onTouchStart={markFormStart}
-                  className="relative space-y-5"
-                >
-                  {/* Honeypot — off-screen and unfocusable for humans. */}
+                <form onSubmit={handleSubmit} onFocus={markFormStart} onMouseDown={markFormStart} onTouchStart={markFormStart} className="relative space-y-6">
                   <div
                     aria-hidden="true"
                     className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden"
                   >
                     <label htmlFor="website">Website</label>
-                    <input
-                      id="website"
-                      name="website"
-                      type="text"
-                      tabIndex={-1}
-                      autoComplete="off"
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                    />
+                    <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-themeText-secondary mb-1.5">
-                        Full Name <span className="text-themeAccent">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        autoComplete="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors"
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-themeText-secondary mb-1.5">
-                        Phone <span className="text-themeText/40">(optional)</span>
-                      </label>
-                      <input
-                        id="phone"
-                        type="tel"
-                        autoComplete="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors"
-                        placeholder="+91 99999 99999"
-                      />
-                    </div>
+                    <BrandInput label="FULL NAME" id="name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required />
+                    <BrandInput label="PHONE" id="phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999" />
                   </div>
 
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-themeText-secondary mb-1.5">
-                      Email Address <span className="text-themeAccent">*</span>
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="reason" className="block text-sm font-medium text-themeText-secondary mb-1.5">
-                      What brings you here? <span className="text-themeAccent">*</span>
-                    </label>
-                    <select
-                      id="reason"
-                      value={reason}
-                      onChange={(e) => setReason(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText focus:outline-none focus:border-themeAccent transition-colors"
-                    >
-                      {REASONS.map((r) => (
-                        <option key={r} value={r}>{r}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-themeText-secondary mb-1.5">
-                      Message <span className="text-themeAccent">*</span>
-                    </label>
-                    <textarea
-                      id="message"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      rows={5}
-                      className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors resize-none"
-                      placeholder="Tell me about your project or idea..."
-                    />
-                  </div>
+                  <BrandInput label="EMAIL ADDRESS" id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
+                  <BrandInput label="WHAT BRINGS YOU HERE?" id="reason" type="select" value={reason} onChange={(e) => setReason(e.target.value)} required>
+                    {REASONS.map((r) => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </BrandInput>
+                  <BrandInput label="MESSAGE" id="message" type="textarea" value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="Tell me about your project or idea..." required />
 
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-themeAccent to-themeSecondary text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-colors disabled:opacity-50"
                   >
                     {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-none animate-spin" />
                     ) : (
                       <>
                         <FiSend className="w-4 h-4" />
@@ -385,61 +288,27 @@ export function ContactFooter() {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
               className="flex flex-col justify-between gap-8"
             >
-              <div className="space-y-4 text-sm">
-                <a
-                  href={`mailto:${social.email}`}
-                  className="flex items-center gap-3 text-themeText-secondary hover:text-themeAccent transition-colors"
-                >
-                  <FiMail className="w-4 h-4 shrink-0" />
-                  {social.email}
-                </a>
-                <p className="flex items-center gap-3 text-themeText-secondary">
-                  <FiPhone className="w-4 h-4 shrink-0" />
-                  {social.phone}
-                </p>
-                <p className="flex items-center gap-3 text-themeText-secondary">
-                  <FiMapPin className="w-4 h-4 shrink-0" />
-                  {social.location}
-                </p>
+              <div className="space-y-5 text-sm">
+                <BrandContactItem icon={<FiMail className="w-4 h-4 shrink-0" />} label="EMAIL" value={social.email} href={`mailto:${social.email}`} />
+                <BrandContactItem icon={<FiPhone className="w-4 h-4 shrink-0" />} label="PHONE" value={social.phone} />
+                <BrandContactItem icon={<FiMapPin className="w-4 h-4 shrink-0" />} label="LOCATION" value={social.location} />
               </div>
 
-              <div className="glass rounded-2xl p-8">
-                <p className="font-display font-semibold text-themeText text-lg mb-6">
-                  Find me on
+              <div className="rounded-none p-8 border-2 border-themeBorder bg-themeSurface/20">
+                <p className="font-display font-bold text-themeText text-base mb-4 uppercase">
+                  Find Me On
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <a
-                    href={social.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-                  >
-                    <FaGithub className="w-4 h-4" />
-                    GitHub
-                  </a>
-                  <a
-                    href={social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-                  >
-                    <FaLinkedin className="w-4 h-4" />
-                    LinkedIn
-                  </a>
-                  <a
-                    href={`mailto:${social.email}`}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
-                  >
-                    <FiMail className="w-4 h-4" />
-                    Email
-                  </a>
+                  <BrandSocial href={social.github} icon={<FaGithub className="w-4 h-4" />} label="GITHUB" />
+                  <BrandSocial href={social.linkedin} icon={<FaLinkedin className="w-4 h-4" />} label="LINKEDIN" />
+                  <BrandSocial href={`mailto:${social.email}`} icon={<FiMail className="w-4 h-4" />} label="EMAIL" />
                 </div>
               </div>
 
-              <div className="text-sm text-themeText-secondary/70">
+              <div className="text-xs text-themeText-secondary/60 uppercase tracking-wider">
                 Your information is private and will never be shared.
               </div>
             </motion.div>
@@ -447,15 +316,11 @@ export function ContactFooter() {
         </div>
       </section>
 
-      <footer className="mt-8 pt-8 border-t border-themeBorder">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col gap-8 pb-8">
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 justify-center">
+      <footer className="mt-12 pt-10 border-t border-themeBorder">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col gap-6 pb-10">
+          <nav className="flex flex-wrap gap-x-6 gap-y-3 justify-center">
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="link-underline text-sm text-themeText-secondary hover:text-themeAccent transition-colors"
-              >
+              <a key={link.label} href={link.href} className="link-underline text-sm text-themeText-secondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em]">
                 {link.label}
               </a>
             ))}
@@ -464,54 +329,64 @@ export function ContactFooter() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-sm text-themeText-secondary text-center md:text-left">
               <p>&copy; 2026 Muhammed Fahim M. All rights reserved.</p>
-              <p className="mt-1 text-themeText-secondary/60">
-                Built with React, Firebase &amp; Tailwind
+              <p className="mt-1 text-xs text-themeText-secondary/50 uppercase tracking-wider">
+                Built with React, Firebase & Tailwind
               </p>
             </div>
 
             <div className="flex items-center gap-4">
-              <a
-                href={social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-themeText-secondary hover:text-themeAccent transition-colors"
-                aria-label="GitHub"
-              >
-                <FaGithub className="w-5 h-5" />
+              <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="GitHub">
+                <FaGithub className="w-4 h-4" />
               </a>
-              <a
-                href={social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-themeText-secondary hover:text-themeAccent transition-colors"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin className="w-5 h-5" />
+              <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="LinkedIn">
+                <FaLinkedin className="w-4 h-4" />
               </a>
-              <a
-                href={`mailto:${social.email}`}
-                className="text-themeText-secondary hover:text-themeAccent transition-colors"
-                aria-label="Email"
-              >
-                <FiMail className="w-5 h-5" />
+              <a href={`mailto:${social.email}`} className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="Email">
+                <FiMail className="w-4 h-4" />
               </a>
-              <button
-                onClick={() => {
-                  if (window.__lenis) window.__lenis.scrollTo(0);
-                  else window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-themeBorder text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors"
-                aria-label="Go to top"
-              >
-                <FiArrowUp className="w-4 h-4" />
-              </button>
-              <ThemeToggle />
             </div>
           </div>
         </div>
-        </footer>
-        </div>
-      </div>
+      </footer>
     </>
+  );
+}
+
+function BrandInput({ label, id, type, value, onChange, placeholder, required, children }) {
+  const isSelect = type === "select";
+  const isTextarea = type === "textarea";
+  return (
+    <div className="space-y-1.5">
+      <label htmlFor={id} className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary/70">
+        {label}{required && <span className="text-themeAccent">*</span>}
+      </label>
+      {isSelect ? (
+        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors">
+          {children}
+        </select>
+      ) : isTextarea ? (
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={placeholder ? 1 : undefined} placeholder={placeholder} className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors resize-none" />
+      ) : (
+        <input id={id} type={type} autoComplete={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors" />
+      )}
+    </div>
+  );
+}
+
+function BrandContactItem({ icon, label, value, href }) {
+  return (
+    <a href={href} className="flex items-center gap-2 text-themeText-secondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em] text-xs">
+      {icon}
+      <span>{value}</span>
+    </a>
+  );
+}
+
+function BrandSocial({ href, icon, label }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-none border-2 border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors uppercase tracking-[0.1em]">
+      {icon}
+      <span>{label}</span>
+    </a>
   );
 }

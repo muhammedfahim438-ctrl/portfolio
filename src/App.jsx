@@ -3,19 +3,9 @@ import { lazy, Suspense, useEffect } from "react";
 import Lenis from "lenis";
 import { SplashScreen } from "@/components/landing/SplashScreen";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { MarqueeTicker } from "@/components/landing/MarqueeTicker";
 import { AboutSection } from "@/components/landing/AboutSection";
 import { SkillsTabs } from "@/components/landing/SkillsTabs";
-import { ExperienceSection } from "@/components/landing/ExperienceSection";
 import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
-import { OpenSourceSection } from "@/components/landing/OpenSourceSection";
-import { CertificationsSection } from "@/components/landing/CertificationsSection";
-import { RecognitionSection } from "@/components/landing/RecognitionSection";
-import { NowSection } from "@/components/landing/NowSection";
-import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
-import { TrustedBySection } from "@/components/landing/TrustedBySection";
-import { ServicesSection } from "@/components/landing/ServicesSection";
-import { WorkWithMeSection } from "@/components/landing/WorkWithMeSection";
 import { ContactFooter } from "@/components/landing/ContactFooter";
 import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
@@ -54,19 +44,9 @@ function LandingPage() {
       <CustomCursor />
       <SplashScreen />
       <HeroSection />
-      <MarqueeTicker />
       <AboutSection />
       <SkillsTabs />
-      <ExperienceSection />
-      <ServicesSection />
       <FeaturedProjects />
-      <OpenSourceSection />
-      <CertificationsSection />
-      <RecognitionSection />
-      <NowSection />
-      <TestimonialsSection />
-      <TrustedBySection />
-      <WorkWithMeSection />
       <ContactFooter />
     </main>
   );

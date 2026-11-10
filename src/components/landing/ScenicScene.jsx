@@ -35,30 +35,35 @@ export function ScenicScene({ variant = "hero" }) {
       aria-hidden="true"
       className={`pointer-events-none absolute inset-0 overflow-hidden ${isFooter ? "scanlines-light" : ""}`}
     >
-      {/* terminal grid */}
-      <div className="terminal-grid absolute inset-0" />
+      {/* neon grid */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: `linear-gradient(rgba(205,242,43,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(205,242,43,0.06) 1px, transparent 1px)`,
+        backgroundSize: "44px 44px",
+        WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+      }} />
 
-      {/* cinematic ember mesh blobs */}
+      {/* cinematic neon mesh blobs */}
       {!isFooter && (
         <>
           <div
             className="mesh-blob mesh-blob--1"
-            style={{ width: "42rem", height: "42rem", top: "-14%", left: "-8%", background: "linear-gradient(135deg, rgba(255,77,77,0.28), rgba(163,18,32,0.16))" }}
+            style={{ width: "42rem", height: "42rem", top: "-14%", left: "-8%", background: "linear-gradient(135deg, rgba(205,242,43,0.18), rgba(8,9,11,0.08))" }}
           />
           <div
             className="mesh-blob mesh-blob--2"
-            style={{ width: "36rem", height: "36rem", bottom: "-18%", right: "-6%", background: "linear-gradient(135deg, rgba(255,138,61,0.20), rgba(255,77,77,0.10))" }}
+            style={{ width: "36rem", height: "36rem", bottom: "-18%", right: "-6%", background: "linear-gradient(135deg, rgba(205,242,43,0.14), rgba(8,9,11,0.06))" }}
           />
           <div
             className="mesh-blob mesh-blob--3"
-            style={{ width: "24rem", height: "24rem", top: "40%", left: "55%", background: "rgba(255,77,77,0.10)" }}
+            style={{ width: "24rem", height: "24rem", top: "40%", left: "55%", background: "rgba(205,242,43,0.08)" }}
           />
         </>
       )}
 
       {/* subtle drifting code lines */}
       <motion.div
-        className="absolute inset-0 flex flex-col justify-end gap-[0.35em] px-[8%] pb-[16%] opacity-[0.14]"
+        className="absolute inset-0 flex flex-col justify-end gap-[0.35em] px-[8%] pb-[16%] opacity-[0.10]"
         style={{ y: codeShift }}
       >
         {CODE_LINES.slice(0, isFooter ? 3 : 8).map((line, i) => (
@@ -96,7 +101,7 @@ export function ScenicScene({ variant = "hero" }) {
 
       <motion.div
         className="absolute -top-24 -right-24 h-80 w-80 rounded-full"
-        style={{ background: "var(--themeAccent)", opacity: 0.14, filter: "blur(90px)", y: glowY }}
+        style={{ background: "var(--themeAccent)", opacity: 0.12, filter: "blur(90px)", y: glowY }}
       />
 
       <div

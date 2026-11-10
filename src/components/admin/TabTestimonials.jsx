@@ -9,7 +9,7 @@ import {
   updateTestimonial,
   deleteTestimonial,
 } from "@/lib/firestore";
-import { Button } from "@/components/ui/Button";
+
 
 const emptyForm = {
   quote: "",
@@ -138,13 +138,13 @@ export function TabTestimonials() {
 
   return (
     <div className="space-y-8">
-      <section className="glass space-y-5">
-        <h2 className="text-xl font-semibold text-themeText">
+      <section className="space-y-6 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
+        <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4">
           {editing ? "Edit Testimonial" : "Add Testimonial"}
         </h2>
 
         <div className="space-y-1.5">
-          <label htmlFor="t-quote" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="t-quote" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Quote
           </label>
           <textarea
@@ -152,14 +152,14 @@ export function TabTestimonials() {
             rows={4}
             value={form.quote}
             onChange={(e) => setForm({ ...form, quote: e.target.value })}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200 resize-y"
             placeholder="What did they say about you?"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label htmlFor="t-author" className="block text-sm font-medium text-themeText/70">
+            <label htmlFor="t-author" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Author
             </label>
             <input
@@ -167,13 +167,13 @@ export function TabTestimonials() {
               type="text"
               value={form.author}
               onChange={(e) => setForm({ ...form, author: e.target.value })}
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
               placeholder="TechFifo Team"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="t-role" className="block text-sm font-medium text-themeText/70">
+            <label htmlFor="t-role" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Role / Company
             </label>
             <input
@@ -181,14 +181,14 @@ export function TabTestimonials() {
               type="text"
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
               placeholder="Engineering Team"
             />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-themeText/70">
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Rating
           </label>
           <div className="flex items-center gap-2">
@@ -203,20 +203,20 @@ export function TabTestimonials() {
                 <FaStar
                   className={
                     star <= Number(form.rating)
-                      ? "text-themeSecondary"
+                      ? "text-themeAccent"
                       : "text-themeBorder hover:text-themeText-secondary/40"
                   }
                 />
               </button>
             ))}
-            <span className="ml-2 font-mono text-xs text-themeText-secondary">
+            <span className="ml-2 font-mono text-[10px] text-themeText-secondary">
               {form.rating} / 5
             </span>
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="t-avatar" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="t-avatar" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Avatar Image URL
           </label>
           <input
@@ -224,19 +224,23 @@ export function TabTestimonials() {
             type="text"
             value={form.avatar_url}
             onChange={(e) => setForm({ ...form, avatar_url: e.target.value })}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
             placeholder="https://… or /assets/avatar.png"
           />
         </div>
 
-        <div className="flex items-center gap-3 pt-1">
-          <Button onClick={editing ? handleSaveEdit : handleAdd} disabled={adding || savingEdit}>
+        <div className="flex items-center gap-3 pt-3">
+          <button
+            onClick={editing ? handleSaveEdit : handleAdd}
+            disabled={adding || savingEdit}
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             {adding || savingEdit ? "Saving…" : editing ? "Save Changes" : "Add Testimonial"}
-          </Button>
+          </button>
           {editing && (
             <button
               onClick={resetForm}
-              className="px-4 py-2 rounded-lg border border-themeBorder text-themeText-secondary text-sm font-medium hover:text-themeText transition-colors"
+              className="px-5 py-2.5 rounded-none border-2 border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
             >
               Cancel
             </button>
@@ -244,8 +248,8 @@ export function TabTestimonials() {
         </div>
       </section>
 
-      <section className="glass space-y-4">
-        <h2 className="text-xl font-semibold text-themeText">
+      <section className="space-y-4 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
+        <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4">
           Existing Testimonials ({items.length})
         </h2>
 
@@ -257,7 +261,7 @@ export function TabTestimonials() {
           <div className="divide-y divide-themeBorder/50">
             {items.map((item) => (
               <div key={item.id} className="py-4 flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full shrink-0 overflow-hidden border border-themeBorder bg-themeBg-secondary">
+                <div className="w-10 h-10 rounded-none shrink-0 overflow-hidden border border-themeBorder bg-themeBgSecondary">
                   {item.avatar_url ? (
                     <img src={item.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -273,10 +277,10 @@ export function TabTestimonials() {
                       {item.author}
                     </p>
                     {item.role && (
-                      <p className="text-xs text-themeText/50">{item.role}</p>
+                      <p className="text-xs text-themeText-secondary/60">{item.role}</p>
                     )}
                     {Number(item.rating) > 0 && (
-                      <span className="flex items-center gap-0.5 text-themeSecondary">
+                      <span className="flex items-center gap-0.5 text-themeAccent">
                         {[1, 2, 3, 4, 5].map((s) => (
                           <FaStar
                             key={s}
@@ -295,7 +299,7 @@ export function TabTestimonials() {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-1.5 shrink-0">
+                <div className="flex flex-col gap-2 shrink-0">
                   <div className="flex items-center gap-2">
                     <input
                       value={avatarDrafts[item.id] ?? item.avatar_url ?? ""}
@@ -306,11 +310,11 @@ export function TabTestimonials() {
                         if (e.key === "Enter") handleAvatarSave(item.id);
                       }}
                       placeholder="Avatar image URL"
-                      className="w-44 rounded-md bg-themeInput px-2 py-1 text-xs text-themeText border border-themeBorder outline-none focus:border-themeAccent"
+                      className="w-44 rounded-none border-2 border-themeBorder bg-themeInput px-2 py-1.5 text-[10px] text-themeText focus:outline-none focus:border-themeAccent"
                     />
                     <button
                       onClick={() => handleAvatarSave(item.id)}
-                      className="text-xs text-green-400 hover:text-green-300 font-medium"
+                      className="text-[10px] text-themeAccent hover:text-themeAccent-hover font-medium"
                     >
                       Save
                     </button>
@@ -318,14 +322,14 @@ export function TabTestimonials() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => startEdit(item)}
-                      className="text-xs text-themeText/60 hover:text-themeAccent transition-colors"
+                      className="text-[10px] text-themeText-secondary/60 hover:text-themeAccent transition-colors"
                       title="Edit testimonial"
                     >
                       ✎ Edit
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                      className="text-[10px] text-red-400 hover:text-red-300 transition-colors"
                     >
                       Delete
                     </button>

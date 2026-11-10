@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FiArrowUpRight, FiMail } from "react-icons/fi";
 import { getCollection, getSocialData, getConfig } from "@/lib/firestore";
-import { MagneticButton } from "@/components/ui/MagneticButton";
+import AnimatedButton from "@/components/ui/animated-button";
 
 const DEFAULT_STEPS = [
   { step: "01", title: "Discover", desc: "We align on your goals, scope, and success metrics." },
@@ -34,10 +34,10 @@ export function WorkWithMeSection() {
         if (Array.isArray(stepData) && stepData.length) setSteps(stepData);
         if (social?.email) setEmail(social.email);
         if (avail) {
-          setAvailability({
+          setAvailability((prev) => ({
             available: avail.available !== false,
-            label: avail.label || availability.label,
-          });
+            label: avail.label || prev.label,
+          }));
         }
       } catch {
         // keep defaults
@@ -46,23 +46,23 @@ export function WorkWithMeSection() {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section id="work-with" className="py-24 px-5 sm:px-8 lg:px-14 relative overflow-hidden">
       <div className="mx-auto max-w-[1400px]">
         <motion.header
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-12 flex flex-col gap-5"
+          transition={{ duration: 0.6 }}
+          className="mb-16 flex flex-col gap-6 text-center"
         >
           <p className="theme-eyebrow">How we work</p>
           <h2 className="font-display font-bold uppercase leading-[0.95] tracking-tight text-3xl sm:text-4xl md:text-6xl">
             FROM IDEA TO LAUNCH
           </h2>
-          <p className="theme-lede text-themeText-secondary max-w-xl">
+          <p className="theme-lede text-themeText-secondary max-w-2xl mx-auto">
             A clear, collaborative process so you always know where your project stands.
           </p>
         </motion.header>
@@ -81,24 +81,24 @@ export function WorkWithMeSection() {
                 hidden: { opacity: 0, y: 40 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
               }}
-              className="relative border-l border-themeBorder pl-6"
+              className="glass rounded-3xl border border-themeBorder p-8 bg-themeSurface/50"
             >
               <span className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-themeAccent" />
-              <span className="font-mono text-sm text-themeAccent">{s.step}</span>
-              <h3 className="mt-2 font-display font-semibold text-xl text-themeText">{s.title}</h3>
+              <span className="font-mono text-sm text-themeAccent font-bold">{s.step}</span>
+              <h3 className="mt-4 font-display font-semibold text-xl text-themeText">{s.title}</h3>
               <p className="mt-2 text-sm text-themeText-secondary leading-relaxed">{s.desc}</p>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Hire CTA band */}
+        {/* Minimal CTA band */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          className="prem-card mt-16 overflow-hidden"
+          className="glass rounded-3xl border border-themeBorder mt-16 overflow-hidden"
         >
-          <div className="absolute inset-0 bg-linear-to-r from-themeAccent/12 via-transparent to-themeSecondary/15 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-r from-themeAccent/12 via-transparent to-themeAccent-hover/15 pointer-events-none" />
           <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 p-8 md:p-12">
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-themeBorder bg-themeSurface/70 px-4 py-1.5 mb-4">
@@ -108,27 +108,26 @@ export function WorkWithMeSection() {
                 </span>
               </div>
               <h3 className="font-display font-bold text-3xl md:text-5xl leading-tight">
-                Have a project in mind? <span className="emb-text">Let&apos;s build it.</span>
+                Have a project in mind? <span className="text-themeAccent">Let's build it.</span>
               </h3>
               <p className="mt-4 text-themeText-secondary">
-                I&apos;m open to freelance work, contract roles, and full-time opportunities.
-                Tell me about your idea and I&apos;ll get back within 24 hours.
+                I'm open to freelance work, contract roles, and full-time opportunities.
+                Tell me about your idea and I'll get back within 24 hours.
               </p>
             </div>
 
             <div className="flex flex-col gap-3">
-              <MagneticButton>
-                <a
-                  href="#contact"
-                  className="group inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-themeAccent to-themeSecondary px-7 py-4 font-display font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
-                >
-                  Hire Me
-                  <FiArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </a>
-              </MagneticButton>
+              <AnimatedButton
+                as="a"
+                href="#contact"
+                className="group inline-flex items-center gap-2 rounded-xl px-8 py-4 font-display font-semibold bg-linear-to-r from-themeAccent to-themeAccent-hover text-themeText shadow-lg hover:opacity-90"
+              >
+                Hire Me
+                <FiArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </AnimatedButton>
               <a
                 href={`mailto:${email}`}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-themeBorder px-7 py-4 text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-themeBorder px-8 py-4 text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors"
               >
                 <FiMail className="w-4 h-4" />
                 {email}

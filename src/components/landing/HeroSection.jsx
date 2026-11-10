@@ -1,44 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiMail, FiFileText, FiVolume2, FiMic, FiArrowDown, FiArrowUpRight } from "react-icons/fi";
-import { useSpeech } from "@/hooks/useSpeech";
+import { FiMail, FiFileText } from "react-icons/fi";
 import { getSocialData, getHeroData, getConfig } from "@/lib/firestore";
-import { Button } from "@/components/ui/Button";
-import { MagneticButton } from "@/components/ui/MagneticButton";
-import { ResumeModal } from "@/components/ui/ResumeModal";
 import { AnimatedPortrait } from "@/components/landing/AnimatedPortrait";
-import { ScenicScene } from "@/components/landing/ScenicScene";
 
-const DEFAULT_TITLE = "Hi, I'm Muhammed Fahim M";
 const DEFAULT_VOICE_TEXT =
-  "Hi! I'm Muhammed Fahim M, a freelance Data Science and Full-Stack Developer from Kerala, India. I build production APIs, ML models, and scalable web apps. Let's connect!";
-
-const ROLE_PILLS = ["Data Scientist", "Full-Stack Developer", "ML Engineer", "API Architect"];
+  "Hi! I'm Muhammed Fahim M, a Data Science and Full-Stack Developer from Kerala, India. I build production APIs, ML models, and scalable web apps.";
 
 const QUICK_FACTS = [
-  { k: "4+", v: "years experience" },
-  { k: "40+", v: "projects shipped" },
-  { k: "ML ×", v: "full-stack" },
+  { k: "4+", v: "YEARS EXPERIENCE" },
+  { k: "40+", v: "PROJECTS SHIPPED" },
+  { k: "ML ×", v: "FULL-STACK" },
 ];
 
 export function HeroSection() {
-  const { speak, stop, speaking, currentText } = useSpeech();
   const [resumeOpen, setResumeOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState("");
-  const [displayTitle, setDisplayTitle] = useState(DEFAULT_TITLE);
-  const [voiceText, setVoiceText] = useState(DEFAULT_VOICE_TEXT);
-  const [availability, setAvailability] = useState({
-    available: true,
-    label: "Available for freelance & full-time",
-  });
   const [social, setSocial] = useState({
     github: "https://github.com/muhammedfahim438-ctrl",
     linkedin: "https://linkedin.com/in/muhammed-fahim-m",
     email: "muhammedfahim438@gmail.com",
   });
+  const wrapRef = useRef(null);
+
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [6, -6]), { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 });
+
+  function handleMove(e) {
+    const el = wrapRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  }
 
   useEffect(() => {
     let mounted = true;
@@ -50,10 +49,6 @@ export function HeroSection() {
           getConfig("availability_data", null),
         ]);
         if (!mounted) return;
-        if (hero) {
-          if (hero.title) setDisplayTitle(hero.title);
-          if (hero.voice_text) setVoiceText(hero.voice_text);
-        }
         if (socialData) {
           setSocial((prev) => ({
             github: socialData.github || prev.github,
@@ -62,14 +57,8 @@ export function HeroSection() {
           }));
           if (socialData.resume_pdf_url) setResumeUrl(socialData.resume_pdf_url);
         }
-        if (avail) {
-          setAvailability({
-            available: avail.available !== false,
-            label: avail.label || "Available for freelance & full-time",
-          });
-        }
       } catch {
-        // fallback to defaults below
+        // fallback to defaults
       }
     }
     fetchData();
@@ -80,240 +69,127 @@ export function HeroSection() {
 
   const activeResumeUrl = resumeUrl || "/resume.pdf";
 
-  const h1Words = displayTitle.replace(/['']/g, "").split(" ");
-
   return (
     <>
-      <section className="relative min-h-screen flex items-center overflow-hidden">
-        <ScenicScene variant="hero" />
-        <div className="container mx-auto px-4 md:px-8 py-24 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* ---- Left: copy ---- */}
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-themeBg">
+        {/* Brutalist grid background */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `linear-gradient(rgba(8,9,11,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,9,11,0.04) 1px, transparent 1px)`,
+          backgroundSize: "44px 44px",
+        }} />
+
+        <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            {/* Left: AIDA Attention - Hero */}
             <motion.div
-              initial="hidden"
-              animate="visible"
-              className="space-y-7"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
             >
-              {/* availability pill */}
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: -12 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 rounded-full border border-themeBorder bg-themeSurface/70 px-4 py-1.5"
-              >
-                <span className="avail-dot" />
-                <span className="font-mono text-xs tracking-wide text-themeText-secondary">
-                  {availability.available ? availability.label : "Currently booked"}
+              <div className="flex items-center gap-3 border-l-4 border-themeAccent pl-4">
+                <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
+                  Data Science × Full-Stack
                 </span>
-              </motion.div>
+              </div>
 
-              {/* headline */}
-              <motion.h1
-                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } } }}
-                className="font-display font-bold leading-[1.02] tracking-tight text-[clamp(2.2rem,6vw,4.2rem)]"
-              >
-                {h1Words.map((word, i) => (
-                  <motion.span
-                    key={i}
-                    variants={{
-                      hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
-                      visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-                    }}
-                    className="inline-block mr-[0.28em]"
-                  >
-                    {i === 1 && /^i['’]m/i.test(word) ? (
-                      <em className="emb-text italic font-normal">{word}</em>
-                    ) : (
-                      word
-                    )}
-                  </motion.span>
-                ))}
-              </motion.h1>
+              {/* 2-line hero rule - wide container, max 3 lines */}
+              <h1 className="font-display font-black leading-[0.92] tracking-[-0.02em] text-[clamp(2.5rem,9vw,4.5rem)] text-themeText uppercase">
+                Muhammed Fahim M
+              </h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-                className="theme-lede"
-              >
-                I&apos;m a freelance Data Scientist &amp; Full-Stack Developer who turns ideas into
-                production-ready products — sharp APIs, accurate ML models, and scalable web apps
-                built for real outcomes.
-              </motion.p>
+              <p className="text-themeText-secondary leading-relaxed text-base max-w-lg">
+                I build production APIs, machine learning models, and scalable web applications at
+                the intersection of data engineering and full-stack development.
+              </p>
 
-              {/* quick facts */}
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.75, duration: 0.6 }}
-                className="flex flex-wrap gap-6"
-              >
+              <div className="flex flex-wrap gap-4">
                 {QUICK_FACTS.map((f) => (
-                  <div key={f.k} className="flex items-baseline gap-2">
-                    <span className="font-display text-2xl md:text-3xl font-bold emb-text">{f.k}</span>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-themeText-secondary max-w-[9rem] leading-tight">
+                  <div key={f.k} className="flex items-baseline gap-2 border-b border-themeBorder pb-1">
+                    <span className="font-display text-2xl md:text-3xl font-bold text-themeAccent uppercase">{f.k}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-themeText-secondary/70">
                       {f.v}
                     </span>
                   </div>
                 ))}
-              </motion.div>
+              </div>
 
-              {/* role pills */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.85 }}
-                className="flex flex-wrap gap-2"
-              >
-                {ROLE_PILLS.map((role) => (
-                  <span
-                    key={role}
-                    className="px-3 py-1.5 rounded-full text-xs font-medium bg-themeAccent/10 text-themeAccent border border-themeAccent/20"
-                  >
-                    {role}
-                  </span>
-                ))}
-              </motion.div>
-
-              {/* voice intro */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.95 }}
-                className="flex items-center gap-3"
-              >
-                <button
-                  onClick={() => (speaking ? stop() : speak(voiceText))}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-themeBg-secondary border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors text-sm"
-                  aria-label={speaking ? "Stop speaking" : "Play voice intro"}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-6">
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-colors"
                 >
-                  {speaking ? (
-                    <FiVolume2 className="w-4 h-4 animate-pulse text-themeAccent" />
-                  ) : (
-                    <FiMic className="w-4 h-4" />
-                  )}
-                  {speaking ? "Stop" : "Play Voice"}
-                </button>
-                <AnimatedSpeechText speaking={speaking} currentText={currentText} />
-              </motion.div>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.05, duration: 0.6 }}
-                className="flex flex-wrap items-center gap-4 pt-1"
-              >
-                <MagneticButton>
-                  <Button href="#contact" size="lg" className="group px-7">
-                    Hire Me
-                    <FiArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </Button>
-                </MagneticButton>
-                <Button href="#work" variant="secondary" size="lg">
+                  Hire Me
+                  <FiFileText className="w-4 h-4 ml-1.5" />
+                </a>
+                <a
+                  href="#work"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeBorder bg-transparent text-themeText font-display font-semibold hover:border-themeAccent hover:text-themeAccent transition-colors"
+                >
                   View Work
-                </Button>
-                <button
-                  onClick={() => setResumeOpen(true)}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl border border-themeBorder text-themeText-secondary hover:border-themeAccent hover:text-themeAccent transition-colors font-medium"
-                >
-                  <FiFileText className="w-4 h-4" />
-                  Resume
-                </button>
-              </motion.div>
+                </a>
+              </div>
             </motion.div>
 
-            {/* ---- Right: animated portrait ---- */}
+            {/* Right: 90° portrait with border */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
+              ref={wrapRef}
+              onMouseMove={handleMove}
+              onMouseLeave={() => { mx.set(0); my.set(0); }}
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative mx-auto w-72 h-80 sm:w-80 sm:h-96 lg:w-[24rem] lg:h-[28rem]"
+              transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="relative mx-auto w-64 h-72 sm:w-[22rem] sm:h-[26rem] lg:w-[28rem] lg:h-[32rem]"
             >
-              <AnimatedPortrait className="h-full w-full rounded-[2rem]" />
-              <RotatingBadge />
+              <div className="absolute inset-[-8px] rounded-none border-2 border-themeAccent bg-themeAccent z-0" />
+              <div className="relative h-full w-full rounded-none border-2 border-themeBorder bg-themeSurface overflow-hidden z-10">
+                <AnimatedPortrait className="h-full w-full" />
+              </div>
             </motion.div>
           </div>
         </div>
 
-        {/* social dock */}
+        {/* Social dock - brutalist pill */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40"
         >
-          <div className="glass rounded-full px-6 py-3 flex items-center gap-4">
+          <div className="rounded-none border-2 border-themeBorder bg-themeSurface px-5 py-2.5 flex items-center gap-3">
             <a href={social.github} target="_blank" rel="noopener noreferrer"
               className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="GitHub">
-              <FaGithub className="w-5 h-5" />
+              <FaGithub className="w-4 h-4" />
             </a>
             <a href={social.linkedin} target="_blank" rel="noopener noreferrer"
               className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="LinkedIn">
-              <FaLinkedin className="w-5 h-5" />
+              <FaLinkedin className="w-4 h-4" />
             </a>
             <a href={`mailto:${social.email}`}
               className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="Email">
-              <FiMail className="w-5 h-5" />
+              <FiMail className="w-4 h-4" />
             </a>
             <button onClick={() => setResumeOpen(true)} data-cursor-hover
               className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="Resume">
-              <FiFileText className="w-5 h-5" />
+              <FiFileText className="w-4 h-4" />
             </button>
           </div>
         </motion.div>
 
-        {/* scroll indicator */}
+        {/* Scroll indicator */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col items-center gap-3"
+          transition={{ delay: 0.9, duration: 0.5 }}
+          className="fixed bottom-4 right-4 z-40 hidden md:flex flex-col items-center gap-2"
         >
-          <span className="text-[10px] tracking-[0.35em] uppercase text-themeText-secondary">Scroll</span>
-          <div className="w-6 h-10 rounded-full border-2 border-themeBorder flex items-start justify-center p-1.5">
-            <div className="w-1 h-2 rounded-full bg-themeAccent animate-scroll-dot" />
+          <span className="text-[10px] tracking-[0.3em] uppercase text-themeText-secondary">Scroll</span>
+          <div className="w-5 h-9 rounded-none border-2 border-themeBorder flex items-start justify-center p-1">
+            <div className="w-1 h-1.5 rounded-none bg-themeAccent animate-scroll-dot" />
           </div>
         </motion.div>
       </section>
-
-      <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} resumeUrl={activeResumeUrl} />
     </>
-  );
-}
-
-function AnimatedSpeechText({ speaking, currentText }) {
-  if (!speaking && !currentText) return null;
-  return (
-    <motion.p
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex-1 min-w-0 text-sm text-themeText/70 italic leading-relaxed"
-    >
-      <span className="text-themeAccent font-medium">▸</span> {currentText}
-      {speaking && <span className="animate-pulse text-themeAccent">|</span>}
-    </motion.p>
-  );
-}
-
-function RotatingBadge() {
-  return (
-    <div
-      className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 z-10 flex h-24 w-24 md:h-28 md:w-28 items-center justify-center rounded-full bg-themeBg/90 glass"
-      data-cursor-hover
-    >
-      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full origin-center animate-spin-slow p-1" aria-hidden="true">
-        <defs>
-          <path id="hero-badge-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
-        </defs>
-        <text fontSize="10.5" letterSpacing="2.4" fontWeight="600" fill="var(--themeText)"
-          className="uppercase" style={{ fontFamily: "ui-monospace, monospace" }}>
-          <textPath href="#hero-badge-circle">
-            Scroll to explore {/* */}
-            &#8226; Let&apos;s connect &#8226;
-          </textPath>
-        </text>
-      </svg>
-      <FiArrowDown className="h-4 w-4 text-themeAccent" />
-    </div>
   );
 }

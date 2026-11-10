@@ -47,7 +47,7 @@ export function NowSection() {
           </p>
         </motion.div>
 
-        <div className="term-win">
+        <div className="glass rounded-2xl border border-themeBorder overflow-hidden">
           <div className="term-win__bar">
             <span className="term-win__dot term-win__dot--red" />
             <span className="term-win__dot term-win__dot--yellow" />
@@ -57,7 +57,7 @@ export function NowSection() {
             </span>
           </div>
 
-          <div className="divide-y divide-themeBorder font-mono text-sm">
+          <div className="divide-y divide-themeBorder/50 font-mono text-sm">
             {items.map((row, i) => (
               <motion.div
                 key={row.type}

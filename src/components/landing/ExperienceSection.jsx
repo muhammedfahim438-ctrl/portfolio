@@ -74,15 +74,15 @@ export function ExperienceSection() {
     <section id="experience" className="relative py-24 px-4 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
           className="mb-16"
         >
           <p className="theme-eyebrow mb-3">$ cat experience.log</p>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="font-display font-bold uppercase leading-[0.95] tracking-tight text-3xl sm:text-4xl md:text-6xl"
@@ -95,7 +95,7 @@ export function ExperienceSection() {
           <div className="absolute left-[7px] top-0 bottom-0 w-px bg-themeBorder sm:left-1/2 sm:-translate-x-px" />
           <motion.div
             className="absolute left-[7px] top-0 w-px bg-themeAccent sm:left-1/2 sm:-translate-x-px"
-            style={{ height: lineHeight, boxShadow: "0 0 12px rgba(255,45,45,0.4)" }}
+            style={{ height: lineHeight, boxShadow: "0 0 12px rgba(205,242,43,0.4)" }}
           />
 
           <div className="space-y-12 sm:space-y-16">
@@ -109,9 +109,7 @@ export function ExperienceSection() {
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.55, delay: 0.05 }}
                   className={`relative pl-10 sm:w-1/2 sm:pl-0 ${
-                    left
-                      ? "sm:pr-14 sm:text-right"
-                      : "sm:ml-auto sm:pl-14"
+                    left ? "sm:pr-14 sm:text-right" : "sm:ml-auto sm:pl-14"
                   }`}
                 >
                   <span
@@ -125,7 +123,7 @@ export function ExperienceSection() {
                     <span className="h-1.5 w-1.5 rounded-full bg-themeAccent" />
                   </span>
 
-                  <div className="crt-glow rounded-2xl border border-themeBorder bg-themeSurface/70 p-6 backdrop-blur-sm">
+                  <div className="glass rounded-3xl border border-themeBorder bg-themeSurface/70 p-8 backdrop-blur-sm">
                     <div className="mb-3 flex flex-wrap items-center gap-3">
                       <span className="rounded-full border border-themeAccent/30 bg-themeAccent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-themeAccent">
                         {item.tag}

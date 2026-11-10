@@ -19,7 +19,7 @@ export function Button({
 
   const variants = {
     primary:
-      "bg-linear-to-r from-themeAccent to-themeSecondary text-white hover:opacity-90 shadow-lg",
+      "bg-linear-to-r from-themeAccent to-themeAccent-hover text-themeText hover:opacity-90 shadow-lg",
     secondary:
       "border border-themeAccent text-themeAccent hover:bg-themeAccent/10",
     ghost: "text-themeText-secondary hover:text-themeText hover:bg-themeBg-secondary",

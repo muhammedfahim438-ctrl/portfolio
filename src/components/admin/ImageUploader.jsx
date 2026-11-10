@@ -28,25 +28,29 @@ export function ImageUploader({ value, onChange, folder = "uploads", label = "Im
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-themeText/70">{label}</label>
+      <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+        {label}
+      </label>
       <div className="flex items-center gap-3">
         {value ? (
-          <img src={value} alt="" className="h-16 w-16 rounded-lg object-cover border border-themeBorder" />
+          <img src={value} alt="" className="h-14 w-14 rounded-none object-cover border border-themeBorder" />
         ) : (
-          <div className="h-16 w-16 rounded-lg border border-dashed border-themeBorder flex items-center justify-center text-xs text-themeText/40">none</div>
+          <div className="h-14 w-14 rounded-none border-2 border-dashed border-themeBorder flex items-center justify-center text-[10px] text-themeText-secondary/50 uppercase tracking-wider">
+            none
+          </div>
         )}
         <div className="flex-1 space-y-2">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="px-4 py-2 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
+              className="px-4 py-2 rounded-none border-2 border-themeBorder bg-themeBgSecondary text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
             >
               {progress !== null ? `Uploading ${progress}%` : "Upload"}
             </button>
             {progress !== null && (
-              <div className="h-1.5 w-28 overflow-hidden rounded-full bg-themeBorder">
-                <div className="h-full bg-themeAccent transition-all" style={{ width: `${progress}%` }} />
+              <div className="h-1.5 w-28 overflow-hidden rounded-none bg-themeBorder">
+                <div className="h-full bg-themeAccent transition-all duration-200" style={{ width: `${progress}%` }} />
               </div>
             )}
             <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
@@ -56,11 +60,11 @@ export function ImageUploader({ value, onChange, folder = "uploads", label = "Im
             value={value ?? ""}
             onChange={(e) => onChange(e.target.value)}
             placeholder="…or paste an image URL"
-            className="w-full rounded-lg bg-themeInput px-3 py-2 text-sm text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-3 py-2 text-[13px] text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
       </div>
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-[10px] text-red-400">{error}</p>}
     </div>
   );
 }

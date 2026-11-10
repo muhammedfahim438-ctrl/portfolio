@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- theme color: light + dark variants match globals.css tokens -->
-    <meta name="theme-color" content="#faf9f8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b0a0c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FAF8F3" />
 
     <!-- icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Fahim M" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="format-detection" content="telephone=no" />
 
@@ -108,19 +107,6 @@
       }
     </script>
 
-    <script>
-      (function() {
-        try {
-          var theme = localStorage.getItem('theme') || 'dark';
-          if (theme === 'system') {
-            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          }
-          document.documentElement.classList.add(theme);
-        } catch(e) {
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
   </head>
   <body class="min-h-screen antialiased">
     <div id="root"></div>

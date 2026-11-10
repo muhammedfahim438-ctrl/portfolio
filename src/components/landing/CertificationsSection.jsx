@@ -92,10 +92,10 @@ export function CertificationsSection() {
                     key={cert.id ?? cert.title}
                     variants={cardVariants}
                     whileHover={{ y: -4 }}
-                    className="cert-card glass rounded-2xl p-6 flex flex-col items-center text-center space-y-4 cursor-pointer group"
+                    className="glass rounded-2xl p-6 flex flex-col items-center text-center space-y-4 cursor-pointer group border border-themeBorder"
                     onClick={() => handleVerify(cert)}
                   >
-                    <div className="cert-badge w-20 h-20 rounded-2xl bg-themeBg-secondary border border-themeBorder flex items-center justify-center overflow-hidden">
+                    <div className="cert-badge w-20 h-20 rounded-2xl bg-themeSurface border border-themeAccent/30 flex items-center justify-center overflow-hidden">
                       {cert.badge_image_url ? (
                         <img
                           src={cert.badge_image_url}
@@ -188,7 +188,7 @@ export function CertificationsSection() {
                 href={activeCert.credential_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex px-4 py-2 rounded-lg bg-themeAccent text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                className="inline-block px-4 py-2 rounded-lg bg-themeAccent text-themeText text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 Verify Certificate ↗
               </a>

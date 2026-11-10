@@ -6,7 +6,6 @@ import { getConfig } from "@/lib/firestore";
 
 const DEFAULT_WORDS = ["DEVELOPER", "SCIENTIST", "ENGINEER", "BUILDER", "MAKER", "THINKER"];
 const DEFAULT_FINAL = "DATA SCIENCE × FULL-STACK";
-const INK = "#f3f0ef";
 
 const GRAIN =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
@@ -53,7 +52,7 @@ export function SplashScreen() {
     const el = slotRef.current;
     if (!el) return;
     el.textContent = finalRef.current;
-    el.style.color = INK;
+    el.style.color = "var(--themeText)";
     setPhase("land");
   }
 
@@ -124,20 +123,20 @@ export function SplashScreen() {
           className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
           style={{
             background:
-              "radial-gradient(1000px 520px at 80% -10%, rgba(255,77,77,.14), transparent 60%), #0b0a0c",
+              "radial-gradient(1000px 520px at 80% -10%, rgba(205,242,43,.14), transparent 60%), #FAF8F3",
           }}
         >
           {/* grain */}
           <div className="pointer-events-none fixed inset-0 opacity-[0.05]" style={{ backgroundImage: GRAIN }} />
 
-          {/* expanding radial red burst when landing */}
+          {/* expanding radial lime burst when landing */}
           {phase !== "burst" && (
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{
                 width: "60vmax",
                 height: "60vmax",
-                background: "radial-gradient(circle, rgba(255,77,77,0.16), transparent 62%)",
+                background: "radial-gradient(circle, rgba(205,242,43,0.16), transparent 62%)",
                 opacity: phase === "land" ? 1 : 0,
                 transform: phase === "land" ? "translate(-50%,-50%) scale(1)" : "translate(-50%,-50%) scale(0.4)",
                 transition: "transform 1.6s cubic-bezier(.16,1,.3,1), opacity .8s ease",
@@ -152,7 +151,7 @@ export function SplashScreen() {
               height: "1.35em",
               WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)",
               maskImage: "linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)",
-              color: "#8f8f99",
+              color: "var(--themeTextSecondary)",
               opacity: phase === "idle" ? 0 : 1,
               transition: "opacity .6s ease",
             }}
@@ -173,22 +172,21 @@ export function SplashScreen() {
               textTransform: "uppercase",
               letterSpacing: "0.05em",
               lineHeight: 1,
-              color: INK,
+              color: "var(--themeText)",
               opacity: 0,
             }}
           >
-            MUHAMMED<span className="emb-text"> FAHIM </span>M
+            MUHAMMED<span className="text-themeAccent"> FAHIM </span>M
           </h1>
 
-          {/* ember sweep divider */}
+          {/* lime sweep divider */}
           <div
             className="relative mt-[6vh] h-px w-[min(480px,70vw)] overflow-hidden"
-            style={{ background: "#2a2326" }}
           >
             <div
               className="absolute inset-0"
               style={{
-                background: "linear-gradient(90deg, transparent, #ff5c60, #ff8a3d, transparent)",
+                background: "linear-gradient(90deg, transparent, var(--themeAccent), var(--themeAccent-hover), transparent)",
                 transform: "translateX(-100%)",
                 animation: "sweep 1.6s .5s ease forwards",
               }}
@@ -197,7 +195,7 @@ export function SplashScreen() {
 
           {/* bottom progress hairline */}
           <div
-            className="absolute bottom-0 left-0 h-[3px] bg-linear-to-r from-themeAccent to-themeSecondary transition-all duration-[1600ms]"
+            className="absolute bottom-0 left-0 h-[3px] bg-linear-to-r from-themeAccent to-themeAccent-hover transition-all duration-[1600ms]"
             style={{ width: phase === "land" || phase === "burst" ? "100%" : "4%", opacity: phase === "idle" ? 0 : 1 }}
           />
         </motion.div>

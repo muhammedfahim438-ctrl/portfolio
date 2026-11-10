@@ -24,8 +24,6 @@ export function NotFound() {
 
   return (
     <main className="min-h-screen bg-themeBg flex flex-col items-center justify-center px-4 py-24 text-center">
-      <div className="pointer-events-none fixed inset-0 terminal-grid opacity-60" aria-hidden="true" />
-
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -35,22 +33,22 @@ export function NotFound() {
         <p className="theme-eyebrow mb-6">Error 404</p>
 
         <h1 className="font-display font-bold leading-none tracking-tight text-[clamp(4rem,18vw,9rem)]">
-          <span className="emb-text">4</span>
+          <span className="text-themeAccent">4</span>
           <span className="text-themeText">0</span>
-          <span className="emb-text">4</span>
+          <span className="text-themeAccent">4</span>
         </h1>
 
         <p className="theme-display mt-6">Page not found</p>
 
         <p className="theme-lede mt-4">
-          That route doesn&apos;t exist — it may have been moved, renamed, or
+          That route doesn't exist — it may have been moved, renamed, or
           never shipped. The rest of the site is very much alive.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/"
-            className="inline-flex items-center gap-3 rounded-xl bg-linear-to-r from-themeAccent to-themeSecondary px-7 py-3.5 font-display font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-3 rounded-xl bg-linear-to-r from-themeAccent to-themeAccent-hover px-7 py-3.5 font-display font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
           >
             <FiArrowLeft className="w-4 h-4" aria-hidden="true" />
             Back to home

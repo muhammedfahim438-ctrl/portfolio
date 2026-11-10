@@ -1,86 +1,86 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/SplitText";
 import { WordHighlight } from "@/components/ui/WordHighlight";
 
-const stats = [
-  { label: "Years Experience", value: 2, suffix: "+" },
-  { label: "Projects Built", value: 12, suffix: "+" },
-  { label: "GitHub Repos", value: 13, suffix: "" },
-  { label: "Technologies", value: 30, suffix: "+" },
-];
-
-function CountUp({ target, suffix, inView }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, target]);
-
-  return (
-    <span className="text-4xl md:text-5xl font-display font-bold text-gradient">
-      {count}{suffix}
-    </span>
-  );
-}
-
 export function AboutSection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="about" className="py-24 px-4" ref={ref}>
+    <section id="about" className="py-20 px-4 border-t border-themeBorder bg-themeBg" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
-            About Me
-          </p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">
-            <SplitText as="span" text="Building the Future with Data" accentWord="Data" />
-          </h2>
-          <div className="max-w-3xl space-y-4 text-themeText-secondary leading-relaxed">
-            <WordHighlight text="I'm a Data Science and Full-Stack Developer from Kerala, India, passionate about building production-grade APIs, ML models, and scalable web applications. Currently pursuing my BSc in Data Science at Nehru Arts and Science College with a CGPA of 8.17." />
-            <WordHighlight text="From parsing 619,000+ villages into a SaaS API to achieving 98.2% accuracy in diabetes prediction, I thrive at the intersection of data engineering, machine learning, and full-stack development. I believe in clean code, meaningful data, and products that solve real problems." />
-          </div>
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Left: JTBD - Jobs to be done */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="space-y-8"
+          >
+            <div className="flex items-center gap-3 border-l-4 border-themeAccent pl-4">
+              <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
+                About Me
+              </span>
+            </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="glass rounded-2xl p-6 text-center"
-            >
-              <CountUp target={stat.value} suffix={stat.suffix} inView={inView} />
-              <p className="text-themeText-secondary text-sm mt-2">{stat.label}</p>
-            </motion.div>
-          ))}
+            <SplitText
+              as="span"
+              text="Building the Future with Data"
+              accentWord="Data"
+              className="font-display font-black leading-[1] tracking-[-0.02em] text-[clamp(2rem,6vw,3rem)] text-themeText uppercase"
+            />
+
+            <div className="space-y-6 text-themeText-secondary leading-relaxed text-base max-w-lg">
+              <div className="relative pl-6 border-l-2 border-themeAccent">
+                <WordHighlight text="I'm Muhammed Fahim M, a Data Science and Full-Stack Developer from Palakkad, Kerala, India." />
+              </div>
+              <div className="relative pl-6 border-l-2 border-themeAccent mt-2">
+                <WordHighlight text="I build production-grade APIs, machine learning models, and scalable web applications that solve real problems." />
+              </div>
+              <div className="relative pl-6 border-l-2 border-themeAccent mt-2">
+                <WordHighlight text="Currently pursuing my BSc in Data Science with a CGPA of 8.17 — shipping clean code, meaningful data, and products that matter." />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right: Brutalist stats - dense data block */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.7 }}
+            className="space-y-4"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <BrutalStat number="4+" label="YEARS" sub="experience" />
+              <BrutalStat number="40+" label="PROJECTS" sub="shipped" />
+              <BrutalStat number="13" label="GITHUB" sub="repos" />
+              <BrutalStat number="30+" label="TECH" sub="stack" />
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
+  );
+}
+
+function BrutalStat({ number, label, sub }) {
+  return (
+    <div className="relative p-5 border-2 border-themeBorder bg-themeSurface/30 overflow-hidden">
+      {/* Corner accent */}
+      <div className="absolute top-0 left-0 w-8 h-8 bg-themeAccent" />
+      <span className="text-3xl font-display font-bold text-themeText uppercase tracking-tighter block leading-none">
+        {number}
+      </span>
+      <span className="font-mono text-[10px] uppercase tracking-wider text-themeAccent mt-1 block">
+        {label}
+      </span>
+      <span className="font-mono text-[10px] text-themeText-secondary/60 uppercase tracking-wider block mt-0.5">
+        {sub}
+      </span>
+    </div>
   );
 }

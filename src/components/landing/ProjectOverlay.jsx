@@ -106,14 +106,14 @@ export function ProjectOverlay({ isOpen, onClose, onSelectProject }) {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.3 }}
-                      className="glass rounded-2xl overflow-hidden hover:border-themeAccent/30 transition-colors cursor-pointer group"
+                      className="glass rounded-2xl overflow-hidden hover:border-themeAccent/30 transition-colors cursor-pointer group border border-themeBorder"
                       onClick={() => {
                         onClose();
                         onSelectProject?.(project);
                       }}
                       data-cursor-hover
                     >
-                      <div className="relative h-36 overflow-hidden bg-gradient-to-br from-themeAccent/20 to-themeSecondary/20 flex items-center justify-center">
+                      <div className="relative h-36 overflow-hidden bg-gradient-to-br from-themeAccent/15 to-themeAccent-hover/10 flex items-center justify-center">
                         {project.image_url ? (
                           <img
                             src={project.image_url}

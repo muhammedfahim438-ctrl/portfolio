@@ -7,32 +7,32 @@ import { SplitText } from "@/components/ui/SplitText";
 import { getCollection } from "@/lib/firestore";
 import { resolveIcon } from "@/lib/iconMap";
 
-const COLORS = ["from-themeAccent to-themeSecondary", "from-themeSecondary to-themeAccent"];
+const COLORS = ["from-themeAccent to-themeAccent-hover", "from-themeAccent-hover to-themeAccent"];
 
 const recognitions = [
   {
     title: "Top Contributor",
     description: "Recognized for building a SaaS API serving 619,000+ villages with production-grade architecture",
     icon: FiAward,
-    color: "from-themeAccent to-themeSecondary",
+    color: "from-themeAccent to-themeAccent-hover",
   },
   {
     title: "ML Excellence",
     description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) in diabetes prediction using ensemble models",
     icon: FiTrendingUp,
-    color: "from-themeSecondary to-themeAccent",
+    color: "from-themeAccent-hover to-themeAccent",
   },
   {
     title: "Hackathon Winner",
     description: "Built UniPath — a cross-platform Flutter app for college counselling & wellness",
     icon: FiZap,
-    color: "from-themeAccent to-themeSecondary",
+    color: "from-themeAccent to-themeAccent-hover",
   },
   {
     title: "Open Source Advocate",
     description: "13+ public repositories on GitHub with production-grade projects and documentation",
     icon: FiStar,
-    color: "from-themeSecondary to-themeAccent",
+    color: "from-themeAccent-hover to-themeAccent",
   },
 ];
 
@@ -97,10 +97,10 @@ export function RecognitionSection() {
                 key={item.title}
                 variants={cardVariants}
                 whileHover={{ y: -4 }}
-                className="glass rounded-2xl p-6 flex gap-4"
+                className="glass rounded-2xl p-6 flex gap-4 border border-themeBorder"
               >
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shrink-0`}>
-                  <Icon className="w-6 h-6 text-white" />
+                  <Icon className="w-6 h-6 text-themeText" />
                 </div>
                 <div>
                   <h3 className="font-display font-semibold text-themeText text-lg mb-1">

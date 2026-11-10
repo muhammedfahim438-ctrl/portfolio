@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { getProjects, addProject, updateProject, deleteProject } from "@/lib/firestore";
-import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
 const CATEGORIES = ["Backend", "Frontend", "Mobile", "Data", "AI/ML", "Tools"];
@@ -144,7 +143,7 @@ export function TabProjectsManager() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 text-themeText/50">
+      <div className="flex items-center justify-center py-24 text-themeText/50">
         Loading projects…
       </div>
     );
@@ -153,76 +152,96 @@ export function TabProjectsManager() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-themeText">Projects</h2>
-        <Button onClick={openAdd}>Add New Project</Button>
+        <div>
+          <h2 className="text-xl font-display font-bold text-themeText uppercase tracking-tight">
+            Projects
+          </h2>
+          <p className="text-xs text-themeText-secondary/60 mt-1 uppercase tracking-[0.1em]">
+            Manage project case studies
+          </p>
+        </div>
+        <button
+          onClick={openAdd}
+          className="flex items-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200"
+        >
+          Add New Project
+        </button>
       </div>
 
       {projects.length === 0 ? (
-        <div className="glass py-16 text-center text-themeText/40">
-          No projects yet. Click &ldquo;Add New Project&rdquo; to get started.
+        <div className="rounded-none p-16 text-center border border-themeBorder bg-themeSurface/20">
+          <div className="w-12 h-12 rounded-none border-2 border-themeBorder bg-themeAccent/10 flex items-center justify-center text-themeAccent mx-auto mb-3">
+            <span className="text-2xl">📁</span>
+          </div>
+          <p className="text-themeText-secondary text-sm uppercase tracking-[0.1em]">
+            No projects yet
+          </p>
+          <p className="text-[10px] text-themeText-secondary/50 mt-1 uppercase tracking-wider">
+            Click "Add New Project" to get started
+          </p>
         </div>
       ) : (
-        <div className="glass overflow-x-auto">
+        <div className="rounded-none overflow-hidden border border-themeBorder bg-themeSurface/20">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-themeBorder text-themeText/60">
+            <thead className="border-b border-themeBorder text-themeText-secondary/60">
               <tr>
-                <th className="px-4 py-3 font-medium">Title</th>
-                <th className="px-4 py-3 font-medium">Category</th>
-                <th className="px-4 py-3 font-medium">Tags</th>
-                <th className="px-4 py-3 font-medium">Featured</th>
-                <th className="px-4 py-3 font-medium text-right">Actions</th>
+                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider">Title</th>
+                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider">Category</th>
+                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider">Tags</th>
+                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider text-right">Featured</th>
+                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-themeBorder/50">
               {projects.map((project) => (
-                <tr key={project.id} className="hover:bg-themeBg/50 transition-colors">
-                  <td className="px-4 py-3 text-themeText font-medium">{project.title}</td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs px-2 py-1 rounded-full bg-themeAccent/15 text-themeAccent">
+                <tr key={project.id} className="hover:bg-themeBg/40 transition-all duration-200">
+                  <td className="px-5 py-4 text-themeText font-medium">{project.title}</td>
+                  <td className="px-5 py-4">
+                    <span className="text-[10px] px-2.5 py-1 rounded-none border border-themeAccent/20 bg-themeAccent/10 text-themeAccent">
                       {project.category || "—"}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-4">
                     <div className="flex flex-wrap gap-1.5">
                       {(project.tags ?? []).slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="inline-block rounded-full bg-themeAccent/15 px-2.5 py-0.5 text-xs text-themeAccent"
+                          className="inline-block rounded-none border border-themeAccent/20 px-2 py-0.5 text-[10px] text-themeAccent uppercase tracking-[0.1em]"
                         >
                           {tag}
                         </span>
                       ))}
                       {(project.tags ?? []).length > 3 && (
-                        <span className="text-xs text-themeText/40">+{(project.tags ?? []).length - 3}</span>
+                        <span className="text-xs text-themeText-secondary/50">+{(project.tags ?? []).length - 3}</span>
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-4">
                     <button
                       onClick={() => handleFeaturedToggle(project)}
-                      className={`h-5 w-9 rounded-full transition-colors relative ${
+                      className={`h-5 w-9 rounded-none transition-colors relative ${
                         project.featured ? "bg-themeAccent" : "bg-themeBorder"
                       }`}
                     >
                       <span
-                        className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform ${
+                        className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-none bg-themeBg transition-transform ${
                           project.featured ? "translate-x-4" : ""
                         }`}
                       />
                     </button>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-5 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => openEdit(project)}
-                        className="rounded-md px-3 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 transition-colors"
+                        className="rounded-none px-3.5 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 transition-all duration-200"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(project.id)}
                         disabled={deletingId === project.id}
-                        className="rounded-md px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-50"
+                        className="rounded-none px-3.5 py-1.5 text-xs font-medium text-red-400 hover:bg-red-400/10 transition-all duration-200 disabled:opacity-50"
                       >
                         {deletingId === project.id ? "…" : "Delete"}
                       </button>
@@ -237,12 +256,12 @@ export function TabProjectsManager() {
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <div className="space-y-5 max-h-[80vh] overflow-y-auto pr-2">
-          <h3 className="text-lg font-semibold text-themeText">
+          <h3 className="text-lg font-display font-bold text-themeText uppercase tracking-tight">
             {editingId ? "Edit Project" : "New Project"}
           </h3>
 
           <div className="space-y-1.5">
-            <label htmlFor="proj-title" className="block text-sm font-medium text-themeText/70">
+            <label htmlFor="proj-title" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Title
             </label>
             <input
@@ -250,12 +269,12 @@ export function TabProjectsManager() {
               type="text"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="proj-desc" className="block text-sm font-medium text-themeText/70">
+            <label htmlFor="proj-desc" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Short Description (for cards)
             </label>
             <textarea
@@ -263,13 +282,13 @@ export function TabProjectsManager() {
               rows={2}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200 resize-y"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="proj-long-desc" className="block text-sm font-medium text-themeText/70">
-              Detailed Description (for project detail view)
+            <label htmlFor="proj-long-desc" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+              Detailed Description
             </label>
             <textarea
               id="proj-long-desc"
@@ -277,18 +296,18 @@ export function TabProjectsManager() {
               value={form.long_description}
               onChange={(e) => setForm({ ...form, long_description: e.target.value })}
               placeholder="Explain what you built, the architecture, challenges solved, and impact..."
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40 resize-y"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200 resize-y"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-themeText/70">
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Category
             </label>
             <select
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
             >
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -297,14 +316,14 @@ export function TabProjectsManager() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-themeText/70">
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Main Thumbnail Image
             </label>
             <div className="flex items-center gap-3">
               {form.image_url ? (
-                <img src={form.image_url} alt="" className="w-16 h-16 rounded-lg object-cover border border-themeBorder" />
+                <img src={form.image_url} alt="" className="w-16 h-16 rounded-none object-cover border border-themeBorder" />
               ) : (
-                <div className="w-16 h-16 rounded-lg border border-dashed border-themeBorder flex items-center justify-center text-xs text-themeText/40">
+                <div className="w-16 h-16 rounded-none border-2 border-dashed border-themeBorder flex items-center justify-center text-[10px] text-themeText-secondary/50 uppercase tracking-wider">
                   none
                 </div>
               )}
@@ -313,22 +332,22 @@ export function TabProjectsManager() {
                 value={form.image_url}
                 onChange={(e) => setForm({ ...form, image_url: e.target.value })}
                 placeholder="/projects/xyz.png or https://…"
-                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+                className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-themeText/70">
-              Gallery Images (3+ images for project detail)
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+              Gallery Images
             </label>
             <div className="flex flex-wrap gap-2 mb-2">
               {form.images.map((url, i) => (
                 <div key={i} className="relative group">
-                  <img src={url} alt="" className="w-20 h-20 rounded-lg object-cover border border-themeBorder" />
+                  <img src={url} alt="" className="w-16 h-16 rounded-none object-cover border border-themeBorder" />
                   <button
                     onClick={() => removeGalleryImage(i)}
-                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-none bg-red-500 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     ✕
                   </button>
@@ -343,12 +362,12 @@ export function TabProjectsManager() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") addGalleryUrl();
                 }}
-                placeholder="Paste image URL and press Enter / Add"
-                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+                placeholder="Paste image URL and press Enter"
+                className="flex-1 rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
               />
               <button
                 onClick={addGalleryUrl}
-                className="px-4 py-2.5 rounded-lg bg-themeBg-secondary border border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors shrink-0"
+                className="px-4 py-3 rounded-none border-2 border-themeBorder bg-themeBgSecondary text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200 shrink-0"
               >
                 Add URL
               </button>
@@ -356,7 +375,7 @@ export function TabProjectsManager() {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="proj-video" className="block text-sm font-medium text-themeText/70">
+            <label htmlFor="proj-video" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Video URL (YouTube/Vimeo embed)
             </label>
             <input
@@ -365,13 +384,13 @@ export function TabProjectsManager() {
               value={form.video_url}
               onChange={(e) => setForm({ ...form, video_url: e.target.value })}
               placeholder="https://www.youtube.com/embed/..."
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label htmlFor="proj-live" className="block text-sm font-medium text-themeText/70">
+              <label htmlFor="proj-live" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
                 Live URL
               </label>
               <input
@@ -379,11 +398,11 @@ export function TabProjectsManager() {
                 type="text"
                 value={form.live_url}
                 onChange={(e) => setForm({ ...form, live_url: e.target.value })}
-                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+                className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
               />
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="proj-gh" className="block text-sm font-medium text-themeText/70">
+              <label htmlFor="proj-gh" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
                 GitHub URL
               </label>
               <input
@@ -391,13 +410,13 @@ export function TabProjectsManager() {
                 type="text"
                 value={form.github_url}
                 onChange={(e) => setForm({ ...form, github_url: e.target.value })}
-                className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+                className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="proj-tags" className="block text-sm font-medium text-themeText/70">
+            <label htmlFor="proj-tags" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               Tags (comma-separated)
             </label>
             <input
@@ -406,7 +425,7 @@ export function TabProjectsManager() {
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
               placeholder="react, typescript, tailwindcss"
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
             />
           </div>
 
@@ -414,31 +433,39 @@ export function TabProjectsManager() {
             <button
               type="button"
               onClick={() => setForm({ ...form, featured: !form.featured })}
-              className={`relative h-6 w-11 rounded-full transition-colors ${
+              className={`relative h-6 w-11 rounded-none transition-colors ${
                 form.featured ? "bg-themeAccent" : "bg-themeBorder"
               }`}
             >
               <span
-                className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${
+                className={`absolute top-1 left-1 h-4 w-4 rounded-none bg-themeBg transition-transform ${
                   form.featured ? "translate-x-5" : ""
                 }`}
               />
             </button>
             <label
-              className="text-sm font-medium text-themeText/70 cursor-pointer"
+              className="text-xs font-mono text-themeText-secondary uppercase tracking-[0.1em] cursor-pointer"
               onClick={() => setForm({ ...form, featured: !form.featured })}
             >
               Featured
             </label>
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button variant="ghost" onClick={() => setModalOpen(false)}>
+          <div className="flex justify-end gap-3 pt-3">
+            <button
+              variant="ghost"
+              onClick={() => setModalOpen(false)}
+              className="px-5 py-2.5 rounded-none border-2 border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
+            >
               Cancel
-            </Button>
-            <Button onClick={handleSave} disabled={saving}>
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="px-5 py-2.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {saving ? "Saving…" : editingId ? "Update" : "Create"}
-            </Button>
+            </button>
           </div>
         </div>
       </Modal>

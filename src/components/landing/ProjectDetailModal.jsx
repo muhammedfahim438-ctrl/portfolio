@@ -42,7 +42,7 @@ export function ProjectDetailModal({ isOpen, onClose, project }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 30 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-4 md:inset-8 lg:inset-16 z-50 glass rounded-2xl flex flex-col overflow-hidden"
+            className="fixed inset-4 md:inset-8 lg:inset-16 z-50 glass rounded-2xl flex flex-col overflow-hidden border border-themeBorder"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-themeBorder shrink-0">

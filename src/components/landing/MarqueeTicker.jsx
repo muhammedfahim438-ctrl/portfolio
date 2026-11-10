@@ -45,7 +45,7 @@ export function MarqueeTicker() {
           {[...items, ...items].map((item, i) => (
             <span
               key={i}
-              className="text-sm md:text-base font-mono tracking-wider text-themeText-secondary/60 select-none uppercase"
+              className="text-sm md:text-base font-mono tracking-wider text-themeText-secondary/50 select-none uppercase"
             >
               {item}
               <span className="mx-4 text-themeAccent/40">•</span>

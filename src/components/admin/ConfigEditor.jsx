@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { getConfig, setConfig, getProfile, setProfileConfig } from "@/lib/firestore";
-import { Button } from "@/components/ui/Button";
+
 
 export function ConfigEditor({ configKey, title, schema, fallback = {}, profile = false }) {
   const [form, setForm] = useState(fallback);
@@ -65,20 +65,28 @@ export function ConfigEditor({ configKey, title, schema, fallback = {}, profile 
   }
 
   return (
-    <div className="glass space-y-4 rounded-2xl p-5">
-      <h3 className="text-lg font-semibold text-themeText">{title}</h3>
+    <div className="space-y-4 rounded-none p-5 border border-themeBorder bg-themeSurface/20">
+      <h3 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
+        {title}
+      </h3>
       {(schema ?? []).map((f) => (
         <ConfigField key={f.key} field={f} value={f.type === "tags" ? (tagBuffers[f.key] ?? "") : (form[f.key] ?? "")}
           onChange={(v) => (f.type === "tags" ? setTagBuffers((p) => ({ ...p, [f.key]: v })) : updateField(f.key, v))} />
       ))}
-      <Button onClick={handleSave} disabled={saving}>{saving ? "Saving…" : "Save Changes"}</Button>
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {saving ? "Saving…" : "Save Changes"}
+      </button>
     </div>
   );
 }
 
 function ConfigField({ field, value, onChange }) {
-  const label = <label className="block text-sm font-medium text-themeText/70">{field.label}</label>;
-  const inputClass = "w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40";
+  const label = <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">{field.label}</label>;
+  const inputClass = "w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200";
 
   if (field.type === "textarea") {
     return (
@@ -99,8 +107,8 @@ function ConfigField({ field, value, onChange }) {
   if (field.type === "bool") {
     return (
       <div className="flex items-center gap-3">
-        <button type="button" onClick={() => onChange(!value)} className={`relative h-6 w-11 rounded-full transition-colors ${value ? "bg-themeAccent" : "bg-themeBorder"}`}>
-          <span className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${value ? "translate-x-5" : ""}`} />
+        <button type="button" onClick={() => onChange(!value)} className={`relative h-6 w-11 rounded-none transition-colors ${value ? "bg-themeAccent" : "bg-themeBorder"}`}>
+          <span className={`absolute top-1 left-1 h-4 w-4 rounded-none bg-themeBg transition-transform ${value ? "translate-x-5" : ""}`} />
         </button>
         {label}
       </div>

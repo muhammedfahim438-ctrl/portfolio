@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { FaStar, FaQuoteRight } from "react-icons/fa";
+import { FaQuoteRight } from "react-icons/fa";
 import { getTestimonials } from "@/lib/firestore";
 import { SplitText } from "@/components/ui/SplitText";
 
@@ -20,7 +20,7 @@ export function TestimonialsSection() {
       const data = await getTestimonials();
       setItems(data);
     } catch {
-      // silent — empty state
+      // silent
     } finally {
       setLoading(false);
     }
@@ -47,43 +47,41 @@ export function TestimonialsSection() {
   const current = items[index];
 
   return (
-    <section id="testimonials" className="py-24 px-4">
+    <section id="testimonials" className="py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.7 }}
           className="mb-12 text-center"
         >
-          <p className="theme-eyebrow mb-3">What People Say</p>
+          <p className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
+            What People Say
+          </p>
           <SplitText
             text="Testimonials"
-            className="text-3xl md:text-5xl font-display font-bold text-gradient"
+            className="font-display font-black uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,3rem)] text-themeText"
           />
         </motion.div>
 
         {loading ? (
-          <div className="text-center py-20 text-themeText-secondary">
-            Loading testimonials…
-          </div>
+          <div className="text-center py-24 text-themeText-secondary">Loading testimonials…</div>
         ) : items.length === 0 ? (
-          <div className="text-center py-20 text-themeText-secondary">
-            No testimonials yet.
-          </div>
+          <div className="text-center py-24 text-themeText-secondary">No testimonials yet.</div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             className="relative"
           >
-            <FaQuoteRight className="absolute -top-8 -left-4 w-16 h-16 text-themeAccent/20 z-0" />
+            <FaQuoteRight className="absolute -top-8 -left-4 w-16 h-16 text-themeAccent/12 z-0" />
 
-            <div className="glass rounded-3xl px-6 py-10 md:px-14 md:py-14 relative z-10 overflow-hidden">
+            <div className="glass rounded-[2rem] px-8 py-12 relative z-10 overflow-hidden border border-themeBorder">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={index}
@@ -94,15 +92,11 @@ export function TestimonialsSection() {
                   className="flex flex-col items-center text-center"
                 >
                   <div className="relative mb-6">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/40 to-themeSecondary/40 blur-lg" />
-                    <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full p-[3px] bg-gradient-to-br from-themeAccent to-themeSecondary">
-                      <div className="rounded-full overflow-hidden w-full h-full bg-themeBg-secondary">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/20 to-themeAccent-hover/20 blur-lg" />
+                    <div className="relative w-20 h-20 rounded-full p-[3px] bg-gradient-to-br from-themeAccent to-themeAccent-hover">
+                      <div className="rounded-full overflow-hidden w-full h-full bg-themeBgSecondary flex items-center justify-center">
                         {current.avatar_url ? (
-                          <img
-                            src={current.avatar_url}
-                            alt={current.author}
-                            className="w-full h-full object-cover"
-                          />
+                          <img src={current.avatar_url} alt={current.author} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center font-display font-bold text-xl text-themeAccent">
                             {getInitials(current.author)}
@@ -112,39 +106,14 @@ export function TestimonialsSection() {
                     </div>
                   </div>
 
-                  {current.rating > 0 && (
-                    <div className="flex items-center gap-1 mb-5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <motion.span
-                          key={star}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.15 + star * 0.07, duration: 0.3 }}
-                        >
-                          <FaStar
-                            className={
-                              star <= Math.round(current.rating)
-                                ? "text-themeSecondary w-4 h-4"
-                                : "text-themeBorder w-4 h-4"
-                            }
-                          />
-                        </motion.span>
-                      ))}
-                    </div>
-                  )}
-
-                  <blockquote className="text-lg md:text-xl text-themeText-secondary leading-relaxed md:leading-relaxed font-light">
+                  <blockquote className="text-lg md:text-xl text-themeText-secondary leading-relaxed font-light max-w-lg mx-auto mb-8">
                     &ldquo;{current.quote}&rdquo;
                   </blockquote>
 
-                  <div className="mt-8">
-                    <p className="font-display font-semibold text-themeText text-lg">
-                      {current.author}
-                    </p>
+                  <div className="mt-4">
+                    <p className="font-display font-semibold text-themeText text-base">{current.author}</p>
                     {current.role && (
-                      <p className="text-themeText-secondary text-sm mt-0.5">
-                        {current.role}
-                      </p>
+                      <p className="text-themeText-secondary text-sm mt-1">{current.role}</p>
                     )}
                   </div>
                 </motion.div>
@@ -155,35 +124,33 @@ export function TestimonialsSection() {
                   <button
                     onClick={() => go(-1)}
                     aria-label="Previous testimonial"
-                    className="absolute top-1/2 -translate-y-1/2 left-3 md:left-5 p-2 rounded-full border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors"
+                    className="absolute top-1/2 -translate-y-1/2 left-3 p-2.5 rounded-full border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors"
                   >
-                    <FiChevronLeft className="w-5 h-5" />
+                    <FiChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => go(1)}
                     aria-label="Next testimonial"
-                    className="absolute top-1/2 -translate-y-1/2 right-3 md:right-5 p-2 rounded-full border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors"
+                    className="absolute top-1/2 -translate-y-1/2 right-3 p-2.5 rounded-full border border-themeBorder text-themeText-secondary hover:text-themeAccent hover:border-themeAccent transition-colors"
                   >
-                    <FiChevronRight className="w-5 h-5" />
+                    <FiChevronRight className="w-4 h-4" />
                   </button>
                 </>
               )}
             </div>
 
-            <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="mt-10 flex items-center justify-center gap-3">
               <span className="font-mono text-xs text-themeText-secondary">
                 {String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 {items.map((_, dotIndex) => (
                   <button
                     key={dotIndex}
                     onClick={() => setIndex(dotIndex)}
                     aria-label={`Go to testimonial ${dotIndex + 1}`}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      dotIndex === index
-                        ? "w-8 bg-themeAccent"
-                        : "w-2.5 bg-themeBorder hover:bg-themeText-secondary/40"
+                      dotIndex === index ? "w-8 bg-themeAccent" : "w-2 bg-themeBorder hover:bg-themeText-secondary/40"
                     }`}
                   />
                 ))}

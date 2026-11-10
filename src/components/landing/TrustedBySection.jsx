@@ -57,7 +57,7 @@ export function TrustedBySection() {
               return (
                 <div
                   key={i}
-                  className="flex items-center gap-2 text-themeText-secondary/40 hover:text-themeAccent transition-colors duration-300 shrink-0"
+                  className="flex items-center gap-2 text-themeText-secondary/30 hover:text-themeAccent transition-colors duration-300 shrink-0"
                   data-cursor-hover
                 >
                   <Icon aria-hidden="true" className="w-8 h-8" />

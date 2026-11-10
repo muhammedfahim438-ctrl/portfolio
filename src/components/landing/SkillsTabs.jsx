@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/SplitText";
 import { getCollection } from "@/lib/firestore";
 import {
@@ -51,10 +51,10 @@ const SKILL_ICONS = {
 const skillIcon = (name) => SKILL_ICONS[(name || "").trim().toLowerCase()] || FiCode;
 
 const ROLE_TEMPLATE = [
-  { id: "data-scientist", title: "Data Scientist", emoji: "📊" },
-  { id: "backend-builder", title: "Backend Builder", emoji: "⚙️" },
-  { id: "frontend-crafter", title: "Frontend Crafter", emoji: "🎨" },
-  { id: "ml-engineer", title: "ML Engineer", emoji: "🧠" },
+  { id: "data-scientist", title: "DATA SCIENTIST" },
+  { id: "backend-builder", title: "BACKEND BUILDER" },
+  { id: "frontend-crafter", title: "FRONTEND CRAFTER" },
+  { id: "ml-engineer", title: "ML ENGINEER" },
 ];
 
 const CATEGORY_ROLE = {
@@ -70,8 +70,7 @@ const CATEGORY_ROLE = {
 const FALLBACK_ROLES = [
   {
     id: "data-scientist",
-    title: "Data Scientist",
-    emoji: "📊",
+    title: "DATA SCIENTIST",
     skills: [
       { name: "Python", icon: SiPython },
       { name: "SQL", icon: SiSqlite },
@@ -84,8 +83,7 @@ const FALLBACK_ROLES = [
   },
   {
     id: "backend-builder",
-    title: "Backend Builder",
-    emoji: "⚙️",
+    title: "BACKEND BUILDER",
     skills: [
       { name: "Django", icon: SiDjango },
       { name: "DRF", icon: SiDjango },
@@ -99,8 +97,7 @@ const FALLBACK_ROLES = [
   },
   {
     id: "frontend-crafter",
-    title: "Frontend Crafter",
-    emoji: "🎨",
+    title: "FRONTEND CRAFTER",
     skills: [
       { name: "React.js", icon: SiReact },
       { name: "Next.js", icon: SiNextdotjs },
@@ -113,8 +110,7 @@ const FALLBACK_ROLES = [
   },
   {
     id: "ml-engineer",
-    title: "ML Engineer",
-    emoji: "🧠",
+    title: "ML ENGINEER",
     skills: [
       { name: "Scikit-learn", icon: SiScikitlearn },
       { name: "Python", icon: SiPython },
@@ -177,69 +173,71 @@ export function SkillsTabs() {
   const activeRole = roles.find((r) => r.id === active) || roles[0];
 
   return (
-    <section id="skills" className="py-24 px-4">
+    <section id="skills" className="py-20 px-4 border-t border-themeBorder bg-themeBg">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
+          transition={{ duration: 0.7 }}
+          className="mb-10"
         >
-          <p className="text-themeAccent font-mono text-sm tracking-wider uppercase mb-3">
-            Expertise
-          </p>
-          <SplitText
-            text="Technical Skills"
-            accentWord="Skills"
-            className="text-3xl md:text-5xl font-display font-bold text-gradient"
-          />
-
-          <div className="flex flex-wrap gap-3 mb-12">
-            {roles.map((role) => (
-              <button
-                key={role.id}
-                onClick={() => setActive(role.id)}
-                className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
-                  active === role.id
-                    ? "bg-themeAccent text-white shadow-lg shadow-themeAccent/25"
-                    : "glass text-themeText-secondary hover:text-themeText hover:border-themeAccent/30"
-                }`}
-              >
-                <span className="mr-2">{role.emoji}</span>
-                {role.title}
-              </button>
-            ))}
+          <div className="flex items-center gap-3 border-l-4 border-themeAccent pl-4 mb-2">
+            <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
+              Technical Skills
+            </span>
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4"
+          <SplitText
+            as="span"
+            text="Tools I Build With"
+            className="font-display font-black leading-[1] tracking-[-0.02em] text-[clamp(2rem,6vw,3rem)] text-themeText uppercase"
+          />
+        </motion.div>
+
+        {/* Tab pills - brutalist, no rounded */}
+        <div className="flex flex-wrap gap-2 mb-10 justify-start">
+          {roles.map((role) => (
+            <button
+              key={role.id}
+              onClick={() => setActive(role.id)}
+              className={`px-5 py-2.5 text-xs font-mono uppercase tracking-wider transition-all duration-300 ${
+                active === role.id
+                  ? "bg-themeAccent text-themeText border-2 border-themeAccent shadow-[4px_4px_0_rgba(8,9,11,0.25)]"
+                  : "bg-transparent text-themeText-secondary border-2 border-themeBorder hover:border-themeAccent hover:text-themeText"
+              }`}
             >
-              {activeRole?.skills.map((skill, i) => (
-                <motion.div
-                  key={skill.name}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="glass rounded-2xl p-6 flex flex-col items-center justify-center hover:shadow-lg hover:shadow-themeAccent/10 hover:border-themeAccent/30 transition-all duration-300 group cursor-default"
-                  data-cursor-hover
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <skill.icon className="w-8 h-8 text-themeText-secondary group-hover:text-themeAccent transition-colors duration-300" />
-                  </div>
-                  <span className="font-mono text-xs font-medium text-themeText-secondary text-center">
-                    {skill.name}
-                  </span>
-                </motion.div>
-              ))}
+              {role.title}
+            </button>
+          ))}
+        </div>
+
+        {/* Gapless bento grid - grid-flow-dense */}
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 grid-flow-dense"
+        >
+          {activeRole?.skills.map((skill, i) => (
+            <motion.div
+              key={skill.name}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.04 }}
+              className="border-2 border-themeBorder bg-themeSurface/20 p-4 flex flex-col items-center justify-center hover:border-themeAccent hover:bg-themeAccent/5 transition-all duration-300 group"
+              data-cursor-hover
+            >
+              <div className="w-8 h-8 rounded-none bg-themeAccent/10 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2">
+                <skill.icon className="w-4 h-4" />
+              </div>
+              <span className="font-mono text-[10px] font-medium text-themeText-secondary text-center leading-tight uppercase tracking-[0.1em]">
+                {skill.name}
+              </span>
             </motion.div>
-          </AnimatePresence>
+          ))}
         </motion.div>
       </div>
     </section>

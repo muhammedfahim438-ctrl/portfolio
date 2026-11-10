@@ -115,15 +115,15 @@ export function TabContent() {
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex flex-wrap gap-2 mb-6">
         {SECTIONS.map((s) => (
           <button
             key={s.id}
             onClick={() => setActive(s.id)}
-            className={`px-4 py-2 rounded-xl font-medium text-sm transition-colors whitespace-nowrap ${
+            className={`px-5 py-2.5 rounded-none border border-themeBorder bg-transparent font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
               active === s.id
-                ? "bg-themeAccent text-white"
-                : "bg-themeBg-secondary text-themeText-secondary border border-themeBorder hover:text-themeText"
+                ? "bg-themeAccent text-themeText border-themeAccent shadow-[4px_4px_0_0_rgba(8,9,11,0.3)]"
+                : "text-themeText-secondary hover:text-themeText hover:border-themeAccent"
             }`}
           >
             {s.label}

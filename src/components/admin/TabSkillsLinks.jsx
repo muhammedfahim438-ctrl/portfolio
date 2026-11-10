@@ -14,7 +14,7 @@ import {
   getSocialData,
   updateSocialData,
 } from "@/lib/firestore";
-import { Button } from "@/components/ui/Button";
+
 
 const CATEGORIES = [
   "Programming",
@@ -39,7 +39,7 @@ const emptySocial = {
 
 export function TabSkillsLinks() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <SkillsManager />
       <CertificationsManager />
       <SocialLinksManager />
@@ -149,26 +149,30 @@ function SkillsManager() {
   }, {});
 
   return (
-    <section className="glass space-y-5">
-      <h2 className="text-xl font-semibold text-themeText">Skills</h2>
+    <section className="space-y-6 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
+      <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4">
+        Skills
+      </h2>
 
       {loading ? (
         <p className="text-themeText/40">Loading skills…</p>
       ) : skills.length === 0 ? (
         <p className="text-themeText/40">No skills yet.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {CATEGORIES.map((cat) => {
             const items = grouped[cat];
             if (!items?.length) return null;
             return (
               <div key={cat}>
-                <h3 className="mb-2 text-sm font-medium text-themeText/60">{cat}</h3>
+                <h3 className="mb-3 text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+                  {cat}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {items.map((skill) => (
                     <div
                       key={skill.id}
-                      className="flex items-center gap-2 rounded-lg bg-themeInput px-3 py-1.5 text-sm text-themeText border border-themeBorder"
+                      className="flex items-center gap-2 rounded-none border border-themeBorder bg-themeInput px-3 py-1.5 text-sm text-themeText"
                     >
                       {editingId === skill.id ? (
                         <>
@@ -176,13 +180,13 @@ function SkillsManager() {
                             type="text"
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
-                            className="w-28 rounded bg-themeBg px-2 py-1 text-themeText border border-themeBorder outline-none text-xs"
+                            className="w-28 rounded-none border border-themeBorder bg-themeBg px-2 py-1 text-themeText text-[10px] focus:outline-none focus:border-themeAccent"
                             autoFocus
                           />
                           <select
                             value={editCategory}
                             onChange={(e) => setEditCategory(e.target.value)}
-                            className="rounded bg-themeBg px-2 py-1 text-themeText border border-themeBorder outline-none text-xs"
+                            className="rounded-none border border-themeBorder bg-themeBg px-2 py-1 text-themeText text-[10px] focus:outline-none focus:border-themeAccent"
                           >
                             {CATEGORIES.map((c) => (
                               <option key={c} value={c}>{c}</option>
@@ -196,17 +200,17 @@ function SkillsManager() {
                             onChange={(e) => setEditLevel(Number(e.target.value))}
                             className="w-16 accent-themeAccent"
                           />
-                          <span className="text-themeAccent font-mono text-xs w-6">{editLevel}</span>
+                          <span className="text-themeAccent font-mono text-[10px] w-6">{editLevel}</span>
                           <button
                             onClick={() => handleSaveEdit(skill.id)}
                             disabled={savingEdit}
-                            className="text-green-400 hover:text-green-300 text-xs font-medium"
+                            className="text-themeAccent hover:text-themeAccent-hover text-[10px] font-medium"
                           >
                             {savingEdit ? "…" : "✓"}
                           </button>
                           <button
                             onClick={cancelEdit}
-                            className="text-themeText-secondary hover:text-themeText text-xs"
+                            className="text-themeText-secondary hover:text-themeText text-[10px]"
                           >
                             ✕
                           </button>
@@ -214,17 +218,17 @@ function SkillsManager() {
                       ) : (
                         <>
                           <span>{skill.name}</span>
-                          <span className="text-themeAccent font-mono text-xs">{skill.level}</span>
+                          <span className="text-themeAccent font-mono text-[10px]">{skill.level}</span>
                           <button
                             onClick={() => startEdit(skill)}
-                            className="ml-1 text-themeText-secondary hover:text-themeAccent text-xs"
+                            className="ml-1 text-themeText-secondary hover:text-themeAccent text-[10px]"
                             title="Edit skill"
                           >
                             ✎
                           </button>
                           <button
                             onClick={() => handleDelete(skill.id)}
-                            className="text-red-400 hover:text-red-300 text-xs"
+                            className="text-red-400 hover:text-red-300 text-[10px]"
                           >
                             ✕
                           </button>
@@ -239,9 +243,9 @@ function SkillsManager() {
         </div>
       )}
 
-      <div className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end border-t border-themeBorder pt-4">
+      <div className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end border-t border-themeBorder pt-5">
         <div className="space-y-1.5">
-          <label htmlFor="skill-name" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="skill-name" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Skill Name
           </label>
           <input
@@ -249,19 +253,19 @@ function SkillsManager() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="skill-cat" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="skill-cat" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Category
           </label>
           <select
             id="skill-cat"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -272,7 +276,7 @@ function SkillsManager() {
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="skill-level" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="skill-level" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Level: {level}
           </label>
           <input
@@ -286,9 +290,13 @@ function SkillsManager() {
           />
         </div>
 
-        <Button onClick={handleAdd} disabled={adding}>
+        <button
+          onClick={handleAdd}
+          disabled={adding}
+          className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {adding ? "…" : "Add"}
-        </Button>
+        </button>
       </div>
     </section>
   );
@@ -374,8 +382,10 @@ function CertificationsManager() {
   }
 
   return (
-    <section className="glass space-y-5">
-      <h2 className="text-xl font-semibold text-themeText">Certifications</h2>
+    <section className="space-y-6 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
+      <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4">
+        Certifications
+      </h2>
 
       {loading ? (
         <p className="text-themeText/40">Loading certifications…</p>
@@ -384,9 +394,9 @@ function CertificationsManager() {
       ) : (
         <div className="divide-y divide-themeBorder/50">
           {certs.map((cert) => (
-            <div key={cert.id} className="flex items-center justify-between py-3 gap-4">
+            <div key={cert.id} className="py-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-themeBg-secondary border border-themeBorder flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-10 h-10 rounded-none bg-themeBgSecondary border border-themeBorder flex items-center justify-center shrink-0 overflow-hidden">
                   {cert.badge_image_url ? (
                     <img src={cert.badge_image_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -395,12 +405,12 @@ function CertificationsManager() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-themeText font-medium truncate">{cert.title}</p>
-                  <p className="text-sm text-themeText/50">
+                  <p className="text-sm text-themeText-secondary/60">
                     {cert.issuer} {cert.issue_date ? `· ${cert.issue_date}` : ""}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col gap-1.5 shrink-0">
+              <div className="flex flex-col gap-2 shrink-0">
                 <div className="flex items-center gap-2">
                   <input
                     value={badgeDrafts[cert.id] ?? cert.badge_image_url ?? ""}
@@ -411,11 +421,11 @@ function CertificationsManager() {
                       if (e.key === "Enter") handleBadgeSave(cert.id);
                     }}
                     placeholder="Badge image URL"
-                    className="w-44 rounded-md bg-themeInput px-2 py-1 text-xs text-themeText border border-themeBorder outline-none focus:border-themeAccent"
+                    className="w-44 rounded-none border-2 border-themeBorder bg-themeInput px-2 py-1.5 text-xs text-themeText focus:outline-none focus:border-themeAccent"
                   />
                   <button
                     onClick={() => handleBadgeSave(cert.id)}
-                    className="text-xs text-green-400 hover:text-green-300 font-medium"
+                    className="text-xs text-themeAccent hover:text-themeAccent-hover font-medium"
                   >
                     Save
                   </button>
@@ -434,9 +444,9 @@ function CertificationsManager() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3 border-t border-themeBorder pt-4">
+      <div className="grid grid-cols-2 gap-3 border-t border-themeBorder pt-5">
         <div className="space-y-1.5">
-          <label htmlFor="cert-title" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="cert-title" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Title
           </label>
           <input
@@ -444,11 +454,11 @@ function CertificationsManager() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="cert-issuer" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="cert-issuer" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Issuer
           </label>
           <input
@@ -456,11 +466,11 @@ function CertificationsManager() {
             type="text"
             value={issuer}
             onChange={(e) => setIssuer(e.target.value)}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="cert-year" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="cert-year" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Year
           </label>
           <input
@@ -469,11 +479,11 @@ function CertificationsManager() {
             value={year}
             onChange={(e) => setYear(e.target.value)}
             placeholder="2026"
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="cert-url" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="cert-url" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Credential URL
           </label>
           <input
@@ -481,13 +491,17 @@ function CertificationsManager() {
             type="text"
             value={credentialUrl}
             onChange={(e) => setCredentialUrl(e.target.value)}
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
         <div className="col-span-2">
-          <Button onClick={handleAdd} disabled={adding}>
+          <button
+            onClick={handleAdd}
+            disabled={adding}
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             {adding ? "Adding…" : "Add Certification"}
-          </Button>
+          </button>
         </div>
       </div>
     </section>
@@ -538,7 +552,7 @@ function SocialLinksManager() {
 
   if (loading) {
     return (
-      <section className="glass py-10 text-center text-themeText/40">
+      <section className="rounded-none py-10 text-center text-themeText/40 border border-themeBorder bg-themeSurface/20">
         Loading social data…
       </section>
     );
@@ -553,13 +567,15 @@ function SocialLinksManager() {
   ];
 
   return (
-    <section className="glass space-y-5">
-      <h2 className="text-xl font-semibold text-themeText">Social Links</h2>
+    <section className="space-y-6 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
+      <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4">
+        Social Links
+      </h2>
 
       <div className="space-y-4">
         {fields.map((f) => (
           <div key={f.key} className="space-y-1.5">
-            <label htmlFor={`social-${f.key}`} className="block text-sm font-medium text-themeText/70">
+            <label htmlFor={`social-${f.key}`} className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
               {f.label}
             </label>
             <input
@@ -568,21 +584,23 @@ function SocialLinksManager() {
               value={form[f.key]}
               onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
               placeholder={f.placeholder}
-              className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+              className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
             />
           </div>
         ))}
       </div>
 
-      <div className="border-t border-themeBorder pt-4 space-y-3">
-        <h3 className="text-sm font-medium text-themeText/70">Resume PDF</h3>
-        <p className="text-xs text-themeText/50">
+      <div className="border-t border-themeBorder pt-5 space-y-3">
+        <h3 className="text-sm font-mono text-themeText-secondary uppercase tracking-wider">
+          Resume PDF
+        </h3>
+        <p className="text-xs text-themeText-secondary/50">
           The site uses the local file{" "}
           <code className="text-themeAccent">public/resume.pdf</code> by default. Leave
           the field empty to use it, or enter an override URL/path.
         </p>
         <div className="space-y-1.5">
-          <label htmlFor="social-resume" className="block text-sm font-medium text-themeText/70">
+          <label htmlFor="social-resume" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
             Resume URL (override)
           </label>
           <input
@@ -591,22 +609,26 @@ function SocialLinksManager() {
             value={form.resume_pdf_url}
             onChange={(e) => setForm({ ...form, resume_pdf_url: e.target.value })}
             placeholder="/resume.pdf"
-            className="w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40"
+            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
           />
         </div>
         <a
           href={form.resume_pdf_url || "/resume.pdf"}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block text-sm text-themeAccent hover:underline"
+          className="inline-block text-sm text-themeAccent hover:underline font-mono"
         >
-          Preview resume ✓
+          Preview resume
         </a>
       </div>
 
-      <Button onClick={handleSave} disabled={saving}>
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         {saving ? "Saving…" : "Save Social Links"}
-      </Button>
+      </button>
     </section>
   );
 }

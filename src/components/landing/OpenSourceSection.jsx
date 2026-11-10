@@ -96,18 +96,8 @@ export function OpenSourceSection() {
                 }}
                 whileHover={{ y: -4 }}
                 data-cursor-hover
-                className="term-win group block p-6"
+                className="glass group block p-6 border border-themeBorder bg-themeSurface/50"
               >
-                <div className="term-win__bar mb-4 -mx-6 -mt-6 px-6">
-                  <span className="term-win__dot term-win__dot--red" />
-                  <span className="term-win__dot term-win__dot--yellow" />
-                  <span className="term-win__dot term-win__dot--green" />
-                  <span className="ml-2 flex-1 truncate font-mono text-[11px] text-themeText-secondary">
-                    {repo.name}.md
-                  </span>
-                  <FiGithub className="h-4 w-4 text-themeText-secondary" />
-                </div>
-
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="font-mono text-base font-semibold text-themeText group-hover:text-themeAccent transition-colors">
                     <span className="text-themeAccent" aria-hidden>$</span> {repo.name}

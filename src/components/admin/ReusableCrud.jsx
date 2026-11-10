@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { getCollection, addItem, updateItem, deleteItem } from "@/lib/firestore";
-import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
 export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem }) {
@@ -12,8 +11,8 @@ export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyItem ?? {});
-  const [saving, setSaving] = useState(false);
   const [tagBuffers, setTagBuffers] = useState({});
+  const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
   const load = useCallback(async () => {
@@ -112,42 +111,58 @@ export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-themeText">{title}</h3>
-        <Button onClick={openAdd} size="sm">Add New</Button>
+        <div>
+          <h3 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
+            {title}
+          </h3>
+        </div>
+        <button
+          onClick={openAdd}
+          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold text-xs hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200"
+        >
+          Add New
+        </button>
       </div>
 
       {loading ? (
-        <div className="glass py-10 text-center text-themeText/40">Loading…</div>
+        <div className="rounded-none py-16 text-center border border-themeBorder bg-themeSurface/20">
+          Loading…
+        </div>
       ) : items.length === 0 ? (
-        <div className="glass py-10 text-center text-themeText/40">
-          Nothing here yet. Click &ldquo;Add New&rdquo;.
+        <div className="rounded-none py-16 text-center border border-themeBorder bg-themeSurface/20">
+          <p className="text-themeText-secondary text-sm uppercase tracking-[0.1em]">
+            Nothing here yet
+          </p>
+          <p className="text-[10px] text-themeText-secondary/50 mt-1 uppercase tracking-wider">
+            Click "Add New" to get started
+          </p>
         </div>
       ) : (
         <ul className="space-y-2">
           {items.map((item) => (
             <li
               key={item.id}
-              className="glass flex items-center justify-between gap-3 rounded-xl px-4 py-3"
+              className="group flex items-center justify-between gap-3 rounded-none px-4 py-3 border border-themeBorder bg-themeSurface/30"
             >
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-themeText">
                   {buildTitle ? buildTitle(item) : (item.title || item.name || item.id)}
                 </p>
                 {(item.desc || item.description) && (
-                  <p className="truncate text-xs text-themeText-secondary">{item.desc || item.description}</p>
+                  <p className="truncate text-xs text-themeText-secondary/60">{item.desc || item.description}</p>
                 )}
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <button
                   onClick={() => openEdit(item)}
-                  className="rounded-md px-3 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 transition-colors"
+                  className="rounded-none px-3 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 transition-all duration-200"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(item.id)}
                   disabled={deletingId === item.id}
-                  className="rounded-md px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-50"
+                  className="rounded-none px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-400/10 transition-all duration-200 disabled:opacity-50"
                 >
                   {deletingId === item.id ? "…" : "Delete"}
                 </button>
@@ -159,7 +174,7 @@ export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem 
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
-          <h4 className="text-lg font-semibold text-themeText">
+          <h4 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
             {editingId ? `Edit ${title}` : `New ${title}`}
           </h4>
 
@@ -172,11 +187,20 @@ export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem 
             />
           ))}
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button variant="ghost" onClick={() => setModalOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving}>
+          <div className="flex justify-end gap-3 pt-3">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-5 py-2.5 rounded-none border-2 border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {saving ? "Saving…" : editingId ? "Update" : "Create"}
-            </Button>
+            </button>
           </div>
         </div>
       </Modal>
@@ -186,10 +210,12 @@ export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem 
 
 function FieldEditor({ field, value, onChange }) {
   const label = (
-    <label className="block text-sm font-medium text-themeText/70">{field.label}</label>
+    <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+      {field.label}
+    </label>
   );
   const inputClass =
-    "w-full rounded-lg bg-themeInput px-4 py-2.5 text-themeText border border-themeBorder outline-none focus:ring-2 focus:ring-themeAccent/40";
+    "w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200";
 
   if (field.type === "textarea" || field.type === "lines") {
     return (
@@ -219,9 +245,9 @@ function FieldEditor({ field, value, onChange }) {
         <button
           type="button"
           onClick={() => onChange(!value)}
-          className={`relative h-6 w-11 rounded-full transition-colors ${value ? "bg-themeAccent" : "bg-themeBorder"}`}
+          className={`relative h-6 w-11 rounded-none transition-colors ${value ? "bg-themeAccent" : "bg-themeBorder"}`}
         >
-          <span className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${value ? "translate-x-5" : ""}`} />
+          <span className={`absolute top-1 left-1 h-4 w-4 rounded-none bg-themeBg transition-transform ${value ? "translate-x-5" : ""}`} />
         </button>
         {label}
       </div>
