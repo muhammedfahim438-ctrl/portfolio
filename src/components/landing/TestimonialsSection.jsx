@@ -27,7 +27,9 @@ export function TestimonialsSection() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   useEffect(() => {

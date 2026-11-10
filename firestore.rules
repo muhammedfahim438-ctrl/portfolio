@@ -1,8 +1,161 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // =====================================================================
+    // ADMIN IDENTITY — THE SINGLE SOURCE OF TRUTH
+    //
+    // Must stay identical to:
+    //   - src/lib/constants.js   (ADMIN_EMAIL)
+    //   - src/app/admin/login/page.jsx  (sign-in form)
+    //   - src/data/seed.js       (profile/social_data.email)
+    //
+    // Case-sensitive equality. request.auth is null for unauthenticated
+    // callers, so the null-check must come first (request.auth.token would
+    // otherwise throw).
+    // =====================================================================
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "muhammedfahim438@gmail.com";
+    }
+
+    // =====================================================================
+    // CONTACT-FORM PAYLOAD VALIDATION
+    //
+    // Mirrors sendMessage() in src/lib/firestore.js and the client-side
+    // checks in src/components/landing/ContactFooter.jsx. Bounds are >= 1
+    // char so the friendly client UX fires first, but the rules never accept
+    // an invalid message even if a script bypasses the client.
+    // =====================================================================
+    function isValidMessage() {
+      let d = request.resource.data;
+      return d.keys().hasAll(["sender_name", "sender_email", "message_body", "created_at"])
+        && d.keys().hasOnly([
+             "sender_name",
+             "sender_email",
+             "sender_phone",
+             "reason",
+             "message_body",
+             "created_at",
+           ])
+        && d.sender_name is string
+        && d.sender_name.size() >= 1
+        && d.sender_name.size() <= 100
+        && d.sender_email is string
+        && d.sender_email.size() <= 200
+        && d.sender_email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
+        && d.message_body is string
+        && d.message_body.size() >= 1
+        && d.message_body.size() <= 4000
+        && (!("sender_phone" in d) || (d.sender_phone is string && d.sender_phone.size() <= 40))
+        && (!("reason" in d) || (d.reason is string && d.reason.size() <= 120))
+        // serverTimestamp() resolves to request.time inside the rules, so a
+        // visitor cannot spoof, back-date, forward-date or omit the timestamp.
+        && d.created_at == request.time
+        && d.created_at.toMillis() >= request.time.toMillis() - 60000
+        && d.created_at.toMillis() <= request.time.toMillis() + 60000;
+    }
+
+    // =====================================================================
+    // CONTACT MESSAGES
+    //
+    // - any anonymous visitor may CREATE (contact form), but only a valid
+    //   payload
+    // - only the admin may read / update / delete (inbox tab)
+    // - there is NO public read grant: a visitor cannot read anyone's
+    //   message, not even their own
+    // =====================================================================
+    match /messages/{messageId} {
+      allow create: if isValidMessage();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // =====================================================================
+    // PUBLIC CONTENT COLLECTIONS
+    // Read = public (landing page is fully Firestore-driven). Write = admin only.
+    // =====================================================================
+    match /projects/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /skills/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /certifications/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /recognition/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /testimonials/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /trusted_by/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /services/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /work_steps/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /experience/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /open_source/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /now_log/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /marquee/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // =====================================================================
+    // SINGLE-DOCUMENT CONFIG
+    // site_config/{hero_data,availability_data,portrait_data,splash_data}
+    // profile/social_data
+    // =====================================================================
+    match /site_config/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /profile/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // =====================================================================
+    // DEFAULT DENY — closes any path not explicitly listed.
+    // Rules are OR-ed, so this cannot override the blocks above.
+    // =====================================================================
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if false;
     }
   }
 }

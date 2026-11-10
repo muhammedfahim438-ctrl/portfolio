@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // =====================================================================
+    // ADMIN IDENTITY — same constant as firestore.rules
+    // =====================================================================
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "muhammedfahim438@gmail.com";
+    }
+
+    // =====================================================================
+    // UPLOAD VALIDATION
+    // Meaningful on create/update (request.resource is null on delete, so
+    // size/contentType checks are NOT part of the delete rule).
+    // =====================================================================
+    function isValidImage() {
+      return request.resource.size > 0
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches("image/.*");
+    }
+
+    // =====================================================================
+    // THE ONE FOLDER THE APP WRITES TO
+    //   src/lib/storage.js           -> uploadFile(file, folder = "uploads")
+    //   ImageUploader.jsx            -> folder = "uploads" (default)
+    //   TabHeroConfig.jsx            -> <ImageUploader ... /> (no folder prop)
+    // Resulting object path: uploads/<timestamp>-<rand><ext>
+    // =====================================================================
+    match /uploads/{allPaths=**} {
+      // Public read: the uploaded hero photo is rendered straight from a
+      // getDownloadURL() URL in <img src=...>.
+      allow read: if true;
+
+      // Admin-only writes, image-only, capped at 5 MB.
+      allow create: if isAdmin() && isValidImage();
+      allow update: if isAdmin() && isValidImage();
+
+      // deleteFile() in src/lib/storage.js (currently uncalled) needs delete.
+      allow delete: if isAdmin();
+    }
+
+    // =====================================================================
+    // EVERYTHING ELSE IN THE BUCKET
+    // Readable by the admin only; writable by nobody.
+    // =====================================================================
+    match /{allPaths=**} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+  }
+}

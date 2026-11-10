@@ -114,7 +114,7 @@ export function TabHeroConfig() {
             </label>
             <p className="text-xs text-themeText/50">
               Leave empty to use the built-in{" "}
-              <code className="text-themeAccent">public/my-picture.png</code>, upload a new
+              <code className="text-themeAccent">public/my-picture.webp</code>, upload a new
               one here, or paste an image URL.
             </p>
             <ImageUploader value={form.photo_url} onChange={handlePhotoChange} label="Profile Photo" />
@@ -131,7 +131,7 @@ export function TabHeroConfig() {
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-themeAccent/30 to-themeSecondary/30 blur-xl" />
               <img
-                src={form.photo_url || "/my-picture.png"}
+                src={form.photo_url || "/my-picture.webp"}
                 alt="Hero preview"
                 className="relative h-44 w-44 rounded-full object-cover border-2 border-themeAccent/50"
               />

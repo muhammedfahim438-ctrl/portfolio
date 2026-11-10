@@ -72,7 +72,9 @@ function SkillsManager() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   async function handleAdd() {
@@ -314,7 +316,9 @@ function CertificationsManager() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   async function handleAdd() {

@@ -16,10 +16,6 @@ function formatDate(date) {
   });
 }
 
-function truncate(str, max) {
-  return str.length > max ? str.slice(0, max) + "…" : str;
-}
-
 export function TabMessages() {
   const [messages, setMessages] = useState([]);
   const [selected, setSelected] = useState(null);

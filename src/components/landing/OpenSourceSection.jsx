@@ -31,7 +31,7 @@ export function OpenSourceSection() {
         // static fallback
       }
     })();
-    const src = repos;
+    const src = REPOS;
     (async () => {
       try {
         const res = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&sort=updated`);

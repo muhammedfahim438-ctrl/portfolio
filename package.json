@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node scripts/seed.mjs"
   },
   "dependencies": {
     "firebase": "^12.18.0",
@@ -20,10 +21,13 @@
     "react-router-dom": "^7.6.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.5.2",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.14.0",
     "tailwindcss": "^4",
     "vite": "^6.3.5"
   }

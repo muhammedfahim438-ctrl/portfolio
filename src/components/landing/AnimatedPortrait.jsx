@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { getHeroData, getConfig } from "@/lib/firestore";
 
-const DEFAULT_PHOTO = "/my-picture.png";
+const DEFAULT_PHOTO = "/my-picture.webp";
 
 export function AnimatedPortrait({ className = "" }) {
   const [photos, setPhotos] = useState([]);
@@ -59,7 +59,6 @@ export function AnimatedPortrait({ className = "" }) {
   }, [photos.length]);
 
   const useBundled = !photos.length;
-  const activeSrc = useBundled ? DEFAULT_PHOTO : photos[imgIdx];
 
   return (
     <div

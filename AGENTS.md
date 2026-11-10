@@ -21,6 +21,7 @@ npm run dev      # Vite dev server on http://localhost:3000
 npm run build    # production build -> dist/
 npm run preview  # serve the production build
 npm run lint     # eslint (flat config, no args = lints cwd)
+npm run seed     # seed Firestore from the CLI (scripts/seed.mjs)
 ```
 
 There is no test runner, no TypeScript, and no Prettier config. Do not invent test commands.
@@ -35,7 +36,6 @@ src/
     globals.css                Tailwind v4 import, @theme tokens, .glass, lenis styles
     admin/page.jsx             Admin shell: tabs, collection stats, dedupe, re-seed
     admin/login/page.jsx       Email/password sign-in
-  pages/SeedPage.jsx           /seed — one-click seedAll()
   components/
     landing/                   Public sections (one file per section)
     admin/                     Tab components + ConfigEditor + ReusableCrud
@@ -44,6 +44,7 @@ src/
   hooks/                       useAuthGuard, useTheme, useSpeech
   lib/                         firebase, firestore, auth, storage, iconMap
   data/seed.js                 Seed data + seedAll()
+scripts/seed.mjs               CLI seeder (npm run seed) — Vite SSR loader
 ```
 
 ### Routes
@@ -53,7 +54,11 @@ src/
 | `/`            | `LandingPage` (App.jsx)  | Eager imports, all sections composed in one file   |
 | `/admin/login` | `app/admin/login/page`   | Lazy                                               |
 | `/admin`       | `app/admin/page`         | Lazy, wrapped in `AuthGuard`                       |
-| `/seed`        | `pages/SeedPage`         | Lazy, unauthenticated seed trigger                 |
+
+The `/seed` browser route was removed. Seeding is now a CLI: `npm run seed`
+(`scripts/seed.mjs`), which loads `src/data/seed.js` through Vite's SSR module
+loader so the `@/` alias and `import.meta.env` work in Node. `src/pages/SeedPage.jsx`
+no longer exists.
 
 ### Landing composition
 
@@ -136,12 +141,16 @@ Rules of thumb:
 
 ## Known gotchas
 
-- **Firestore rules are wide open.** `firestore.rules` allows `read, write` for everyone. Auth gating in the app (`AuthGuard` + `useAuthGuard`) is client-side only and is *not* a security boundary — any visitor can write to Firestore directly with the public web config. Tighten the rules before treating the admin area as private.
-- **`seedAll()` can fail on `skills`.** `seedNoDuplicates` uses `where(keyField, "in", [...])`, and Firestore caps `in` at 30 values; `seedSkills` currently has 31. Chunk the array (or compare in JS) if you touch this.
+- **Firestore rules are the real security boundary.** `firestore.rules` allows public reads of content, restricts every content write to the admin account (`isAdmin()` → `request.auth.token.email == <admin email>`), and allows the public to `create` `messages` only when the payload passes validation (field whitelist, email regex, length caps, `created_at` within ±60 s of `request.time`, and a per-email-per-UTC-day document id). `storage.rules` mirrors this for Firebase Storage. The admin e-mail is a **literal in `firestore.rules`** because Security Rules cannot import JavaScript — keep it in sync with `ADMIN_EMAIL` in `src/lib/constants.js`. Auth gating in the app (`AuthGuard` + `useAuthGuard`) is client-side UX only.
+- **App Check is opt-in.** `initializeAppCheck` only runs when `VITE_FIREBASE_APPCHECK_KEY` is set. Enforcement is a console toggle (App Check → Apps → your web app → Enforcement), not a rules change. reCAPTCHA v3 does not run in Node, so enabling enforcement on Firestore/Auth breaks `npm run seed`.
+- **`npm run seed` needs credentials under locked rules.** Set `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` in `.env` (not `VITE_`-prefixed, so they are never bundled) so the CLI can sign in before writing. Without them the script still runs but Firestore returns `permission-denied`.
+- **Seeding compares in JavaScript, not in Firestore.** `seedNoDuplicates` used to issue `where(keyField, "in", [...])`, which Firestore caps at 30 values while `seedSkills` has 31 — that query threw. It now reads the collection and compares in JS, so any count works.
+- **`seedAll()` is non-destructive.** `seedHeroConfig` and `seedProfile` now use `{merge: true}` so re-seeding does not overwrite your edited hero text or contact profile.
+- **`seedAll()` does not seed six collections.** `services`, `work_steps`, `experience`, `open_source`, `now_log` and `marquee` are admin-only; their landing sections fall back to static defaults while the collections are empty.
 - **`VITE_ADMIN_EMAIL` and the `SMTP_*` vars are unused.** They exist in `.env`/README but no code reads them; SMTP has no server component in this repo.
 - **README drift.** `README.md` lists files and features that no longer exist (`SkillsBentoGrid`, `WorkflowTimeline`, `useFirestore`, `useAudioVisualizer`, Chart.js/GSAP deps, a `cp .env.example` step with no `.env.example` present). Trust the code over the README.
 - **Firebase Hosting is not configured.** `firebase.json` only declares Firestore, so `firebase deploy --only hosting` will fail despite the README instructions. Deployment target is Vercel (`vercel.json` rewrites all non-asset paths to `index.html` for SPA routing).
-- **`SkillsTabs` is hardcoded.** The role/skill grid in `src/components/landing/SkillsTabs.jsx` is static and does *not* read the `skills` collection — editing skills in `/admin` will not change that section.
+- **`SkillsTabs` reads Firestore.** `src/components/landing/SkillsTabs.jsx` calls `getCollection("skills")` and groups the results into the four roles via the `CATEGORY_ROLE` map (`Programming`/`Data Analysis` → Data Scientist, `Backend`/`Database` → Backend Builder, `Frontend` → Frontend Crafter, `AI / ML`/`Tools & DevOps` → ML Engineer). It falls back to the static `FALLBACK_ROLES` list when the collection is empty or unreachable. Editing skills in `/admin` **does** change that section. A skill whose `category` is not in `CATEGORY_ROLE` falls back to the Data Scientist role.
 - **Build chunking is manual.** `vite.config.js` splits `react`, `firebase`, `motion`, and `ui` chunks. Keep new heavy dependencies out of the entry chunk; add them to `manualChunks` if they are large.
 
 ## Deployment
@@ -153,4 +162,6 @@ Rules of thumb:
 
 1. `npm run lint` — no new warnings/errors.
 2. `npm run build` — the build must succeed.
-3. Manually sanity-check the landing page and `/admin` if you changed data shapes; unseeded Firestore should still render via fallbacks.
+3. `npm ci --dry-run` — must print "up to date" (lockfile in sync with package.json).
+4. Manually sanity-check the landing page and `/admin` if you changed data shapes; unseeded Firestore should still render via fallbacks.
+5. If you changed `firestore.rules` or `storage.rules`, test them in the console **Rules Simulator** before deploying — a rule that fails to compile blocks every read and write.

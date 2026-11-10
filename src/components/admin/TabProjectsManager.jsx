@@ -45,7 +45,9 @@ export function TabProjectsManager() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   function openAdd() {

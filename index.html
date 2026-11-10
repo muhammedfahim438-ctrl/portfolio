@@ -2,47 +2,112 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#09090b" />
-    <meta name="robots" content="index, follow" />
+
+    <!-- theme color: light + dark variants match globals.css tokens -->
+    <meta name="theme-color" content="#faf9f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0a0c" media="(prefers-color-scheme: dark)" />
+
+    <!-- icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Fahim M" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
-    <title>Muhammed Fahim M | Data Science & Full-Stack Developer</title>
-    <meta name="description" content="Portfolio of Muhammed Fahim M — Full-Stack Developer & Data Science enthusiast from Kerala, India. Building production APIs, ML models, and scalable web apps." />
-    <link rel="canonical" href="https://muhammed-fahim-portfolio.vercel.app/" />
 
+    <title>Muhammed Fahim M | Data Science &amp; Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Portfolio of Muhammed Fahim M — Full-Stack Developer &amp; Data Science enthusiast from Kerala, India. Building production APIs, ML models, and scalable web apps."
+    />
+    <meta name="author" content="Muhammed Fahim M" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <!-- canonical: __SITE_URL__ replaced at build time from src/lib/constants.js -->
+    <link rel="canonical" href="__SITE_URL__/" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Muhammed Fahim M" />
-    <meta property="og:title" content="Muhammed Fahim M | Data Science & Full-Stack Developer" />
-    <meta property="og:description" content="Full-Stack Developer & Data Science enthusiast building production APIs, ML models, and scalable web apps from Kerala, India." />
-    <meta property="og:image" content="/my-picture.webp" />
-    <meta property="og:url" content="https://muhammed-fahim-portfolio.vercel.app/" />
+    <meta property="og:title" content="Muhammed Fahim M | Data Science &amp; Full-Stack Developer" />
+    <meta
+      property="og:description"
+      content="Full-Stack Developer &amp; Data Science enthusiast building production APIs, ML models, and scalable web apps from Kerala, India."
+    />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image" content="__SITE_URL__/og.jpg" />
+    <meta property="og:image:secure_url" content="__SITE_URL__/og.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Muhammed Fahim M — Data Science and Full-Stack Developer from Kerala, India"
+    />
 
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Muhammed Fahim M | Data Science & Full-Stack Developer" />
-    <meta name="twitter:description" content="Full-Stack Developer & Data Science enthusiast building production APIs, ML models, and scalable web apps." />
-    <meta name="twitter:image" content="/my-picture.webp" />
+    <meta name="twitter:title" content="Muhammed Fahim M | Data Science &amp; Full-Stack Developer" />
+    <meta
+      name="twitter:description"
+      content="Full-Stack Developer &amp; Data Science enthusiast building production APIs, ML models, and scalable web apps."
+    />
+    <meta name="twitter:image" content="__SITE_URL__/og.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Muhammed Fahim M — Data Science and Full-Stack Developer from Kerala, India"
+    />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
+        "@id": "__SITE_URL__/#person",
         "name": "Muhammed Fahim M",
+        "givenName": "Muhammed Fahim",
+        "familyName": "M",
         "jobTitle": "Data Science & Full-Stack Developer",
-        "url": "https://muhammed-fahim-portfolio.vercel.app/",
+        "description": "Full-Stack Developer and Data Science enthusiast from Kerala, India. Builds production APIs, machine-learning models and scalable web applications.",
+        "url": "__SITE_URL__/",
+        "image": "__SITE_URL__/og.jpg",
         "email": "mailto:muhammedfahim438@gmail.com",
-        "address": { "@type": "PostalAddress", "addressLocality": "Palakkad, Kerala", "addressCountry": "IN" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Palakkad",
+          "addressRegion": "Kerala",
+          "addressCountry": "IN"
+        },
+        "knowsAbout": [
+          "Data Science",
+          "Machine Learning",
+          "Python",
+          "Django",
+          "REST APIs",
+          "React",
+          "JavaScript",
+          "Flutter",
+          "PostgreSQL",
+          "Firebase",
+          "Power BI",
+          "Tailwind CSS"
+        ],
         "sameAs": [
           "https://github.com/muhammedfahim438-ctrl",
           "https://linkedin.com/in/muhammed-fahim-m"
         ]
       }
     </script>
+
     <script>
       (function() {
         try {

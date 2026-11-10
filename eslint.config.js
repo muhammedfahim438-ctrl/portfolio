@@ -29,4 +29,12 @@ export default [
   {
     ignores: ["dist"],
   },
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: globals.node,
+    },
+  },
 ];

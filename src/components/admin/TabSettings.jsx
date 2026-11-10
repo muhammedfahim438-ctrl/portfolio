@@ -48,7 +48,7 @@ export function TabSettings() {
           />
           <p className="text-xs text-themeText/50">
             Add multiple image URLs and the hero will crossfade between them for a dynamic,
-            varied look. Leave blank to use the built-in /my-picture image.
+            varied look. Leave blank to use the built-in /my-picture.webp image.
           </p>
         </div>
       )}

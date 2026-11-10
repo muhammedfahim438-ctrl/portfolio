@@ -27,7 +27,9 @@ export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem 
   }, [collection, title]);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   function openAdd() {

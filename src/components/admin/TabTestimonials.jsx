@@ -40,7 +40,9 @@ export function TabTestimonials() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   function resetForm() {
@@ -253,7 +255,7 @@ export function TabTestimonials() {
           <p className="text-themeText/40">No testimonials yet.</p>
         ) : (
           <div className="divide-y divide-themeBorder/50">
-            {items.map((item, i) => (
+            {items.map((item) => (
               <div key={item.id} className="py-4 flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full shrink-0 overflow-hidden border border-themeBorder bg-themeBg-secondary">
                   {item.avatar_url ? (

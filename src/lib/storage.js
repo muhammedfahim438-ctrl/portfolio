@@ -1,7 +1,7 @@
 "use client";
 
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
-import { storage } from "./firebase";
+import { storage } from "./firebaseStorage";
 
 export function uploadFile(file, folder = "uploads", onProgress) {
   const ext = (file.name.match(/\.\w+$/) || [""])[0].toLowerCase();

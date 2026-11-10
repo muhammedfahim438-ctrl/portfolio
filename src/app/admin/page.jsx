@@ -62,7 +62,9 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    loadStats();
+    (async () => {
+      await loadStats();
+    })();
   }, [loadStats]);
 
   async function handleCleanup() {

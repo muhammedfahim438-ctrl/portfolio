@@ -31,7 +31,9 @@ export function ConfigEditor({ configKey, title, schema, fallback = {}, profile 
   }, [configKey, schema, profile]);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   function updateField(key, value) {

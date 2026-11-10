@@ -17,13 +17,15 @@ import { TrustedBySection } from "@/components/landing/TrustedBySection";
 import { ServicesSection } from "@/components/landing/ServicesSection";
 import { WorkWithMeSection } from "@/components/landing/WorkWithMeSection";
 import { ContactFooter } from "@/components/landing/ContactFooter";
+import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
-import { AuthGuard } from "@/components/admin/AuthGuard";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 const AdminPage = lazy(() => import("@/app/admin/page"));
 const LoginPage = lazy(() => import("@/app/admin/login/page"));
-const SeedPage = lazy(() => import("@/pages/SeedPage"));
+const AuthGuard = lazy(() =>
+  import("@/components/admin/AuthGuard").then((m) => ({ default: m.AuthGuard }))
+);
 
 function LandingPage() {
   useEffect(() => {
@@ -95,7 +97,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin" element={<ProtectedAdmin />} />
-        <Route path="/seed" element={<SeedPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

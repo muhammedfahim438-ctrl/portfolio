@@ -50,7 +50,9 @@ export function FeaturedProjects() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   function openDetail(project) {

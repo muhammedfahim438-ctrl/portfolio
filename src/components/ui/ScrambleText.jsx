@@ -22,17 +22,15 @@ export function ScrambleText({
   as: Tag = "span",
   ariaLabel,
 }) {
-  const [display, setDisplay] = useState(text);
+  const [scrambled, setScrambled] = useState(text);
   const timerRef = useRef(null);
   const [self, setSelf] = useState(false);
   const active = enabled !== undefined ? enabled : self;
 
+  const display = active ? scrambled : text;
+
   useEffect(() => {
-    if (!active) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      setDisplay(text);
-      return;
-    }
+    if (!active) return;
 
     let frame = 0;
     const frames = 7;
@@ -40,10 +38,10 @@ export function ScrambleText({
       frame += 1;
       if (frame >= frames) {
         clearInterval(timerRef.current);
-        setDisplay(text);
+        setScrambled(text);
         return;
       }
-      setDisplay(scrambleText(text, (text.length / frames) * frame));
+      setScrambled(scrambleText(text, (text.length / frames) * frame));
     }, 42);
 
     return () => {

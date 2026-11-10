@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 const ThemeContext = createContext({
   theme: "dark",
@@ -8,21 +8,16 @@ const ThemeContext = createContext({
   setTheme: () => {},
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useThemeContext() {
   return useContext(ThemeContext);
 }
 
 export function ThemeProvider({ children }) {
-  const [theme, setThemeState] = useState("dark");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored) {
-      setThemeState(stored);
-      document.documentElement.classList.remove("dark", "light");
-      document.documentElement.classList.add(stored);
-    }
-  }, []);
+  const [theme, setThemeState] = useState(() => {
+    if (typeof window === "undefined") return "dark";
+    return localStorage.getItem("theme") || "dark";
+  });
 
   const setTheme = (t) => {
     setThemeState(t);

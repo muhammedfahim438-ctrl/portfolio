@@ -23,7 +23,12 @@ export function SplitText({
   as: Tag = "h2",
 }) {
   const words = text.split(" ");
+  const wordStarts = [];
   let charIndex = 0;
+  for (const w of words) {
+    wordStarts.push(charIndex);
+    charIndex += w.length + 1;
+  }
 
   return (
     <Tag className={className} aria-label={text}>
@@ -31,8 +36,7 @@ export function SplitText({
         const clean = word.replace(/[^\p{L}\p{N}]/gu, "");
         const isAccent =
           !!accentWord && clean.toUpperCase() === accentWord.toUpperCase();
-        const start = charIndex;
-        charIndex += word.length + 1;
+        const start = wordStarts[wi];
 
         return (
           <span key={wi} className="inline-block whitespace-pre">

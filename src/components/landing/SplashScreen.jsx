@@ -20,6 +20,7 @@ export function SplashScreen() {
   const tickRef = useRef(0);
   const wordsRef = useRef(DEFAULT_WORDS);
   const finalRef = useRef(DEFAULT_FINAL);
+  const [initialWord] = useState(DEFAULT_WORDS[0]);
 
   // load splash config once
   useEffect(() => {
@@ -78,7 +79,6 @@ export function SplashScreen() {
       }, 240);
       return;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export function SplashScreen() {
             }}
           >
             <div ref={slotRef} style={{ willChange: "transform" }}>
-              {wordsRef.current[0]}
+              {initialWord}
             </div>
           </div>
 

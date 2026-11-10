@@ -1,28 +1,49 @@
 import {
-  doc, setDoc, addDoc, collection, getDocs, query, where,
+  doc, setDoc, addDoc, collection, getDocs,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firestoreDb";
 
-async function keyFieldFor(name) {
-  switch (name) {
-    case "skills":
-    case "trusted_by":
-      return "name";
-    default:
-      return "title";
-  }
+// Which field uniquely identifies a document in each seeded collection.
+// "name"  -> skills, trusted_by
+// "author"-> testimonials (these documents have quote/role/author, no title)
+// "title" -> everything else
+const COLLECTION_KEY_FIELDS = {
+  skills: "name",
+  trusted_by: "name",
+  testimonials: "author",
+};
+
+function keyFieldFor(name) {
+  return COLLECTION_KEY_FIELDS[name] ?? "title";
 }
 
+// Compares existing keys in JavaScript instead of a Firestore `in` query,
+// which is capped at 30 comparison values (seedSkills has 31 items).
 async function seedNoDuplicates(name, items) {
-  const keyField = await keyFieldFor(name);
-  const existing = await getDocs(
-    query(collection(db, name), where(keyField, "in", items.map((i) => i[keyField])))
-  );
+  if (!Array.isArray(items) || items.length === 0) {
+    console.log(`Skipped ${name} (no items to seed)`);
+    return;
+  }
+
+  const keyField = keyFieldFor(name);
+
+  // Every item must carry the key field.
+  const keys = items.map((item) => item?.[keyField]);
+  const hasMissingKey = keys.some((key) => typeof key !== "string" || key.trim() === "");
+  if (hasMissingKey) {
+    throw new Error(
+      `seed ${name}: key field "${keyField}" is missing or empty on one or more items.`
+    );
+  }
+
+  const existing = await getDocs(collection(db, name));
   const existingKeys = new Set(existing.docs.map((d) => d.data()[keyField]));
+
   let added = 0;
   for (const item of items) {
     if (existingKeys.has(item[keyField])) continue;
     await addDoc(collection(db, name), item);
+    existingKeys.add(item[keyField]);
     added += 1;
   }
   console.log(`Seeded ${added} ${name} (${items.length - added} already present)`);
@@ -35,7 +56,7 @@ export async function seedHeroConfig() {
     voice_text: "Hi! I'm Muhammed Fahim M, a Data Science and Full-Stack Developer from Kerala, India. I build production APIs, ML models, and scalable web apps. Let's connect!",
     photo_url: "",
   };
-  await setDoc(doc(db, "site_config", "hero_data"), data);
+  await setDoc(doc(db, "site_config", "hero_data"), data, { merge: true });
   console.log("Seeded hero_data");
 }
 
@@ -344,7 +365,7 @@ export async function seedProfile() {
     location: "Palakkad, Kerala, India",
     resume_pdf_url: "",
   };
-  await setDoc(doc(db, "profile", "social_data"), data);
+  await setDoc(doc(db, "profile", "social_data"), data, { merge: true });
   console.log("Seeded profile/social_data");
 }
 

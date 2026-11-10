@@ -26,8 +26,10 @@ export function ProjectOverlay({ isOpen, onClose, onSelectProject }) {
 
   useEffect(() => {
     if (isOpen) {
-      load();
-      setActiveTab("All");
+      (async () => {
+        setActiveTab("All");
+        await load();
+      })();
     }
   }, [isOpen, load]);
 

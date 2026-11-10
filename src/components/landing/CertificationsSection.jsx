@@ -38,7 +38,9 @@ export function CertificationsSection() {
   }, []);
 
   useEffect(() => {
-    load();
+    (async () => {
+      await load();
+    })();
   }, [load]);
 
   const shown = certs.slice(0, visibleCount);

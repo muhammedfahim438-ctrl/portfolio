@@ -8,7 +8,6 @@ import { useSpeech } from "@/hooks/useSpeech";
 import { getSocialData, getHeroData, getConfig } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { SplitText } from "@/components/ui/SplitText";
 import { ResumeModal } from "@/components/ui/ResumeModal";
 import { AnimatedPortrait } from "@/components/landing/AnimatedPortrait";
 import { ScenicScene } from "@/components/landing/ScenicScene";

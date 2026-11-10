@@ -1,11 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiMail, FiPhone, FiMapPin, FiSend, FiArrowUp } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { sendMessage, getSocialData } from "@/lib/firestore";
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  CONTACT_LOCATION,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  MESSAGE_LIMITS,
+  EMAIL_REGEX,
+  MIN_FORM_FILL_MS,
+} from "@/lib/constants";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ScenicScene } from "@/components/landing/ScenicScene";
 import { SplitText } from "@/components/ui/SplitText";
@@ -46,15 +56,21 @@ export function ContactFooter() {
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState(REASONS[0]);
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [social, setSocial] = useState({
-    email: "muhammedfahim438@gmail.com",
-    phone: "+91 9061635562",
-    location: "Palakkad, Kerala, India",
-    github: "https://github.com/muhammedfahim438-ctrl",
-    linkedin: "https://linkedin.com/in/muhammed-fahim-m",
+    email: CONTACT_EMAIL,
+    phone: CONTACT_PHONE,
+    location: CONTACT_LOCATION,
+    github: GITHUB_URL,
+    linkedin: LINKEDIN_URL,
   });
+  const formStartedAt = useRef(null);
+
+  const markFormStart = () => {
+    if (formStartedAt.current === null) formStartedAt.current = Date.now();
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -81,28 +97,78 @@ export function ContactFooter() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) {
+
+    // --- honeypot: a real user never sees or fills this field ---
+    if (website.trim()) {
+      toast.error("Failed to send message. Please try again.");
+      return;
+    }
+
+    // --- minimum fill time: bots submit instantly ---
+    const filledFor =
+      formStartedAt.current === null ? 0 : Date.now() - formStartedAt.current;
+    if (filledFor < MIN_FORM_FILL_MS) {
+      toast.error("Please take a moment before sending your message.");
+      return;
+    }
+
+    const senderName = name.trim();
+    const senderEmail = email.trim();
+    const senderPhone = phone.trim();
+    const messageBody = message.trim();
+
+    if (!senderName || !senderEmail || !messageBody) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // --- length caps: mirror exactly what firestore.rules enforces ---
+    if (senderName.length > MESSAGE_LIMITS.sender_name) {
+      toast.error(`Name must be ${MESSAGE_LIMITS.sender_name} characters or fewer.`);
+      return;
+    }
+    if (senderPhone.length > MESSAGE_LIMITS.sender_phone) {
+      toast.error(`Phone must be ${MESSAGE_LIMITS.sender_phone} characters or fewer.`);
+      return;
+    }
+    if (senderEmail.length > MESSAGE_LIMITS.sender_email) {
+      toast.error(`Email must be ${MESSAGE_LIMITS.sender_email} characters or fewer.`);
+      return;
+    }
+    if (!EMAIL_REGEX.test(senderEmail)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    if (messageBody.length > MESSAGE_LIMITS.message_body) {
+      toast.error(`Message must be ${MESSAGE_LIMITS.message_body} characters or fewer.`);
       return;
     }
 
     setLoading(true);
     try {
       await sendMessage({
-        sender_name: name.trim(),
-        sender_email: email.trim(),
-        sender_phone: phone.trim(),
+        sender_name: senderName,
+        sender_email: senderEmail,
+        sender_phone: senderPhone,
         reason,
-        message_body: message.trim(),
+        message_body: messageBody,
       });
       setSent(true);
       setName("");
       setPhone("");
       setEmail("");
+      setWebsite("");
       setReason(REASONS[0]);
       setMessage("");
-    } catch {
-      toast.error("Failed to send message. Please try again.");
+      formStartedAt.current = null;
+    } catch (err) {
+      if (err?.code === "permission-denied") {
+        toast.error(
+          "You have already sent a message today. Please try again tomorrow, or email me directly."
+        );
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -196,7 +262,29 @@ export function ContactFooter() {
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form
+                  onSubmit={handleSubmit}
+                  onFocus={markFormStart}
+                  onMouseDown={markFormStart}
+                  onTouchStart={markFormStart}
+                  className="relative space-y-5"
+                >
+                  {/* Honeypot — off-screen and unfocusable for humans. */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden"
+                  >
+                    <label htmlFor="website">Website</label>
+                    <input
+                      id="website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                    />
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-themeText-secondary mb-1.5">
@@ -205,6 +293,7 @@ export function ContactFooter() {
                       <input
                         id="name"
                         type="text"
+                        autoComplete="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors"
@@ -218,6 +307,7 @@ export function ContactFooter() {
                       <input
                         id="phone"
                         type="tel"
+                        autoComplete="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors"
@@ -233,6 +323,7 @@ export function ContactFooter() {
                     <input
                       id="email"
                       type="email"
+                      autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full px-4 py-3 rounded-xl bg-themeInput border border-themeBorder text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors"
