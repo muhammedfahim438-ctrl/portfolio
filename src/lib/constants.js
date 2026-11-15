@@ -8,7 +8,7 @@
 //
 // Keep SITE_URL without a trailing slash or path.
 
-export const SITE_URL = "https://muhammedfahim-portfolio.vercel.app";
+export const SITE_URL = "https://muhammedfahimm-portfolio.vercel.app";
 
 export function absoluteUrl(path = "/") {
   const base = SITE_URL.replace(/\/+$/, "");

@@ -109,8 +109,8 @@ export function HeroSection() {
               <div className="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-[#C8102E] bg-[#080808]" />
               <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-[#C8102E] bg-[#080808]" />
               <img
-                src="/my-picture.webp"
-                alt="Muhammed Fahim M"
+                src="/portrait.svg"
+                alt="Dot-matrix portrait of Muhammed Fahim M"
                 className="h-full w-full object-cover grayscale-30 hover:grayscale-0 transition-all duration-500 opacity-100"
                 loading="eager"
               />

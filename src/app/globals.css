@@ -1,9 +1,38 @@
 @import "tailwindcss";
 
+/* ── Fonts ─────────────────────────────────────────────────────────────
+ * NDot55 (display), Ntype82 (subhead/body), Lettera Mono LL (mono/UI).
+ * Drop the woff2 files into public/fonts/ with these exact names:
+ *   NDot55.woff2  Ntype82.woff2  LetteraMonoLL.woff2
+ * Until then the stack falls back to system faces and the layout holds.
+ * ──────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "NDot55";
+  src: url("/fonts/NDot55.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ntype82";
+  src: url("/fonts/Ntype82.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lettera Mono LL";
+  src: url("/fonts/LetteraMonoLL.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   /* ── Typography ── */
   --font-display: "NDot55", ui-sans-serif, system-ui, sans-serif;
   --font-subhead: "Ntype82", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Ntype82", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Lettera Mono LL", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* ── Radius ── */
@@ -46,7 +75,11 @@
 }
 
 :root {
-  /* ── Core Palette ── */
+  /* ── Core Palette ──
+   * Target ratio across a screen: black 70 / silver 12 / grey 10 /
+   * blue 4 / red 3 / yellow 1. Red = signal and primary actions,
+   * blue = depth and interactive states, yellow = micro accents only.
+   */
   --dg-bg-deep: #080808;
   --dg-surf: #B1B3B3;
   --dg-high: #CDCBCA;
@@ -90,6 +123,14 @@
   --themeGradientStart: #C8102E;
   --themeGradientEnd: #002F6C;
   --themeWaveform: #FFC700;
+
+  /* ── Z-index scale ── */
+  --dg-z-bg: 0;
+  --dg-z-content: 10;
+  --dg-z-sticky: 30;
+  --dg-z-overlay: 50;
+  --dg-z-modal: 80;
+  --dg-z-cursor: 9999;
 }
 
 .dark {
@@ -140,8 +181,15 @@
 body {
   background-color: var(--themeBg);
   color: var(--themeText);
-  font-family: var(--font-display);
+  font-family: var(--font-subhead);
   overflow-x: hidden;
+}
+
+/* Accessible focus ring on every interactive element */
+:focus-visible {
+  outline: 2px solid var(--dg-warn);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 /* ── Liquid Glass Utilities ── */
@@ -196,6 +244,72 @@ body {
   box-shadow: var(--dg-shadow-glass), var(--dg-shadow-tint-yellow);
 }
 
+/* ── Liquid Glass (approximation, no backdrop blur cost at rest) ── */
+.dg-liquid {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(205, 203, 202, 0.10),
+    rgba(205, 203, 202, 0.03) 42%,
+    rgba(0, 47, 108, 0.12)
+  );
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 0.5px solid var(--dg-glass-border);
+  border-radius: var(--dg-r-lg);
+  box-shadow:
+    inset 0 1px 0 var(--dg-glass-border-li),
+    inset 0 -1px 0 var(--dg-glass-border-lo),
+    var(--dg-shadow-glass);
+  overflow: hidden;
+}
+/* Specular streak that sweeps on hover (the interactive payoff) */
+.dg-liquid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.07) 45%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform 0.9s ease;
+}
+.dg-liquid:hover::before {
+  transform: translateX(120%);
+}
+
+/* ── Dot-matrix textures ── */
+.dg-halftone {
+  background-image: radial-gradient(circle at 50% 50%, rgba(205, 203, 202, 0.16) 1px, transparent 1.6px);
+  background-size: 7px 7px;
+}
+.dg-blueprint {
+  background-image:
+    linear-gradient(rgba(0, 47, 108, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 47, 108, 0.28) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ── Transparency fallbacks (no backdrop-filter support or user opt-out) ── */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .dg-glass,
+  .dg-card-glass,
+  .dg-liquid {
+    background: rgba(10, 10, 10, 0.96);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .dg-glass,
+  .dg-card-glass,
+  .dg-liquid {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(10, 10, 10, 0.96);
+  }
+  .dg-liquid::before {
+    display: none;
+  }
+}
+
 /* ── Cyberpunk ── */
 .dg-border-neon-red {
   border: 1px solid var(--dg-accent-p);
@@ -229,9 +343,13 @@ body {
   text-shadow: 0 0 8px rgba(255, 199, 0, 0.70);
 }
 
-/* ── Glitch ── */
+/* ── Glitch ──
+ * Shadow-only chromatic offsets. The pseudo-layers carry no opaque
+ * background, so the headline sits directly on the page background.
+ */
 .dg-glitch {
   position: relative;
+  display: inline-block;
   color: var(--dg-high);
 }
 .dg-glitch::before,
@@ -242,18 +360,20 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--dg-bg-deep);
-  opacity: 0.8;
+  pointer-events: none;
+  background: transparent;
 }
 .dg-glitch::before {
   color: var(--dg-accent-p);
   z-index: -1;
-  animation: dg-glitch-1 2.5s infinite linear alternate-reverse;
+  opacity: 0.65;
+  animation: dg-glitch-1 2.8s infinite linear alternate-reverse;
 }
 .dg-glitch::after {
   color: var(--dg-accent-s);
   z-index: -2;
-  animation: dg-glitch-2 3s infinite linear alternate-reverse;
+  opacity: 0.65;
+  animation: dg-glitch-2 3.4s infinite linear alternate-reverse;
 }
 
 @keyframes dg-glitch-1 {
@@ -353,18 +473,21 @@ body {
 .dg-corner--blue * { border-color: var(--dg-accent-s); }
 .dg-corner--warn * { border-color: var(--dg-warn); }
 
-/* ── Chunky ── */
+/* ── Chunky ──
+ * Dark glass plate with hard-edged red border and blue offset shadow.
+ * (Legacy version filled this class with the silver surface, which is
+ * what produced the oversized silver slabs in the old hero.)
+ */
 .dg-chunky {
-  background: var(--dg-surf);
-  color: #080808;
-  border: 2px solid #080808;
-  box-shadow: 4px 4px 0 #080808;
-  border-radius: var(--dg-r-sm);
-  image-rendering: pixelated;
+  background: var(--themeCard);
+  color: var(--dg-high);
+  border: 2px solid var(--dg-accent-p);
+  box-shadow: 6px 6px 0 var(--dg-accent-s);
+  border-radius: var(--dg-r-0);
 }
 .dg-chunky:active {
-  box-shadow: 2px 2px 0 #080808;
-  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--dg-accent-s);
+  transform: translate(4px, 4px);
 }
 
 /* ── Typography ── */
@@ -374,17 +497,19 @@ body {
 
 .h1 {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 .h2 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(2rem, 5vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
+  text-wrap: balance;
 }
 .h3 {
   font-family: var(--font-subhead);
@@ -392,6 +517,7 @@ body {
   font-size: clamp(1.25rem, 3vw, 1.75rem);
   line-height: 1.2;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .dg-ui-mono {
@@ -771,8 +897,4 @@ html.lenis, html.lenis body { height: auto; }
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
-
-.text-glow-lime {
-  text-shadow: 0 0 10px rgba(200, 16, 46, 0.55), 0 0 24px rgba(200, 16, 46, 0.25);
 }

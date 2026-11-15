@@ -85,7 +85,7 @@ Smooth scrolling is Lenis, mounted in a `useEffect` in `LandingPage` and exposed
 | ------------------------------- | --------------------------------------------------------------------- |
 | `site_config/hero_data`         | `title`, `subtitle`, `voice_text`, `photo_url`                        |
 | `site_config/availability_data` | `available` (bool), `label`                                            |
-| `site_config/portrait_data`     | `photos` (array of URLs; empty = bundled `/my-picture.*`)              |
+| `site_config/portrait_data`     | `photos` (array of URLs; empty = bundled `/portrait.svg`)               |
 | `site_config/splash_data`       | `words` (array), `final`                                               |
 | `profile/social_data`           | `email`, `phone`, `location`, `github`, `linkedin`, `resume_pdf_url`   |
 | `messages`                      | contact form submissions, `created_at` server timestamp                |
@@ -127,7 +127,7 @@ Tailwind v4, no `tailwind.config.js`. Design tokens are declared in `src/app/glo
 Rules of thumb:
 
 - **Use theme tokens, never hardcoded hex values** in components. Adding a new color means adding a CSS var in both `:root` and `.dark`, then exposing it in `@theme inline`.
-- Fonts: `font-sans` (Inter), `font-display` (Space Grotesk), `font-mono` (JetBrains Mono), `font-accent` (Instrument Serif). Loaded from Google Fonts in `index.html`.
+- Fonts: `font-display` (NDot55), `font-subhead` (Ntype82), `font-mono` (Lettera Mono LL). Served from `public/fonts/*.woff2` via `@font-face` in `globals.css` with system fallbacks until the files are added.
 - Animations use `framer-motion`; icons come from `react-icons` (`si` for brands, `fi` for UI). Admin-selectable icons must be registered in `src/lib/iconMap.js` (`ICON_MAP` / `ICON_KEYS`).
 - Toasts: `import toast from "react-hot-toast"` — `<Toaster>` is already mounted in `main.jsx`.
 

@@ -50,12 +50,12 @@ export function TabSettings() {
             title="Hero Portrait (Variety Images)"
             fallback={{ photos: [] }}
             schema={[
-              { key: "photos", label: "Portrait URLs (comma-separated — leave blank to use bundled photo)", type: "tags" },
+              { key: "photos", label: "Portrait URLs (comma-separated, leave blank to use bundled photo)", type: "tags" },
             ]}
           />
           <p className="text-xs text-themeTextSecondary/50">
             Add multiple image URLs and the hero will crossfade between them for a dynamic,
-            varied look. Leave blank to use the built-in /my-picture.webp image.
+            varied look. Leave blank to use the built-in /portrait.svg image.
           </p>
         </div>
       )}

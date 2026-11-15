@@ -1,10 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#aac8a7"/>
-      <stop offset="100%" stop-color="#e9ffc2"/>
-    </linearGradient>
-  </defs>
-  <rect width="100" height="100" rx="20" fill="#191e19"/>
-  <text x="50" y="68" font-family="Arial,sans-serif" font-size="52" font-weight="bold" fill="url(#g)" text-anchor="middle">FM</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Muhammed Fahim M dot-matrix F mark">
+  <rect width="64" height="64" fill="#080808"/>
+  <g fill="#CDCBCA">
+    <!-- dot-matrix F: stem x=18..22, bars y=12..16 and y=28..32 -->
+    <circle cx="18" cy="14" r="3.1"/><circle cx="27" cy="14" r="3.1"/><circle cx="36" cy="14" r="3.1"/><circle cx="45" cy="14" r="3.1"/>
+    <circle cx="18" cy="23" r="3.1"/><circle cx="27" cy="23" r="3.1"/>
+    <circle cx="18" cy="32" r="3.1"/><circle cx="27" cy="32" r="3.1"/><circle cx="36" cy="32" r="3.1"/>
+    <circle cx="18" cy="41" r="3.1"/>
+    <circle cx="18" cy="50" r="3.1"/>
+  </g>
+  <circle cx="45" cy="14" r="3.1" fill="#C8102E"/>
+  <path d="M2 12 V2 H12" fill="none" stroke="#FFC700" stroke-width="2.5"/>
+  <path d="M62 52 V62 H52" fill="none" stroke="#002F6C" stroke-width="2.5"/>
 </svg>

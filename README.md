@@ -23,14 +23,15 @@ Storage) used as a headless CMS so the site can be edited without touching code.
 | Smooth scroll | Lenis | `^1.3.26` | 1.3.26 |
 | Routing | React Router DOM | `^7.6.1` | 7.18.2 |
 | Backend / CMS | Firebase — Firestore, Authentication, Storage | `^12.18.0` | 12.18.0 |
-| App Check (optional) | `firebase/app-check` (reCAPTCHA v3) — ships inside `firebase` | — | 12.18.0 |
+| App Check (optional) | `firebase/app-check` (reCAPTCHA v3, ships inside `firebase`) | — | 12.18.0 |
 | Icons | react-icons | `^5.7.0` | 5.7.0 |
 | Toasts | react-hot-toast | `^2.6.0` | 2.6.0 |
 | Linting | ESLint (flat config) + `eslint-plugin-react-hooks` + `eslint-plugin-react-refresh` | `^10.14.0` | 10.14.0 |
 
 There is **no** GSAP, **no** Chart.js, **no** `react-chartjs-2`, **no** TypeScript, **no** test runner,
-and **no** Prettier config in this repository. Fonts (Inter, Space Grotesk, JetBrains Mono,
-Instrument Serif) are loaded from Google Fonts in `index.html`.
+and **no** Prettier config in this repository. Fonts (NDot55, Ntype82, Lettera Mono LL) are served
+from `public/fonts/*.woff2` via `@font-face` rules in `src/app/globals.css`, with system fallbacks
+until the files are dropped in.
 
 ### Node requirement
 
@@ -299,7 +300,7 @@ D:\portfolio
 |------|-------|
 | `site_config/hero_data` | `title`, `subtitle`, `voice_text`, `photo_url` |
 | `site_config/availability_data` | `available` (bool), `label` |
-| `site_config/portrait_data` | `photos` (array of URLs; empty = bundled `/my-picture.*`) |
+| `site_config/portrait_data` | `photos` (array of URLs; empty = bundled `/portrait.svg`) |
 | `site_config/splash_data` | `words` (array), `final` |
 | `profile/social_data` | `email`, `phone`, `location`, `github`, `linkedin`, `kaggle`, `leetcode`, `resume_pdf_url` |
 | `messages` | contact submissions — `sender_name`, `sender_email`, `sender_phone`, `reason`, `message_body`, `created_at` |

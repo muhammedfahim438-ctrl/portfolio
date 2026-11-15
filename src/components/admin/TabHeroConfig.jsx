@@ -114,7 +114,7 @@ export function TabHeroConfig() {
           </label>
           <p className="text-xs text-themeTextSecondary/60">
             Leave empty to use the built-in{" "}
-            <code className="text-themeAccent">public/my-picture.webp</code>, upload a new
+            <code className="text-themeAccent">public/portrait.svg</code>, upload a new
             one here, or paste an image URL.
           </p>
           <ImageUploader value={form.photo_url} onChange={handlePhotoChange} label="Profile Photo" />
