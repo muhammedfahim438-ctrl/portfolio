@@ -70,6 +70,8 @@ export function HeroSection() {
       </ParallaxLayers>
 
       <div className="container mx-auto px-4 md:px-8 py-24 relative z-10 w-full">
+        {/* Backdrop panel behind hero content for readability */}
+        <div className="absolute inset-0 -z-10 bg-[#080808]/40 backdrop-blur-md" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: AIDA Attention with staggered entrance reveal */}
           <EntranceReveal variant="slide" delay={0} className="max-w-lg">
@@ -80,16 +82,16 @@ export function HeroSection() {
               className="space-y-8"
             >
               <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4 dg-corner dg-corner--red">
-                <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono">
+                <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono text-[#CDCBCA]">
                   {hero.subtitle || "Data Science × Full-Stack"}
                 </span>
               </div>
 
-              <h1 className="h1 dg-f-display text-themeText uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"} style={{ textShadow: '0 0 20px rgba(205, 203, 202, 0.6)' }}>
+              <h1 className="h1 dg-f-display text-[#FAF8F3] uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"} style={{ textShadow: '0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(200, 16, 46, 0.4)' }}>
                 {hero.title || "Muhammed Fahim M"}
               </h1>
 
-              <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg">
+              <p className="dg-f-subhead text-[#CDCBCA]/90 leading-relaxed text-lg max-w-lg">
                 {hero.body || "I build production APIs, machine learning models, and scalable web applications at the intersection of data engineering and full-stack development."}
               </p>
 
