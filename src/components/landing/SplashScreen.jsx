@@ -113,7 +113,7 @@ export function SplashScreen() {
           initial={{ opacity: 1 }}
           exit={{ y: "-100%" }}
           transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-          className="fixed inset-0 z-[80] flex flex-col items-center justify-center overflow-hidden bg-themeBg"
+          className="fixed inset-0 z-80 flex flex-col items-center justify-center overflow-hidden bg-themeBg"
         >
           {/* dot-matrix boot grid */}
           <div
@@ -144,12 +144,12 @@ export function SplashScreen() {
           </p>
 
           {/* progress hairline with yellow tip */}
-          <div className="absolute bottom-0 left-0 h-[3px] w-full bg-themeBg-secondary">
+          <div className="absolute bottom-0 left-0 h-0.75 w-full bg-themeBg-secondary">
             <div
               className="relative h-full bg-themeAccent transition-[width] duration-150 ease-linear"
               style={{ width: `${pct}%` }}
             >
-              <span className="absolute right-0 top-0 h-full w-[3px] bg-themeWarn" />
+              <span className="absolute right-0 top-0 h-full w-0.75 bg-themeWarn" />
             </div>
           </div>
         </motion.div>
