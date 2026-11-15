@@ -63,14 +63,14 @@ export function TabHeroConfig() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
-      <div className="space-y-6 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
-        <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
+    <div className="grid gap-6 lg:grid-cols-2">
+      <div className="space-y-6 p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+        <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] dg-f-display">
           Edit Hero Section
         </h2>
 
         <div className="space-y-1.5">
-          <label htmlFor="hero-title" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="hero-title" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
             Title
           </label>
           <input
@@ -78,12 +78,12 @@ export function TabHeroConfig() {
             type="text"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
+            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="hero-subtitle" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="hero-subtitle" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
             Subtitle
           </label>
           <input
@@ -91,12 +91,12 @@ export function TabHeroConfig() {
             type="text"
             value={form.subtitle}
             onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
-            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
+            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="hero-voice" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="hero-voice" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
             Voice Text
           </label>
           <textarea
@@ -104,15 +104,15 @@ export function TabHeroConfig() {
             rows={4}
             value={form.voice_text}
             onChange={(e) => setForm({ ...form, voice_text: e.target.value })}
-            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200 resize-y"
+            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 resize-y dg-r-0"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="hero-photo" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="hero-photo" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
             Profile Photo
           </label>
-          <p className="text-xs text-themeText-secondary/60">
+          <p className="text-xs text-themeTextSecondary/60">
             Leave empty to use the built-in{" "}
             <code className="text-themeAccent">public/my-picture.webp</code>, upload a new
             one here, or paste an image URL.
@@ -123,18 +123,18 @@ export function TabHeroConfig() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
         >
           {saving ? "Saving…" : "Save Changes"}
         </button>
       </div>
 
-      <div className="space-y-6 rounded-none p-6 border border-themeBorder bg-themeSurface/20">
-        <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
+      <div className="space-y-6 p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+        <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] dg-f-display">
           Preview
         </h2>
         <div className="flex flex-col items-center gap-4 text-center">
-          <div className="relative h-44 w-48 rounded-none border-2 border-themeAccent/50 bg-themeSurface flex items-center justify-center text-themeText-secondary font-mono text-sm">
+          <div className="relative h-44 w-48 border-4 border-themeAccent/50 bg-themeSurface flex items-center justify-center text-themeTextSecondary font-mono text-sm dg-r-0 shadow-[2px_2px_0_0_#080808]">
             {form.photo_url ? (
               <img src={form.photo_url} alt="Hero preview" className="h-full w-full object-cover" />
             ) : (
@@ -142,13 +142,13 @@ export function TabHeroConfig() {
             )}
           </div>
           <div>
-            <h3 className="text-2xl font-display font-bold text-themeText uppercase tracking-tight">
+            <h3 className="text-2xl font-display font-bold text-themeText uppercase tracking-tight dg-f-display">
               {form.title || "Muhammed Fahim M"}
             </h3>
-            <p className="mt-1 text-themeText-secondary">{form.subtitle || "Subtitle goes here"}</p>
+            <p className="mt-1 text-themeTextSecondary">{form.subtitle || "Subtitle goes here"}</p>
           </div>
           {form.voice_text && (
-            <p className="max-w-sm text-xs text-themeText-secondary/70 italic">
+            <p className="max-w-sm text-xs text-themeTextSecondary/70 italic">
               &ldquo;{form.voice_text}&rdquo;
             </p>
           )}

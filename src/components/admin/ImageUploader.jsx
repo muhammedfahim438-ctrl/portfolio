@@ -1,70 +1,64 @@
 "use client";
 
-import { useRef, useState } from "react";
-import toast from "react-hot-toast";
-import { uploadFile } from "@/lib/storage";
+import { useState } from "react";
 
-export function ImageUploader({ value, onChange, folder = "uploads", label = "Image" }) {
-  const fileRef = useRef(null);
-  const [progress, setProgress] = useState(null);
-  const [error, setError] = useState("");
-
-  async function handleFile(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setError("");
-    setProgress(0);
-    try {
-      const { url } = await uploadFile(file, folder, (p) => setProgress(p));
-      onChange(url);
-      toast.success("Image uploaded");
-    } catch {
-      setError("Upload failed. Make sure Firebase Storage is enabled.");
-    } finally {
-      setProgress(null);
-      e.target.value = "";
-    }
-  }
+export function ImageUploader({ value, onChange, label }) {
+  const [url, setUrl] = useState(value || "");
 
   return (
-    <div className="space-y-2">
-      <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
-        {label}
+    <div className="space-y-3">
+      <label htmlFor="image-upload" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+        {label || "Image URL"}
       </label>
-      <div className="flex items-center gap-3">
-        {value ? (
-          <img src={value} alt="" className="h-14 w-14 rounded-none object-cover border border-themeBorder" />
-        ) : (
-          <div className="h-14 w-14 rounded-none border-2 border-dashed border-themeBorder flex items-center justify-center text-[10px] text-themeText-secondary/50 uppercase tracking-wider">
-            none
-          </div>
-        )}
-        <div className="flex-1 space-y-2">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              className="px-4 py-2 rounded-none border-2 border-themeBorder bg-themeBgSecondary text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
-            >
-              {progress !== null ? `Uploading ${progress}%` : "Upload"}
-            </button>
-            {progress !== null && (
-              <div className="h-1.5 w-28 overflow-hidden rounded-none bg-themeBorder">
-                <div className="h-full bg-themeAccent transition-all duration-200" style={{ width: `${progress}%` }} />
-              </div>
-            )}
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-          </div>
-          <input
-            type="text"
-            value={value ?? ""}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="…or paste an image URL"
-            className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-3 py-2 text-[13px] text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200"
-          />
-        </div>
+      <div className="flex items-center gap-2">
+        <input
+          id="image-upload"
+          type="text"
+          value={url}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            onChange(e.target.value);
+          }}
+          placeholder="https://… or /assets/image.png"
+          className="flex-1 rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+        />
+        <button
+          onClick={() => {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.onchange = (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => {
+                const dataUrl = String(reader.result);
+                setUrl(dataUrl);
+                onChange(dataUrl);
+              };
+              reader.readAsDataURL(file);
+            };
+            input.click();
+          }}
+          className="px-4 py-3 border-4 border-themeAccent bg-themeSurface text-themeText text-xs font-medium uppercase tracking-tighter shadow-[2px_2px_0_0_#080808] hover:bg-themeAccent hover:text-themeBg transition-all duration-150 dg-f-mono dg-r-0"
+        >
+          Upload
+        </button>
       </div>
-      {error && <p className="text-[10px] text-red-400">{error}</p>}
+      {url && (
+        <div className="flex items-center gap-2">
+          <img src={url} alt="Preview" className="w-12 h-12 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_#080808]" />
+          <button
+            onClick={() => {
+              setUrl("");
+              onChange("");
+            }}
+            className="border-2 border-themeAccent bg-transparent text-themeAccent hover:bg-themeAccent hover:text-themeText shadow-[1px_1px_0_0_#080808] transition-all duration-150 dg-f-mono dg-r-0"
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 }

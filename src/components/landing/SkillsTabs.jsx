@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { SplitText } from "@/components/ui/SplitText";
+
 import { getCollection } from "@/lib/firestore";
 import {
   SiPython, SiDjango, SiReact, SiNextdotjs, SiFlutter,
@@ -181,12 +181,9 @@ export function SkillsTabs() {
           transition={{ duration: 0.7 }}
           className="mb-12"
         >
-          <SplitText
-            as="span"
-            text="Tools I Build With"
-            className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--red"
-            data-text="Tools I Build With"
-          />
+          <h2 className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--red" data-text="Tools I Build With">
+            Tools I Build With
+          </h2>
         </motion.div>
 
         {/* Tab pills - cyberpunk */}

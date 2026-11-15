@@ -22,6 +22,8 @@
   --color-accent-p: var(--dg-accent-p);
   --color-accent-s: var(--dg-accent-s);
   --color-warn: var(--dg-warn);
+  --color-theme-warn: var(--dg-warn);
+  --color-theme-accent-s: var(--dg-accent-s);
 
   /* ── Glass ── */
   --color-glass-bg: var(--dg-glass-bg);

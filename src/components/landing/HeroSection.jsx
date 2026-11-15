@@ -6,8 +6,6 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { getHeroData, getSocialData } from "@/lib/firestore";
 
 export function HeroSection() {
-  const [resumeOpen, setResumeOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState("");
   const [social, setSocial] = useState({
     github: "https://github.com/muhammedfahim438-ctrl",
     linkedin: "https://linkedin.com/in/muhammed-fahim-m",
@@ -30,11 +28,11 @@ export function HeroSection() {
         ]);
         if (!mounted) return;
         if (heroData) {
-          setHero({
-            title: heroData.title || hero.title,
-            subtitle: heroData.subtitle || hero.subtitle,
-            body: heroData.voice_text || hero.body,
-          });
+          setHero((prev) => ({
+            title: heroData.title || prev.title,
+            subtitle: heroData.subtitle || prev.subtitle,
+            body: heroData.voice_text || prev.body,
+          }));
         }
         if (socialData) {
           setSocial((prev) => ({
@@ -42,7 +40,9 @@ export function HeroSection() {
             linkedin: socialData.linkedin || prev.linkedin,
             email: socialData.email || prev.email,
           }));
-          if (socialData.resume_pdf_url) setResumeUrl(socialData.resume_pdf_url);
+          if (socialData.resume_pdf_url) {
+            // resume URL from social data
+          }
         }
       } catch {
         // fallback to defaults
@@ -52,19 +52,15 @@ export function HeroSection() {
     return () => {
       mounted = false;
     };
-  }, [getHeroData, getSocialData]);
-
-  const activeResumeUrl = resumeUrl || "/resume.pdf";
+  }, []);
 
   return (
     <section
       id="hero"
       className="relative min-h-[100dvh] flex items-center overflow-hidden bg-themeBg border-t border-themeBorder/40 dg-crt dg-dot-matrix dg-scanlines"
     >
-      {/* Hero content layer */}
       <div className="container mx-auto px-4 md:px-8 py-24 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: AIDA Attention */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -101,15 +97,14 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right: Portrait with corner brackets */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2 }}
             className="relative mx-auto w-64 h-72 sm:w-[22rem] sm:h-[26rem] lg:w-[28rem] lg:h-[32rem] dg-corner dg-corner--blue"
           >
-            <div className="absolute inset-[-6px] rounded-[14px] bg-themeAccent z-0 blur opacity-30 animate-orb" />
-            <div className="relative h-full w-full rounded-[12px] border-2 border-themeBorder bg-themeSurface/10 overflow-hidden z-10 backdrop-blur-sm">
+            <div className="absolute inset-[-6px] rounded-none bg-themeAccent z-0" />
+            <div className="relative h-full w-full border-2 border-themeBorder bg-themeSurface/10 overflow-hidden z-10 backdrop-blur-sm">
               <img
                 src="/my-picture.webp"
                 alt="Muhammed Fahim M"
@@ -120,7 +115,6 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Social dock - cyberpunk pill */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -137,13 +131,12 @@ export function HeroSection() {
             <a href={`mailto:${social.email}`} className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Email">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </a>
-            <button onClick={() => setResumeOpen(true)} data-cursor-hover className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Resume">
+            <button onClick={() => {}} data-cursor-hover className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Resume">
               <FiFileText className="w-5 h-5" />
             </button>
           </div>
         </motion.div>
 
-        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

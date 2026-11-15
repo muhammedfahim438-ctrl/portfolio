@@ -15,7 +15,7 @@ import {
   EMAIL_REGEX,
   MIN_FORM_FILL_MS,
 } from "@/lib/constants";
-import { SplitText } from "@/components/ui/SplitText";
+
 
 const REASONS = [
   "HIRE ME — PROJECT WORK",
@@ -178,12 +178,9 @@ export function ContactFooter() {
               </span>
             </div>
 
-            <SplitText
-              text="Let's Build Something"
-              accentWord="Build"
-              className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--blue"
-              data-text="Let's Build Something"
-            />
+            <h2 className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--blue" data-text="Let's Build Something">
+              Let's Build Something
+            </h2>
 
             <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg mt-6">
               I'm open to freelance work, contract roles, and full-time opportunities. Tell me about your idea and I'll get back within 24 hours.
@@ -249,17 +246,17 @@ export function ContactFooter() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <BrandInput label="FULL NAME" id="name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required />
-                    <BrandInput label="PHONE" id="phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999" />
+                    <BrandInput id="name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required />
+                    <BrandInput id="phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999" />
                   </div>
 
-                  <BrandInput label="EMAIL ADDRESS" id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
-                  <BrandInput label="WHAT BRINGS YOU HERE?" id="reason" type="select" value={reason} onChange={(e) => setReason(e.target.value)} required>
+                  <BrandInput id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
+                  <BrandInput id="reason" type="select" value={reason} onChange={(e) => setReason(e.target.value)} required>
                     {REASONS.map((r) => (
                       <option key={r} value={r}>{r}</option>
                     ))}
                   </BrandInput>
-                  <BrandInput label="MESSAGE" id="message" type="textarea" value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="Tell me about your project or idea..." required />
+                  <BrandInput id="message" type="textarea" value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="Tell me about your project or idea..." required />
 
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -349,13 +346,13 @@ export function ContactFooter() {
   );
 }
 
-function BrandInput({ label, id, type, value, onChange, placeholder, required, children }) {
+function BrandInput({ id, type, value, onChange, placeholder, required, children }) {
   const isSelect = type === "select";
   const isTextarea = type === "textarea";
   return (
     <div className="space-y-2">
       <label htmlFor={id} className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary/70 dg-ui-mono">
-        {label}{required && <span className="text-themeAccent">*</span>}
+        {id}{required && <span className="text-themeAccent">*</span>}
       </label>
       {isSelect ? (
         <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber">
@@ -370,7 +367,7 @@ function BrandInput({ label, id, type, value, onChange, placeholder, required, c
   );
 }
 
-function BrandContactItem({ icon, label, value, href }) {
+function BrandContactItem({ icon, value, href }) {
   return (
     <a href={href} className="flex items-center gap-2 text-themeTextSecondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em] text-xs dg-ui-mono">
       {icon}

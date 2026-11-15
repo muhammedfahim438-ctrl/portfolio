@@ -1,269 +1,257 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { getCollection, addItem, updateItem, deleteItem } from "@/lib/firestore";
-import { Modal } from "@/components/ui/Modal";
+import {
+  getCollection,
+  addItem,
+  updateItem,
+  deleteItem,
+} from "@/lib/firestore";
 
-export function ReusableCrud({ collection, schema, title, buildTitle, emptyItem }) {
+export function ReusableCrud({ collection, schema, title, emptyItem }) {
   const [items, setItems] = useState([]);
+  const [form, setForm] = useState(emptyItem);
   const [loading, setLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState(emptyItem ?? {});
-  const [tagBuffers, setTagBuffers] = useState({});
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
-  const load = useCallback(async () => {
-    try {
-      setItems(await getCollection(collection));
-    } catch {
-      toast.error(`Failed to load ${title.toLowerCase()}`);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await getCollection(collection);
+        if (!cancelled) setItems(data);
+      } catch {
+        if (!cancelled) setItems([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [collection, title]);
 
-  useEffect(() => {
-    (async () => {
-      await load();
-    })();
-  }, [load]);
-
-  function openAdd() {
-    setEditingId(null);
-    setForm(emptyItem ?? {});
-    setTagBuffers({});
-    setModalOpen(true);
-  }
-
-  function openEdit(item) {
-    setEditingId(item.id ?? null);
-    const next = {};
-    const buffers = {};
-    (schema ?? []).forEach((f) => {
-      const val = item[f.key] ?? f.default ?? "";
-      next[f.key] = f.type === "lines" && Array.isArray(val) ? val.join("\n") : val;
-      if (f.type === "tags") {
-        buffers[f.key] = Array.isArray(val) ? val.join(", ") : "";
-      }
-    });
-    setForm(next);
-    setTagBuffers(buffers);
-    setModalOpen(true);
-  }
-
-  function updateField(key, value) {
-    setForm((prev) => ({ ...prev, [key]: value }));
+  async function reload() {
+    try {
+      const data = await getCollection(collection);
+      setItems(data);
+    } catch {
+      toast.error(`Failed to load ${title}`);
+    }
   }
 
   async function handleSave() {
     setSaving(true);
-    const payload = { ...form };
-    (schema ?? []).forEach((f) => {
-      if (f.type === "tags") {
-        payload[f.key] = String(tagBuffers[f.key] ?? "")
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-      if (f.type === "lines") {
-        payload[f.key] = String(form[f.key] ?? "")
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-      if (f.type === "number") payload[f.key] = Number(payload[f.key]) || 0;
-      if (f.type === "bool") payload[f.key] = !!payload[f.key];
-    });
     try {
       if (editingId) {
-        await updateItem(collection, editingId, payload);
-        toast.success("Updated");
+        await updateItem(collection, editingId, form);
+        toast.success(`${title} updated`);
       } else {
-        await addItem(collection, payload);
-        toast.success("Added");
+        await addItem(collection, form);
+        toast.success(`${title} added`);
       }
-      setModalOpen(false);
-      await load();
+      setEditingId(null);
+      setForm({ ...emptyItem });
+      await reload();
     } catch {
-      toast.error("Save failed");
+      toast.error(`Failed to save ${title}`);
     } finally {
       setSaving(false);
     }
   }
 
   async function handleDelete(id) {
-    if (!confirm("Delete this item? This cannot be undone.")) return;
+    if (!confirm(`Delete this ${title}?`)) return;
     setDeletingId(id);
     try {
       await deleteItem(collection, id);
-      toast.success("Deleted");
-      setItems((prev) => prev.filter((it) => it.id !== id));
+      setItems((prev) => prev.filter((i) => i.id !== id));
+      toast.success(`${title} deleted`);
     } catch {
-      toast.error("Delete failed");
+      toast.error(`Failed to delete ${title}`);
     } finally {
       setDeletingId(null);
     }
   }
 
+  function startEdit(item) {
+    setEditingId(item.id);
+    setForm({ ...item });
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setForm({ ...emptyItem });
+  }
+
+  const getFieldValue = (key) => {
+    const val = form[key];
+    if (Array.isArray(val)) return val.join(", ");
+    return val ?? "";
+  };
+
+  const setFieldValue = (key, value) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
-            {title}
-          </h3>
-        </div>
-        <button
-          onClick={openAdd}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold text-xs hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200"
-        >
-          Add New
-        </button>
-      </div>
+    <section className="space-y-6 rounded-none p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+      <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4 dg-f-display">
+        {title}
+      </h2>
 
-      {loading ? (
-        <div className="rounded-none py-16 text-center border border-themeBorder bg-themeSurface/20">
-          Loading…
-        </div>
-      ) : items.length === 0 ? (
-        <div className="rounded-none py-16 text-center border border-themeBorder bg-themeSurface/20">
-          <p className="text-themeText-secondary text-sm uppercase tracking-[0.1em]">
-            Nothing here yet
-          </p>
-          <p className="text-[10px] text-themeText-secondary/50 mt-1 uppercase tracking-wider">
-            Click "Add New" to get started
-          </p>
-        </div>
-      ) : (
-        <ul className="space-y-2">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              className="group flex items-center justify-between gap-3 rounded-none px-4 py-3 border border-themeBorder bg-themeSurface/30"
-            >
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-themeText">
-                  {buildTitle ? buildTitle(item) : (item.title || item.name || item.id)}
-                </p>
-                {(item.desc || item.description) && (
-                  <p className="truncate text-xs text-themeText-secondary/60">{item.desc || item.description}</p>
-                )}
-              </div>
-              <div className="flex shrink-0 items-center gap-2">
+      {loading && <p className="text-themeText/40">Loading {title}…</p>}
+      {!loading && items.length === 0 && <p className="text-themeText/40">No {title} yet.</p>}
+      {!loading && items.length > 0 && (
+        <div className="space-y-6">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm border-collapse">
+              <thead className="border-b-4 border-themeAccent text-themeTextSecondary/60">
+                <tr>
+                  {schema.map((f) => (
+                    <th key={f.key} className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-left">
+                      {f.label}
+                    </th>
+                  ))}
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-themeAccent/30">
+                {items.map((item) => (
+                  <tr key={item.id} className="hover:bg-themeBg/40 transition-all duration-150">
+                    {schema.map((f) => (
+                      <td key={f.key} className="px-4 py-3 text-themeText font-medium">
+                        {f.type === "tags" && Array.isArray(item[f.key]) ? (
+                          <span className="text-[10px] text-themeAccent dg-ui-mono">
+                            {item[f.key].join(", ")}
+                          </span>
+                        ) : (
+                          item[f.key] ?? "—"
+                        )}
+                      </td>
+                    ))}
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => startEdit(item)}
+                          className="px-3 py-1 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_#080808] hover:shadow-[2px_2px_0_0_#080808] transition-all duration-150 active:shadow-[0px_0px_0_0_#080808] active:translate-[1px_1px] dg-f-mono dg-r-0"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          disabled={deletingId === item.id}
+                          className="px-3 py-1 text-xs font-medium text-red-400 hover:bg-red-400/10 shadow-[1px_1px_0_0_#080808] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
+                        >
+                          {deletingId === item.id ? "…" : "Delete"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            <h3 className="text-sm font-display font-bold text-themeText uppercase mb-3 dg-f-display">
+              {editingId ? "Edit" : "Add New"} {title}
+            </h3>
+
+            <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="space-y-4">
+              {schema.map((field) => (
+                <div key={field.key} className="space-y-1.5">
+                  <label
+                    htmlFor={`crud-${field.key}`}
+                    className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono"
+                  >
+                    {field.label}
+                  </label>
+                  {field.type === "textarea" ? (
+                    <textarea
+                      id={`crud-${field.key}`}
+                      value={getFieldValue(field.key)}
+                      onChange={(e) => setFieldValue(field.key, e.target.value)}
+                      rows={field.rows || 3}
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 resize-y dg-r-0"
+                    />
+                  ) : field.type === "select" ? (
+                    <select
+                      id={`crud-${field.key}`}
+                      value={getFieldValue(field.key)}
+                      onChange={(e) => setFieldValue(field.key, e.target.value)}
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+                    >
+                      {field.options.map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  ) : field.type === "bool" ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        id={`crud-${field.key}`}
+                        type="checkbox"
+                        checked={getFieldValue(field.key) === "true" || getFieldValue(field.key) === true}
+                        onChange={(e) => setFieldValue(field.key, e.target.checked)}
+                        className="w-4 h-4 border-4 border-themeAccent text-themeAccent bg-themeInput shadow-[1px_1px_0_0_#080808] dg-r-0"
+                      />
+                      <span className="text-xs font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                        {field.label}
+                      </span>
+                    </div>
+                  ) : field.type === "tags" ? (
+                    <input
+                      id={`crud-${field.key}`}
+                      type="text"
+                      value={getFieldValue(field.key)}
+                      onChange={(e) => setFieldValue(field.key, e.target.value.split(",").map((t) => t.trim()).filter(Boolean))}
+                      placeholder={field.placeholder || "tag1, tag2, tag3"}
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+                    />
+                  ) : field.type === "lines" ? (
+                    <textarea
+                      id={`crud-${field.key}`}
+                      value={getFieldValue(field.key)}
+                      onChange={(e) => setFieldValue(field.key, e.target.value.split("\n"))}
+                      rows={field.rows || 4}
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 resize-y dg-r-0"
+                    />
+                  ) : (
+                    <input
+                      id={`crud-${field.key}`}
+                      type="text"
+                      value={getFieldValue(field.key)}
+                      onChange={(e) => setFieldValue(field.key, e.target.value)}
+                      placeholder={field.placeholder || ""}
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+                    />
+                  )}
+                </div>
+              ))}
+
+              <div className="flex justify-end gap-3 pt-4">
                 <button
-                  onClick={() => openEdit(item)}
-                  className="rounded-none px-3 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 transition-all duration-200"
+                  type="button"
+                  onClick={cancelEdit}
+                  className="px-5 py-2.5 border-4 border-themeAccent text-themeTextSecondary text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px] dg-f-mono dg-r-0"
                 >
-                  Edit
+                  Cancel
                 </button>
                 <button
-                  onClick={() => handleDelete(item.id)}
-                  disabled={deletingId === item.id}
-                  className="rounded-none px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-400/10 transition-all duration-200 disabled:opacity-50"
+                  type="submit"
+                  disabled={saving}
+                  className="px-5 py-2.5 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
                 >
-                  {deletingId === item.id ? "…" : "Delete"}
+                  {saving ? "Saving…" : editingId ? "Update" : "Create"}
                 </button>
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
-          <h4 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
-            {editingId ? `Edit ${title}` : `New ${title}`}
-          </h4>
-
-          {(schema ?? []).map((f) => (
-            <FieldEditor
-              key={f.key}
-              field={f}
-              value={f.type === "tags" ? (tagBuffers[f.key] ?? "") : (form[f.key] ?? "")}
-              onChange={(v) => (f.type === "tags" ? setTagBuffers((p) => ({ ...p, [f.key]: v })) : updateField(f.key, v))}
-            />
-          ))}
-
-          <div className="flex justify-end gap-3 pt-3">
-            <button
-              onClick={() => setModalOpen(false)}
-              className="px-5 py-2.5 rounded-none border-2 border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? "Saving…" : editingId ? "Update" : "Create"}
-            </button>
+            </form>
           </div>
         </div>
-      </Modal>
-    </div>
-  );
-}
-
-function FieldEditor({ field, value, onChange }) {
-  const label = (
-    <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
-      {field.label}
-    </label>
-  );
-  const inputClass =
-    "w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200";
-
-  if (field.type === "textarea" || field.type === "lines") {
-    return (
-      <div className="space-y-1.5">
-        {label}
-        <textarea rows={field.rows ?? 3} value={value} onChange={(e) => onChange(e.target.value)} className={`${inputClass} resize-y`} placeholder={field.placeholder} />
-      </div>
-    );
-  }
-
-  if (field.type === "select") {
-    return (
-      <div className="space-y-1.5">
-        {label}
-        <select value={value} onChange={(e) => onChange(e.target.value)} className={inputClass}>
-          {(field.options ?? []).map((o) => (
-            <option key={o} value={o}>{o}</option>
-          ))}
-        </select>
-      </div>
-    );
-  }
-
-  if (field.type === "bool") {
-    return (
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => onChange(!value)}
-          className={`relative h-6 w-11 rounded-none transition-colors ${value ? "bg-themeAccent" : "bg-themeBorder"}`}
-        >
-          <span className={`absolute top-1 left-1 h-4 w-4 rounded-none bg-themeBg transition-transform ${value ? "translate-x-5" : ""}`} />
-        </button>
-        {label}
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-1.5">
-      {label}
-      <input
-        type={field.type === "number" ? "number" : "text"}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={field.placeholder}
-        className={inputClass}
-      />
-    </div>
+      )}
+    </section>
   );
 }

@@ -28,34 +28,31 @@ export function AdminHeader() {
 
   return (
     <>
-      {/* Floating glass pill navbar — detached from top edge */}
-      <header
-        className="sticky top-6 z-50 mx-auto w-full max-w-[1200px] px-4"
-      >
+      <header className="sticky top-0 z-50">
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="rounded-none border border-themeBorder bg-themeSurface/70 backdrop-blur-2xl px-5 py-3 flex items-center justify-between"
+          className="border-4 border-themeAccent bg-themeBg shadow-[4px_4px_0_0_#080808] px-5 py-3 flex items-center justify-between dg-r-0"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-none border border-themeBorder bg-themeAccent flex items-center justify-center text-themeText font-display font-bold text-xs">
+            <div className="w-8 h-8 bg-themeAccent text-themeText border-4 border-themeAccent flex items-center justify-center text-themeText font-display font-bold text-xs shadow-[2px_2px_0_0_#080808]">
               MF
             </div>
-            <h1 className="font-display font-bold text-themeText text-sm tracking-tight uppercase">
+            <h1 className="font-display font-bold text-themeText text-sm tracking-tight uppercase dg-f-display">
               Portfolio Admin
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {email && (
-              <span className="hidden md:inline-block text-xs font-mono text-themeText-secondary uppercase tracking-[0.1em]">
+              <span className="hidden md:inline-block text-[10px] font-mono text-themeTextSecondary uppercase tracking-[0.1em] dg-ui-mono">
                 {email}
               </span>
             )}
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 px-4 py-2 rounded-none border border-themeBorder bg-transparent text-themeText text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-300"
+              className="flex items-center gap-2 px-4 py-2 border-4 border-themeAccent bg-transparent text-themeText text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] dg-f-mono"
             >
               <FiLogOut className="w-3 h-3" />
               Sign Out
@@ -64,14 +61,13 @@ export function AdminHeader() {
         </motion.div>
       </header>
 
-      {/* Mobile nav overlay */}
       {menuOpen && (
         <AnimatePresence>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-[#080808]/80 backdrop-blur-sm"
             onClick={() => setMenuOpen(false)}
           />
           <motion.div
@@ -79,7 +75,7 @@ export function AdminHeader() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 right-0 z-50 w-72 bg-themeSurface border-l border-themeBorder p-6"
+            className="fixed inset-y-0 right-0 z-50 w-72 bg-themeBg border-l-4 border-themeAccent p-6 shadow-[4px_4px_0_0_#080808] dg-r-0"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
@@ -88,7 +84,7 @@ export function AdminHeader() {
               </span>
               <button
                 onClick={() => setMenuOpen(false)}
-                className="rounded-none p-2 text-themeText-secondary hover:text-themeText transition-colors"
+                className="p-2 border-2 border-themeAccent bg-transparent text-themeText hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px]"
               >
                 <FiX className="w-5 h-5" />
               </button>
@@ -107,17 +103,17 @@ export function AdminHeader() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-none border border-transparent text-themeText-secondary text-sm font-medium hover:bg-themeBg/40 hover:border-themeAccent/20 hover:text-themeAccent transition-all duration-200"
+                  className="flex items-center gap-3 px-4 py-3 border-2 border-transparent text-themeText-secondary text-sm font-medium uppercase tracking-wider hover:bg-themeAccent/10 hover:border-themeAccent hover:text-themeAccent shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px] dg-f-mono"
                 >
                   <span className="text-xs">{item.icon}</span>
                   {item.label}
                 </a>
               ))}
             </nav>
-            <div className="mt-6 pt-6 border-t border-themeBorder">
+            <div className="mt-6 pt-6 border-t-4 border-themeAccent">
               <button
                 onClick={handleSignOut}
-                className="flex items-center gap-3 px-4 py-3 rounded-none border border-themeBorder text-themeText text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-3 border-2 border-themeAccent bg-transparent text-themeText text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px] dg-f-mono"
               >
                 <FiLogOut className="w-4 h-4" />
                 Sign Out

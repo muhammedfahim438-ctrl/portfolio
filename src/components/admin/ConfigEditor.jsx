@@ -1,123 +1,109 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { getConfig, setConfig, getProfile, setProfileConfig } from "@/lib/firestore";
 
-
-export function ConfigEditor({ configKey, title, schema, fallback = {}, profile = false }) {
-  const [form, setForm] = useState(fallback);
+export function ConfigEditor({ configKey, title, schema, fallback, profile }) {
+  const [form, setForm] = useState(fallback || {});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [tagBuffers, setTagBuffers] = useState({});
-
-  const load = useCallback(async () => {
-    try {
-      const data = (profile ? await getProfile(configKey) : await getConfig(configKey, null)) ?? {};
-      const next = {};
-      const buffers = {};
-      (schema ?? []).forEach((f) => {
-        const val = data[f.key] ?? f.default ?? "";
-        next[f.key] = val;
-        if (f.type === "tags") buffers[f.key] = Array.isArray(val) ? val.join(", ") : "";
-      });
-      setForm(next);
-      setTagBuffers(buffers);
-    } catch {
-      toast.error("Failed to load");
-    } finally {
-      setLoading(false);
-    }
-  }, [configKey, schema, profile]);
 
   useEffect(() => {
-    (async () => {
-      await load();
-    })();
-  }, [load]);
-
-  function updateField(key, value) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
+    async function load() {
+      try {
+        const data = profile
+          ? await getProfile(configKey)
+          : await getConfig(configKey);
+        if (data) setForm({ ...fallback, ...data });
+      } catch {
+        // keep fallback
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [configKey, profile, fallback]);
 
   async function handleSave() {
     setSaving(true);
-    const payload = { ...form };
-    (schema ?? []).forEach((f) => {
-      if (f.type === "tags") {
-        payload[f.key] = String(tagBuffers[f.key] ?? "").split(",").map((s) => s.trim()).filter(Boolean);
-      }
-      if (f.type === "number") payload[f.key] = Number(payload[f.key]) || 0;
-      if (f.type === "bool") payload[f.key] = !!payload[f.key];
-    });
     try {
-      await (profile ? setProfileConfig(configKey, payload) : setConfig(configKey, payload));
-      toast.success(`${title} saved`);
+      if (profile) {
+        await setProfileConfig(configKey, form);
+      } else {
+        await setConfig(configKey, form);
+      }
+      toast.success(`${title} updated`);
     } catch {
-      toast.error("Save failed");
+      toast.error(`Failed to save ${title}`);
     } finally {
       setSaving(false);
     }
   }
 
   if (loading) {
-    return <div className="flex items-center justify-center py-12 text-themeText/40">Loading…</div>;
+    return (
+      <div className="flex items-center justify-center py-24 text-themeText/50">
+        Loading {title}…
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-4 rounded-none p-5 border border-themeBorder bg-themeSurface/20">
-      <h3 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em]">
+    <section className="space-y-6 rounded-none p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+      <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-6 dg-f-display">
         {title}
-      </h3>
-      {(schema ?? []).map((f) => (
-        <ConfigField key={f.key} field={f} value={f.type === "tags" ? (tagBuffers[f.key] ?? "") : (form[f.key] ?? "")}
-          onChange={(v) => (f.type === "tags" ? setTagBuffers((p) => ({ ...p, [f.key]: v })) : updateField(f.key, v))} />
-      ))}
-      <button
-        onClick={handleSave}
-        disabled={saving}
-        className="flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {saving ? "Saving…" : "Save Changes"}
-      </button>
-    </div>
-  );
-}
+      </h2>
 
-function ConfigField({ field, value, onChange }) {
-  const label = <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">{field.label}</label>;
-  const inputClass = "w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-all duration-200";
+      <div className="space-y-5">
+        {schema.map((field) => (
+          <div key={field.key} className="space-y-1.5">
+            <label
+              htmlFor={`config-${configKey}-${field.key}`}
+              className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono"
+            >
+              {field.label}
+            </label>
+            {field.type === "bool" ? (
+              <div className="flex items-center gap-2">
+                <input
+                  id={`config-${configKey}-${field.key}`}
+                  type="checkbox"
+                  checked={form[field.key] === true}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, [field.key]: e.target.checked }))
+                  }
+                  className="w-4 h-4 border-4 border-themeAccent text-themeAccent bg-themeInput shadow-[1px_1px_0_0_#080808] dg-r-0"
+                />
+                <span className="text-xs font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                  {field.label}
+                </span>
+              </div>
+            ) : (
+              <input
+                id={`config-${configKey}-${field.key}`}
+                type="text"
+                value={form[field.key] ?? ""}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, [field.key]: e.target.value }))
+                }
+                placeholder={field.placeholder || ""}
+                className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+              />
+            )}
+          </div>
+        ))}
 
-  if (field.type === "textarea") {
-    return (
-      <div className="space-y-1.5">
-        {label}
-        <textarea rows={field.rows ?? 3} value={value} onChange={(e) => onChange(e.target.value)} className={`${inputClass} resize-y`} placeholder={field.placeholder} />
+        <div className="pt-4">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center justify-center gap-2 px-6 py-3 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
+          >
+            {saving ? "Saving…" : "Save Changes"}
+          </button>
+        </div>
       </div>
-    );
-  }
-  if (field.type === "tags") {
-    return (
-      <div className="space-y-1.5">
-        {label}
-        <input value={value} onChange={(e) => onChange(e.target.value)} placeholder="comma, separated, values" className={inputClass} />
-      </div>
-    );
-  }
-  if (field.type === "bool") {
-    return (
-      <div className="flex items-center gap-3">
-        <button type="button" onClick={() => onChange(!value)} className={`relative h-6 w-11 rounded-none transition-colors ${value ? "bg-themeAccent" : "bg-themeBorder"}`}>
-          <span className={`absolute top-1 left-1 h-4 w-4 rounded-none bg-themeBg transition-transform ${value ? "translate-x-5" : ""}`} />
-        </button>
-        {label}
-      </div>
-    );
-  }
-  return (
-    <div className="space-y-1.5">
-      {label}
-      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder} className={inputClass} />
-    </div>
+    </section>
   );
 }

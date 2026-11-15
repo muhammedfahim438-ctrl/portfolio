@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FiArrowUpRight, FiGithub, FiExternalLink } from "react-icons/fi";
+import { FiExternalLink } from "react-icons/fi";
 import { getProjects } from "@/lib/firestore";
-import { SplitText } from "@/components/ui/SplitText";
+
 
 const rowVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -53,12 +53,9 @@ export function FeaturedProjects() {
             </span>
           </div>
 
-          <SplitText
-            text="Work That Ships"
-            accentWord="Ships"
-            className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--blue"
-            data-text="Work That Ships"
-          />
+          <h2 className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--blue" data-text="Work That Ships">
+            Work That Ships
+          </h2>
 
           <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg mt-6">
             Production-grade APIs, machine learning models, and cross-platform applications — built for real outcomes. Case studies below.
@@ -111,11 +108,8 @@ export function FeaturedProjects() {
 }
 
 function CaseStudyCard({ project }) {
-  const ref = useRef(null);
-
   return (
     <motion.div
-      ref={ref}
       whileHover={{ y: -6 }}
       className="relative p-5 border border-themeBorder/60 bg-themeSurface/10 backdrop-blur-sm group overflow-hidden dg-r-lg dg-corner dg-corner--red"
       data-cursor-hover
