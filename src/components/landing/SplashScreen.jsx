@@ -6,7 +6,7 @@ import { getConfig } from "@/lib/firestore";
 
 const DEFAULT_FINAL = "DATA SCIENCE × FULL-STACK";
 const SEEN_KEY = "mf-splash-v1";
-const CAP_MS = 1200;
+const CAP_MS = 2800;
 
 // 5x5 dot-matrix boot grid. Center cross renders red, corners yellow.
 const DOTS = Array.from({ length: 25 }, (_, i) => {
@@ -16,7 +16,7 @@ const DOTS = Array.from({ length: 25 }, (_, i) => {
   const isCross = row === 2 || col === 2;
   const isCorner = (row === 0 || row === 4) && (col === 0 || col === 4);
   const color = isCenter ? "var(--dg-accent-p)" : isCorner ? "var(--dg-warn)" : isCross ? "var(--dg-high)" : "var(--dg-surf)";
-  const delay = (row + col) * 45;
+  const delay = (row + col) * 85;
   return { i, color, delay };
 });
 
@@ -112,7 +112,7 @@ export function SplashScreen() {
           aria-label="Loading portfolio"
           initial={{ opacity: 1 }}
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
           className="fixed inset-0 z-[80] flex flex-col items-center justify-center overflow-hidden bg-themeBg"
         >
           {/* dot-matrix boot grid */}

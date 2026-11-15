@@ -129,7 +129,7 @@ export function HeroSection() {
           <EntranceReveal
             variant="scale"
             delay={0.2}
-            className="relative mx-auto w-72 h-80 sm:w-96 sm:h-112 lg:w-[32rem] lg:h-[40rem]"
+            className="relative mx-auto w-72 h-80 sm:w-96 sm:h-112 lg:w-lg lg:h-160"
           >
             <Tilt3D maxRotate={6} perspective={900} scale={1.01} className="h-full w-full">
               <div className="relative h-full w-full overflow-hidden border-2 border-themeAccent bg-themeBg shadow-[8px_8px_0_0_var(--dg-accent-s)] dg-r-0">

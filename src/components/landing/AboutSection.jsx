@@ -1,102 +1,216 @@
 "use client";
+import { useEffect, useState } from "react";
+import { FiDownload, FiSend } from "react-icons/fi";
+import { getConfig, getSocialData } from "@/lib/firestore";
 import { EntranceReveal } from "@/components/ui/EntranceReveal";
 
+const FACTS = [
+  { term: "Role", value: "Data Science & Full-Stack Developer" },
+  { term: "Base", value: "Palakkad, Kerala, India" },
+  { term: "Study", value: "BSc Data Science, CGPA 8.17" },
+  { term: "Focus", value: "Production APIs, ML models, web apps" },
+];
+
+const STATS = [
+  { value: "4+", label: "Years shipping" },
+  { value: "40+", label: "Projects" },
+  { value: "13+", label: "Public repos" },
+  { value: "31", label: "Skills" },
+];
+
+const TECH = [
+  "Python", "Django", "React", "Next.js", "Flutter",
+  "PostgreSQL", "MongoDB", "Docker", "Git", "Vercel",
+];
+
 export function AboutSection() {
+  const [resume, setResume] = useState("/resume.pdf");
+  // null = availability doc missing or unreadable; the STATUS line only
+  // renders when Firestore provides a real answer.
+  const [status, setStatus] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      let url = "";
+      try {
+        const social = await getSocialData();
+        url = social?.resume_pdf_url || "";
+      } catch {
+        // fall through to the bundled /resume.pdf
+      }
+      if (mounted) setResume(url || "/resume.pdf");
+      try {
+        const availability = await getConfig("availability_data");
+        if (mounted && availability && typeof availability.available === "boolean") {
+          setStatus(
+            availability.available
+              ? availability.label || "Open to work"
+              : "Not available"
+          );
+        }
+      } catch {
+        // leave status null; the line hides itself
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   return (
     <section
       id="about"
-      className="relative overflow-hidden border-t border-themeBorder/40 bg-themeBg py-24 px-4"
+      className="relative overflow-hidden border-t-2 border-themeBorder bg-themeBg py-24 px-4"
     >
       {/* Subtle dot matrix */}
       <div className="dg-dot-matrix absolute inset-0 -z-10 opacity-10" />
 
-      {/* Asymmetric corner accents */}
-      <div className="absolute top-0 left-0 h-32 w-32 border-l-2 border-t-2 border-themeAccent/40" />
-      <div className="absolute right-0 bottom-0 h-24 w-24 border-r-2 border-b-2 border-themeSecondary/40" />
+      {/* CRT scanlines */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background: "repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px)",
+          opacity: 0.3,
+        }}
+      />
 
       <div className="relative z-10 mx-auto max-w-6xl">
-        <EntranceReveal variant="slide" delay={0} className="space-y-16">
-          <div className="relative -mt-4 mb-8">
-            <div className="absolute -top-3 -left-3 h-20 w-20 border-l-2 border-t-2 border-themeWarn bg-themeBg" />
-            <h2
-              className="h2 dg-f-display text-themeText dg-glitch dg-corner dg-corner--red"
-              data-text="About me"
-            >
-              About me
-            </h2>
+        <EntranceReveal variant="slide" delay={0}>
+          {/* Masthead rule */}
+          <div className="flex items-end justify-between gap-4 border-b-2 border-themeAccent pb-4">
+            <p className="dg-ui-mono text-[11px] font-bold uppercase tracking-[0.3em] text-themeAccent">
+              [ SEC.01 // OPERATOR PROFILE ]
+            </p>
+            <p className="dg-ui-mono hidden text-[10px] uppercase tracking-[0.2em] text-themeText-secondary sm:block">
+              REV 2.6 / UNIT MF-01
+            </p>
           </div>
 
-          {/* Asymmetric content grid */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-            {/* Left: bio */}
-            <div className="space-y-8 lg:col-span-7">
+          {/* Macro type + registration marks + barcode */}
+          <div className="relative mt-10 flex items-start justify-between gap-6">
+            <span aria-hidden="true" className="dg-ui-mono absolute -top-5 right-1/4 select-none text-sm font-bold text-themeWarn">
+              +
+            </span>
+            <span aria-hidden="true" className="dg-ui-mono absolute -bottom-7 left-1 select-none text-sm font-bold text-themeWarn">
+              +
+            </span>
+            <h2
+              className="dg-f-display dg-glitch text-themeText uppercase"
+              data-text="ABOUT ME"
+              style={{
+                fontSize: "clamp(3.5rem, 12vw, 10rem)",
+                lineHeight: 0.85,
+                letterSpacing: "-0.04em",
+                fontWeight: 800,
+              }}
+            >
+              ABOUT ME
+            </h2>
+            <div
+              aria-hidden="true"
+              className="mt-2 hidden h-28 w-16 shrink-0 sm:block"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(90deg, var(--themeText) 0 2px, transparent 2px 5px, var(--themeText) 5px 6px, transparent 6px 10px)",
+              }}
+            />
+          </div>
+
+          {/* Razor grid body (1px rules via gap-px on a border-color track) */}
+          <div className="mt-14 grid grid-cols-1 gap-px border-2 border-themeBorder bg-themeBorder lg:grid-cols-12">
+            {/* Left cell: bio, facts, actions */}
+            <div className="bg-themeBg p-8 lg:col-span-7 lg:p-10">
               <p className="dg-f-subhead text-lg leading-relaxed text-themeText">
-                I&apos;m <span className="font-bold text-themeAccent">Muhammed Fahim M</span>, a Data Science and Full-Stack Developer from Palakkad, Kerala, India.
+                I&apos;m <span className="font-bold text-themeAccent">Muhammed Fahim M</span>, a Data Science
+                and Full-Stack Developer from Palakkad, Kerala, India.
               </p>
-              <p className="dg-f-subhead text-lg leading-relaxed text-themeText">
-                I build production-grade APIs, machine learning models, and web applications that solve real problems.
+              <p className="dg-f-subhead mt-5 text-lg leading-relaxed text-themeText">
+                I build production-grade APIs, machine learning models, and web applications that
+                solve real problems.
               </p>
-              <p className="dg-f-subhead text-lg leading-relaxed text-themeText">
-                I&apos;m pursuing my BSc in Data Science with a CGPA of 8.17, shipping clean code, meaningful data, and products that matter.
+              <p className="dg-f-subhead mt-5 text-lg leading-relaxed text-themeText">
+                I&apos;m pursuing my BSc in Data Science with a CGPA of 8.17, shipping clean code,
+                meaningful data, and products that matter.
               </p>
 
-              <a href="#contact" className="btn btn--primary dg-border-neon-red">
-                GET IN TOUCH
-              </a>
+              <dl className="mt-8 grid grid-cols-1 gap-px border border-themeBorder bg-themeBorder sm:grid-cols-2">
+                {FACTS.map((fact) => (
+                  <div key={fact.term} className="bg-themeBg p-4">
+                    <dt className="dg-ui-mono text-[10px] font-bold uppercase tracking-[0.25em] text-themeText-secondary">
+                      {fact.term}
+                    </dt>
+                    <dd className="dg-ui-mono mt-1.5 text-xs font-bold uppercase leading-snug tracking-wide text-themeText">
+                      {fact.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <a
+                  href={resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn--primary dg-border-neon-red"
+                >
+                  DOWNLOAD RESUME <FiDownload className="ml-2 w-4 h-4" />
+                </a>
+                <a href="#contact" className="btn btn--secondary">
+                  GET IN TOUCH <FiSend className="ml-2 w-4 h-4" />
+                </a>
+              </div>
             </div>
 
-            {/* Right: stats with offset */}
-            <div className="mt-8 space-y-8 lg:col-span-5 lg:col-start-3 lg:mt-0">
-              <div className="grid grid-cols-2 gap-6">
-                <StatCard number="4+" label="Years" accent="red" />
-                <StatCard number="40+" label="Projects" accent="blue" />
-                <StatCard number="13" label="Repos" accent="warn" />
-                <StatCard number="31" label="Skills" accent="red" />
+            {/* Right cell: stat readouts + telemetry line */}
+            <div className="flex flex-col bg-themeBg p-8 lg:col-span-5 lg:p-10">
+              <div className="grid grid-cols-2 gap-px border border-themeBorder bg-themeBorder">
+                {STATS.map((stat, index) => (
+                  <div
+                    key={stat.label}
+                    className={`bg-themeBg p-6 transition-colors duration-150 hover:bg-themeSecondary/10 ${
+                      index === 0 ? "outline outline-2 outline-themeAccent" : ""
+                    }`}
+                  >
+                    <span
+                      className={`dg-f-display block text-5xl font-bold uppercase leading-none tracking-tighter ${
+                        index === 0 ? "text-themeAccent" : "text-themeText"
+                      }`}
+                    >
+                      {stat.value}
+                    </span>
+                    <span className="dg-ui-mono mt-3 block text-[10px] font-bold uppercase leading-snug tracking-[0.2em] text-themeText-secondary">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
               </div>
 
-              <div className="mt-8 border-t-2 border-themeAccent pt-6">
-                <h3 className="dg-ui-mono mb-4 text-sm font-bold uppercase tracking-wider text-themeText">
-                  Tech stack
-                </h3>
-                <div className="flex flex-wrap gap-4">
-                  {["Python", "Django", "React", "Next.js", "Flutter", "PostgreSQL", "MongoDB", "Docker", "Git", "Vercel"].map((tech) => (
-                    <TechChip key={tech} tech={tech} />
-                  ))}
-                </div>
+              <p className="dg-ui-mono mt-8 text-[10px] font-bold uppercase tracking-[0.25em] text-themeText-secondary">
+                LAT 10.77 N / LON 76.66 E
+              </p>
+              {status && (
+                <p className="dg-ui-mono mt-4 border-l-2 border-themeWarn pl-4 text-xs font-bold uppercase tracking-[0.25em] text-themeWarn">
+                  STATUS: {status}
+                </p>
+              )}
+
+              {/* Tech as razor-grid chips */}
+              <div className="mt-8 flex flex-wrap gap-2 border-t border-themeBorder pt-6">
+                {TECH.map((tech) => (
+                  <span
+                    key={tech}
+                    className="dg-ui-mono border border-themeBorder px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-themeText-secondary transition-colors duration-150 hover:border-themeAccent hover:text-themeAccent"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
         </EntranceReveal>
       </div>
     </section>
-  );
-}
-
-function StatCard({ number, label, accent }) {
-  const styles = {
-    red: { bg: "bg-themeAccent", text: "text-themeBg", border: "border-themeAccent" },
-    blue: { bg: "bg-themeSecondary", text: "text-themeText", border: "border-themeSecondary" },
-    warn: { bg: "bg-themeWarn", text: "text-themeBg", border: "border-themeWarn" },
-  };
-  const style = styles[accent] || styles.red;
-
-  return (
-    <div className={`dg-chunky relative overflow-hidden border-2 p-6 ${style.border} ${style.bg}`}>
-      <div className="absolute top-0 right-0 h-8 w-8 bg-themeBg" />
-      <span className={`dg-f-display block text-5xl font-bold uppercase leading-none tracking-tighter ${style.text}`}>
-        {number}
-      </span>
-      <span className="dg-ui-mono mt-2 block text-[10px] font-bold uppercase tracking-wider text-themeTextSecondary">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function TechChip({ tech }) {
-  return (
-    <div className="dg-r-0 border-2 border-themeAccent bg-themeBg px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-themeAccent shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 hover:bg-themeAccent hover:text-themeBg hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] active:translate-x-0.5 active:translate-y-0.5">
-      {tech}
-    </div>
   );
 }
