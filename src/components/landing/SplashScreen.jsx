@@ -123,20 +123,20 @@ export function SplashScreen() {
           className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
           style={{
             background:
-              "radial-gradient(1000px 520px at 80% -10%, rgba(205,242,43,.14), transparent 60%), #FAF8F3",
+              "radial-gradient(1000px 520px at 80% -10%, rgba(200,16,46,.14), transparent 60%), #080808",
           }}
         >
           {/* grain */}
           <div className="pointer-events-none fixed inset-0 opacity-[0.05]" style={{ backgroundImage: GRAIN }} />
 
-          {/* expanding radial lime burst when landing */}
+          {/* expanding radial red burst when landing */}
           {phase !== "burst" && (
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{
                 width: "60vmax",
                 height: "60vmax",
-                background: "radial-gradient(circle, rgba(205,242,43,0.16), transparent 62%)",
+                background: "radial-gradient(circle, rgba(200,16,46,0.16), transparent 62%)",
                 opacity: phase === "land" ? 1 : 0,
                 transform: phase === "land" ? "translate(-50%,-50%) scale(1)" : "translate(-50%,-50%) scale(0.4)",
                 transition: "transform 1.6s cubic-bezier(.16,1,.3,1), opacity .8s ease",

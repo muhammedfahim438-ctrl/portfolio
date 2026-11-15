@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import Lenis from "lenis";
+import { DotMatrixBackground } from "@/components/landing/DotMatrixBackground";
 import { SplashScreen } from "@/components/landing/SplashScreen";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { AboutSection } from "@/components/landing/AboutSection";
 import { SkillsTabs } from "@/components/landing/SkillsTabs";
 import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
 import { ContactFooter } from "@/components/landing/ContactFooter";
-import { SorvineBackground } from "@/components/landing/SorvineBackground";
 import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
@@ -41,12 +41,9 @@ function LandingPage() {
   }, []);
 
   return (
-    <main className="isolate min-h-screen bg-themeBg">
-      {/* Canvas background — fixed behind all content, pointer events pass through */}
-      <SorvineBackground
-        className="fixed inset-0 w-full h-full z-0 pointer-events-none"
-        aria-hidden="true"
-      />
+    <main className="isolate min-h-[100dvh] bg-themeBg overflow-x-hidden">
+      {/* Dot-matrix background — fixed behind all content, pointer events pass through */}
+      <DotMatrixBackground aria-hidden="true" />
       <CustomCursor />
       <SplashScreen />
       <div className="relative z-10">

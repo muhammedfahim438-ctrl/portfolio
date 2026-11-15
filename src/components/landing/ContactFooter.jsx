@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiMail, FiPhone, FiMapPin, FiSend, FiDownload } from "react-icons/fi";
@@ -164,17 +163,17 @@ export function ContactFooter() {
 
   return (
     <>
-      <section id="contact" className="py-20 px-4 border-t border-themeBorder/40 bg-themeBg/20 backdrop-blur-sm overflow-hidden">
+      <section id="contact" className="py-24 px-4 border-t border-themeBorder/40 bg-themeBg/60 backdrop-blur-sm overflow-hidden dg-glass dg-r-xl dg-border-hairline">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="mb-16 text-start max-w-4xl"
+            className="mb-20 text-start max-w-4xl"
           >
-            <div className="flex items-center gap-3 border-l-4 border-themeAccent pl-4 mb-4">
-              <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
+            <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4 mb-6 dg-corner dg-corner--red">
+              <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono">
                 Get In Touch
               </span>
             </div>
@@ -182,30 +181,28 @@ export function ContactFooter() {
             <SplitText
               text="Let's Build Something"
               accentWord="Build"
-              className="font-display font-black uppercase leading-[0.95] tracking-[-0.02em] text-[clamp(2rem,6vw,3rem)] text-themeText"
+              className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--blue"
+              data-text="Let's Build Something"
             />
 
-            <p className="text-themeText-secondary leading-relaxed text-base max-w-lg mt-4">
-              I'm open to freelance work, contract roles, and full-time opportunities.
-              Tell me about your idea and I'll get back within 24 hours.
+            <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg mt-6">
+              I'm open to freelance work, contract roles, and full-time opportunities. Tell me about your idea and I'll get back within 24 hours.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-10">
               <button
                 onClick={scrollToForm}
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-colors"
+                className="btn btn--primary dg-border-neon-red"
               >
-                Start a Project
-                <FiSend className="w-4 h-4 ml-1.5" />
+                Start a Project <FiSend className="w-4 h-4 ml-1.5" />
               </button>
               <a
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeBorder bg-transparent text-themeText font-display font-semibold hover:border-themeAccent hover:text-themeAccent transition-colors"
+                className="btn btn--secondary dg-border-neon-blue"
               >
-                Download Resume
-                <FiDownload className="w-4 h-4 ml-1.5" />
+                Download Resume <FiDownload className="w-4 h-4 ml-1.5" />
               </a>
             </div>
           </motion.div>
@@ -223,7 +220,7 @@ export function ContactFooter() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="rounded-none p-10 border-2 border-themeBorder bg-themeSurface/30 text-center"
+                  className="dg-r-xl p-10 border-2 border-themeBorder/60 bg-themeSurface/30 text-center dg-glass dg-border-hairline"
                 >
                   <div className="w-12 h-12 mx-auto mb-4 border-2 border-themeAccent flex items-center justify-center text-themeAccent">
                     <FiSend className="w-6 h-6" />
@@ -231,18 +228,18 @@ export function ContactFooter() {
                   <h3 className="font-display font-bold text-themeText text-xl mb-2 uppercase">
                     Message Sent
                   </h3>
-                  <p className="text-themeText-secondary">
+                  <p className="dg-f-subhead text-themeTextSecondary">
                     Thanks for reaching out. I'll get back to you within 24 hours.
                   </p>
                   <button
                     onClick={() => setSent(false)}
-                    className="mt-6 px-5 py-2 rounded-none border-2 border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors"
+                    className="mt-6 px-6 py-2.5 rounded-md border-2 border-themeBorder text-themeTextSecondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors dg-ui-mono"
                   >
                     Send Another
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} onFocus={markFormStart} onMouseDown={markFormStart} onTouchStart={markFormStart} className="relative space-y-6">
+                <form onSubmit={handleSubmit} onFocus={markFormStart} onMouseDown={markFormStart} onTouchStart={markFormStart} className="relative space-y-8">
                   <div
                     aria-hidden="true"
                     className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden"
@@ -251,7 +248,7 @@ export function ContactFooter() {
                     <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <BrandInput label="FULL NAME" id="name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required />
                     <BrandInput label="PHONE" id="phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999" />
                   </div>
@@ -266,13 +263,13 @@ export function ContactFooter() {
 
                   <motion.button
                     whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileTap={{ scale: 0.97 }}
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 px-8 py-3.5 rounded-none border-2 border-themeAccent bg-themeAccent text-themeText font-display font-semibold hover:bg-themeAccent-hover hover:text-themeText transition-colors disabled:opacity-50"
+                    className="w-full btn btn--primary dg-border-neon-red"
                   >
                     {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-none animate-spin" />
+                      <div className="w-5 h-5 border-2 border-white/50 border-t-themeAccent rounded-full animate-spin" />
                     ) : (
                       <>
                         <FiSend className="w-4 h-4" />
@@ -291,14 +288,14 @@ export function ContactFooter() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="flex flex-col justify-between gap-8"
             >
-              <div className="space-y-5 text-sm">
+              <div className="space-y-6 text-sm">
                 <BrandContactItem icon={<FiMail className="w-4 h-4 shrink-0" />} label="EMAIL" value={social.email} href={`mailto:${social.email}`} />
                 <BrandContactItem icon={<FiPhone className="w-4 h-4 shrink-0" />} label="PHONE" value={social.phone} />
                 <BrandContactItem icon={<FiMapPin className="w-4 h-4 shrink-0" />} label="LOCATION" value={social.location} />
               </div>
 
-              <div className="rounded-none p-8 border-2 border-themeBorder bg-themeSurface/20">
-                <p className="font-display font-bold text-themeText text-base mb-4 uppercase">
+              <div className="dg-r-xl p-8 border-2 border-themeBorder/60 bg-themeSurface/20 dg-glass dg-border-hairline">
+                <p className="font-display font-bold text-themeText text-base mb-4 uppercase dg-f-subhead">
                   Find Me On
                 </p>
                 <div className="flex flex-wrap gap-4">
@@ -308,7 +305,7 @@ export function ContactFooter() {
                 </div>
               </div>
 
-              <div className="text-xs text-themeText-secondary/60 uppercase tracking-wider">
+              <div className="text-xs text-themeTextSecondary/50 uppercase tracking-wider dg-ui-mono">
                 Your information is private and will never be shared.
               </div>
             </motion.div>
@@ -316,33 +313,33 @@ export function ContactFooter() {
         </div>
       </section>
 
-      <footer className="mt-12 pt-10 border-t border-themeBorder">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col gap-6 pb-10">
-          <nav className="flex flex-wrap gap-x-6 gap-y-3 justify-center">
+      <footer className="mt-16 pt-12 border-t border-themeBorder/40">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col gap-8 pb-12">
+          <nav className="flex flex-wrap gap-x-8 gap-y-4 justify-center">
             {NAV_LINKS.map((link) => (
-              <a key={link.label} href={link.href} className="link-underline text-sm text-themeText-secondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em]">
+              <a key={link.label} href={link.href} className="link-underline text-sm text-themeTextSecondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em] dg-ui-mono">
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-themeText-secondary text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-sm text-themeTextSecondary text-center md:text-left dg-ui-mono">
               <p>&copy; 2026 Muhammed Fahim M. All rights reserved.</p>
-              <p className="mt-1 text-xs text-themeText-secondary/50 uppercase tracking-wider">
+              <p className="mt-1 text-xs text-themeTextSecondary/50 uppercase tracking-wider">
                 Built with React, Firebase & Tailwind
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
-              <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="GitHub">
-                <FaGithub className="w-4 h-4" />
+            <div className="flex items-center gap-6">
+              <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="GitHub">
+                <FaGithub className="w-5 h-5" />
               </a>
-              <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="LinkedIn">
-                <FaLinkedin className="w-4 h-4" />
+              <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="LinkedIn">
+                <FaLinkedin className="w-5 h-5" />
               </a>
-              <a href={`mailto:${social.email}`} className="text-themeText-secondary hover:text-themeAccent transition-colors" aria-label="Email">
-                <FiMail className="w-4 h-4" />
+              <a href={`mailto:${social.email}`} className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Email">
+                <FiMail className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -356,18 +353,18 @@ function BrandInput({ label, id, type, value, onChange, placeholder, required, c
   const isSelect = type === "select";
   const isTextarea = type === "textarea";
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary/70">
+    <div className="space-y-2">
+      <label htmlFor={id} className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary/70 dg-ui-mono">
         {label}{required && <span className="text-themeAccent">*</span>}
       </label>
       {isSelect ? (
-        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors">
+        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber">
           {children}
         </select>
       ) : isTextarea ? (
-        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={placeholder ? 1 : undefined} placeholder={placeholder} className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors resize-none" />
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={placeholder ? 1 : undefined} placeholder={placeholder} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber resize-none" />
       ) : (
-        <input id={id} type={type} autoComplete={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-none border-2 border-themeBorder bg-themeInput px-4 py-3 text-themeText placeholder-themeText-secondary/40 focus:outline-none focus:border-themeAccent transition-colors" />
+        <input id={id} type={type} autoComplete={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText placeholder-themeTextSecondary/40 focus:outline-none focus:border-themeAccent transition-colors input-cyber" />
       )}
     </div>
   );
@@ -375,7 +372,7 @@ function BrandInput({ label, id, type, value, onChange, placeholder, required, c
 
 function BrandContactItem({ icon, label, value, href }) {
   return (
-    <a href={href} className="flex items-center gap-2 text-themeText-secondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em] text-xs">
+    <a href={href} className="flex items-center gap-2 text-themeTextSecondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em] text-xs dg-ui-mono">
       {icon}
       <span>{value}</span>
     </a>
@@ -384,7 +381,7 @@ function BrandContactItem({ icon, label, value, href }) {
 
 function BrandSocial({ href, icon, label }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-none border-2 border-themeBorder text-themeText-secondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors uppercase tracking-[0.1em]">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2.5 rounded-md border-2 border-themeBorder/60 text-themeTextSecondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors uppercase tracking-[0.1em] dg-ui-mono">
       {icon}
       <span>{label}</span>
     </a>

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/SplitText";
@@ -173,38 +172,33 @@ export function SkillsTabs() {
   const activeRole = roles.find((r) => r.id === active) || roles[0];
 
   return (
-    <section id="skills" className="py-20 px-4 border-t border-themeBorder/40 bg-themeBg/20 backdrop-blur-sm">
+    <section id="skills" className="py-24 px-4 border-t border-themeBorder/40 bg-themeBg/60 backdrop-blur-sm dg-glass dg-r-xl dg-border-hairline">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mb-10"
+          className="mb-12"
         >
-          <div className="flex items-center gap-3 border-l-4 border-themeAccent pl-4 mb-2">
-            <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase">
-              Technical Skills
-            </span>
-          </div>
-
           <SplitText
             as="span"
             text="Tools I Build With"
-            className="font-display font-black leading-[1] tracking-[-0.02em] text-[clamp(2rem,6vw,3rem)] text-themeText uppercase"
+            className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--red"
+            data-text="Tools I Build With"
           />
         </motion.div>
 
-        {/* Tab pills - brutalist, no rounded */}
-        <div className="flex flex-wrap gap-2 mb-10 justify-start">
+        {/* Tab pills - cyberpunk */}
+        <div className="flex flex-wrap gap-2 mb-12 justify-start">
           {roles.map((role) => (
             <button
               key={role.id}
               onClick={() => setActive(role.id)}
-              className={`px-5 py-2.5 text-xs font-mono uppercase tracking-wider transition-all duration-300 ${
+              className={`px-6 py-3 text-xs font-mono uppercase tracking-wider transition-all duration-300 dg-r-md ${
                 active === role.id
-                  ? "bg-themeAccent text-themeText border-2 border-themeAccent shadow-[4px_4px_0_rgba(8,9,11,0.25)]"
-                  : "bg-transparent text-themeText-secondary border-2 border-themeBorder hover:border-themeAccent hover:text-themeText"
+                  ? "bg-themeAccent text-themeText border-2 border-themeAccent dg-shadow--tint-red shadow-lg"
+                  : "bg-transparent text-themeTextSecondary border-2 border-themeBorder/60 hover:border-themeAccent hover:text-themeText hover:bg-themeAccent/10"
               }`}
             >
               {role.title}
@@ -212,7 +206,7 @@ export function SkillsTabs() {
           ))}
         </div>
 
-        {/* Gapless bento grid - grid-flow-dense */}
+        {/* Bento grid - asymmetric */}
         <motion.div
           key={active}
           initial={{ opacity: 0, y: 20 }}
@@ -227,13 +221,13 @@ export function SkillsTabs() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.04 }}
-              className="border-2 border-themeBorder bg-themeSurface/20 p-4 flex flex-col items-center justify-center hover:border-themeAccent hover:bg-themeAccent/5 transition-all duration-300 group"
+              className="dg-glass dg-r-md p-4 flex flex-col items-center justify-center hover:border-themeAccent hover:bg-themeAccent/10 transition-all duration-300 group dg-repel"
               data-cursor-hover
             >
-              <div className="w-8 h-8 rounded-none bg-themeAccent/10 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2">
+              <div className="w-8 h-8 rounded-md bg-themeAccent/20 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2 backdrop-blur-sm">
                 <skill.icon className="w-4 h-4" />
               </div>
-              <span className="font-mono text-[10px] font-medium text-themeText-secondary text-center leading-tight uppercase tracking-[0.1em]">
+              <span className="font-mono text-[10px] font-medium text-themeTextSecondary text-center leading-tight uppercase tracking-[0.1em] dg-ui-mono">
                 {skill.name}
               </span>
             </motion.div>
