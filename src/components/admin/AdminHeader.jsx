@@ -30,7 +30,7 @@ export function AdminHeader() {
         className="border-4 border-themeAccent bg-themeBg shadow-[4px_4px_0_0_var(--dg-bg-deep)] px-5 py-3 flex items-center justify-between dg-r-0"
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-themeAccent text-themeText border-4 border-themeAccent flex items-center justify-center text-themeText font-display font-bold text-xs shadow-[2px_2px_0_0_var(--dg-bg-deep)]">
+          <div className="w-8 h-8 bg-themeAccent text-themeText border-4 border-themeAccent flex items-center justify-center font-display font-bold text-xs shadow-[2px_2px_0_0_var(--dg-bg-deep)]">
             MF
           </div>
           <h1 className="font-display font-bold text-themeText text-sm tracking-tight uppercase dg-f-display">
@@ -40,7 +40,7 @@ export function AdminHeader() {
 
         <div className="flex items-center gap-4">
           {email && (
-            <span className="hidden md:inline-block text-[10px] font-mono text-themeTextSecondary uppercase tracking-[0.1em] dg-ui-mono">
+            <span className="hidden md:inline-block text-[10px] font-mono text-themeTextSecondary uppercase tracking-widest dg-ui-mono">
               {email}
             </span>
           )}
