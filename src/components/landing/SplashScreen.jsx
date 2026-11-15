@@ -1,34 +1,50 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getConfig } from "@/lib/firestore";
 
-const DEFAULT_WORDS = ["DEVELOPER", "SCIENTIST", "ENGINEER", "BUILDER", "MAKER", "THINKER"];
 const DEFAULT_FINAL = "DATA SCIENCE × FULL-STACK";
+const SEEN_KEY = "mf-splash-v1";
+const CAP_MS = 1200;
 
-const GRAIN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+// 5x5 dot-matrix boot grid. Center cross renders red, corners yellow.
+const DOTS = Array.from({ length: 25 }, (_, i) => {
+  const row = Math.floor(i / 5);
+  const col = i % 5;
+  const isCenter = row === 2 && col === 2;
+  const isCross = row === 2 || col === 2;
+  const isCorner = (row === 0 || row === 4) && (col === 0 || col === 4);
+  const color = isCenter ? "var(--dg-accent-p)" : isCorner ? "var(--dg-warn)" : isCross ? "var(--dg-high)" : "var(--dg-surf)";
+  const delay = (row + col) * 45;
+  return { i, color, delay };
+});
 
 export function SplashScreen() {
-  const [visible, setVisible] = useState(true);
-  const [phase, setPhase] = useState("idle"); // idle | spin | land | reveal | burst | done
-  const [showName, setShowName] = useState(false);
-  const slotRef = useRef(null);
-  const nameRef = useRef(null);
-  const tickRef = useRef(0);
-  const wordsRef = useRef(DEFAULT_WORDS);
-  const finalRef = useRef(DEFAULT_FINAL);
-  const [initialWord] = useState(DEFAULT_WORDS[0]);
+  const [seen] = useState(() => {
+    try {
+      return sessionStorage.getItem(SEEN_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+  const [visible, setVisible] = useState(!seen);
+  const [pct, setPct] = useState(0);
+  const [final, setFinal] = useState(DEFAULT_FINAL);
+  const doneRef = useRef(false);
+  const [reducedNow] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
-  // load splash config once
   useEffect(() => {
     let mounted = true;
     getConfig("splash_data", null)
       .then((data) => {
-        if (!mounted || !data) return;
-        if (Array.isArray(data.words) && data.words.length) wordsRef.current = data.words;
-        if (typeof data.final === "string" && data.final.trim()) finalRef.current = data.final.trim();
+        if (mounted && data && typeof data.final === "string" && data.final.trim()) {
+          setFinal(data.final.trim());
+        }
       })
       .catch(() => {});
     return () => {
@@ -36,168 +52,106 @@ export function SplashScreen() {
     };
   }, []);
 
-  function tick() {
-    const el = slotRef.current;
-    if (!el) return;
-    el.style.transition = "none";
-    el.style.transform = "translateY(-100%)";
-    el.textContent = wordsRef.current[tickRef.current % wordsRef.current.length];
-    void el.offsetWidth;
-    el.style.transition = "transform .45s cubic-bezier(.3,.7,.3,1)";
-    el.style.transform = "translateY(0)";
-    tickRef.current++;
-  }
-
-  function land() {
-    const el = slotRef.current;
-    if (!el) return;
-    el.textContent = finalRef.current;
-    el.style.color = "var(--themeText)";
-    setPhase("land");
-  }
-
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]).then(() => {
-      if (reduced) {
-        land();
-        setShowName(true);
-        setPhase("burst");
+    if (seen) return;
+    const reduced = reducedNow;
+    const start = performance.now();
+
+    const finish = () => {
+      if (doneRef.current) return;
+      doneRef.current = true;
+      try {
+        sessionStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        // private mode: skip silently
+      }
+      setVisible(false);
+    };
+
+    if (reduced) {
+      const p = setTimeout(() => setPct(100), 0);
+      const t = setTimeout(finish, 160);
+      return () => {
+        clearTimeout(p);
+        clearTimeout(t);
+      };
+    }
+
+    let rafId = 0;
+    const step = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(100, Math.round((elapsed / (CAP_MS - 120)) * 100));
+      setPct(progress);
+      if (elapsed >= CAP_MS - 120) {
+        // let the wipe read as a release, not a hard cut
+        setTimeout(finish, 140);
         return;
       }
-      tick();
-      const total = 5 + Math.floor(Math.random() * 2);
-      let count = 0;
-      const iv = setInterval(() => {
-        count++;
-        tick();
-        if (count >= total) {
-          clearInterval(iv);
-          setTimeout(land, 460);
-        }
-      }, 240);
-      return;
-    });
-  }, []);
+      rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
 
-  useEffect(() => {
-    if (phase !== "land") return;
-    const t = setTimeout(() => setShowName(true), 120);
-    return () => clearTimeout(t);
-  }, [phase]);
+    // Hard cap: never block the page longer than CAP_MS + wipe.
+    const cap = setTimeout(finish, CAP_MS + 250);
 
-  useEffect(() => {
-    if (phase === "land") {
-      const t = setTimeout(() => setPhase("burst"), 1800);
-      return () => clearTimeout(t);
-    }
-  }, [phase]);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(cap);
+    };
+  }, [seen, reducedNow]);
 
-  useEffect(() => {
-    if (phase === "burst") {
-      const t = setTimeout(() => setVisible(false), 500);
-      return () => clearTimeout(t);
-    }
-  }, [phase]);
-
-  useEffect(() => {
-    const name = nameRef.current;
-    if (!showName || !name) return;
-    const anim = name.animate(
-      [
-        { opacity: 0, transform: "translateY(26px)", filter: "blur(6px)" },
-        { opacity: 1, transform: "translateY(0)", filter: "blur(0)" },
-      ],
-      { duration: 1100, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }
-    );
-    return () => anim.cancel();
-  }, [showName]);
+  if (seen) return null;
+  // Reduced motion: unmount instantly instead of playing the exit wipe.
+  if (reducedNow && !visible) return null;
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
+          role="status"
+          aria-label="Loading portfolio"
           initial={{ opacity: 1 }}
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
-          style={{
-            background:
-              "radial-gradient(1000px 520px at 80% -10%, rgba(200,16,46,.14), transparent 60%), #080808",
-          }}
+          transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 z-[80] flex flex-col items-center justify-center overflow-hidden bg-[#080808]"
         >
-          {/* grain */}
-          <div className="pointer-events-none fixed inset-0 opacity-[0.05]" style={{ backgroundImage: GRAIN }} />
-
-          {/* expanding radial red burst when landing */}
-          {phase !== "burst" && (
-            <div
-              className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-              style={{
-                width: "60vmax",
-                height: "60vmax",
-                background: "radial-gradient(circle, rgba(200,16,46,0.16), transparent 62%)",
-                opacity: phase === "land" ? 1 : 0,
-                transform: phase === "land" ? "translate(-50%,-50%) scale(1)" : "translate(-50%,-50%) scale(0.4)",
-                transition: "transform 1.6s cubic-bezier(.16,1,.3,1), opacity .8s ease",
-              }}
-            />
-          )}
-
-          {/* word slot */}
+          {/* dot-matrix boot grid */}
           <div
-            className="relative mb-[6vh] w-[min(90vw,980px)] overflow-hidden text-center"
-            style={{
-              height: "1.35em",
-              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)",
-              maskImage: "linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)",
-              color: "var(--themeTextSecondary)",
-              opacity: phase === "idle" ? 0 : 1,
-              transition: "opacity .6s ease",
-            }}
+            className="grid grid-cols-5 gap-3"
+            style={{ width: "min(180px, 40vw)" }}
+            aria-hidden="true"
           >
-            <div ref={slotRef} style={{ willChange: "transform" }}>
-              {initialWord}
+            {DOTS.map((d) => (
+              <span
+                key={d.i}
+                className="dg-splash-dot"
+                style={{
+                  backgroundColor: d.color,
+                  animationDelay: `${d.delay}ms`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* tagline from site_config/splash_data */}
+          <p className="dg-ui-mono mt-8 text-[11px] uppercase tracking-[0.4em] text-themeText-secondary">
+            {final}
+          </p>
+
+          {/* percentage readout */}
+          <p className="dg-ui-mono mt-3 text-xs tracking-[0.2em] text-themeAccent" aria-hidden="true">
+            {String(pct).padStart(3, "0")}%
+          </p>
+
+          {/* progress hairline with yellow tip */}
+          <div className="absolute bottom-0 left-0 h-[3px] w-full bg-themeBg-secondary">
+            <div
+              className="relative h-full bg-themeAccent transition-[width] duration-150 ease-linear"
+              style={{ width: `${pct}%` }}
+            >
+              <span className="absolute right-0 top-0 h-full w-[3px] bg-themeWarn" />
             </div>
           </div>
-
-          {/* name */}
-          <h1
-            ref={nameRef}
-            className="text-center"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "clamp(2.6rem, 10vw, 8rem)",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              lineHeight: 1,
-              color: "var(--themeText)",
-              opacity: 0,
-            }}
-          >
-            MUHAMMED<span className="text-themeAccent"> FAHIM </span>M
-          </h1>
-
-          {/* lime sweep divider */}
-          <div
-            className="relative mt-[6vh] h-px w-[min(480px,70vw)] overflow-hidden"
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                background: "linear-gradient(90deg, transparent, var(--themeAccent), var(--themeAccent-hover), transparent)",
-                transform: "translateX(-100%)",
-                animation: "sweep 1.6s .5s ease forwards",
-              }}
-            />
-          </div>
-
-          {/* bottom progress hairline */}
-          <div
-            className="absolute bottom-0 left-0 h-[3px] bg-linear-to-r from-themeAccent to-themeAccent-hover transition-all duration-[1600ms]"
-            style={{ width: phase === "land" || phase === "burst" ? "100%" : "4%", opacity: phase === "idle" ? 0 : 1 }}
-          />
         </motion.div>
       )}
     </AnimatePresence>

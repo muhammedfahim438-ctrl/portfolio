@@ -2,118 +2,110 @@
 
 import { useEffect, useRef } from "react";
 
+/**
+ * CustomCursor — dot-matrix reticle.
+ * A red center dot tracks the pointer exactly; a yellow corner-bracket ring
+ * trails behind with lerped easing. Pointer-fine devices only. The native
+ * cursor is hidden while mounted via the `dg-cursor-on` class on <html>.
+ */
 export function CustomCursor() {
-  const cursorRef = useRef(null);
-  const innerRef = useRef(null);
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
 
   useEffect(() => {
-    const cursor = cursorRef.current;
-    const inner = innerRef.current;
-    if (!cursor || !inner) return;
+    const fine = window.matchMedia("(pointer: fine)");
+    if (!fine.matches) return undefined;
 
-    // Create liquid trail elements (double-bezel trail architecture)
-    const trails = [];
-    for (let i = 0; i < 6; i++) {
-      const trail = document.createElement("div");
-      trail.className = "cursor-trail";
-      document.body.appendChild(trail);
-      trails.push(trail);
-    }
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return undefined;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.documentElement.classList.add("dg-cursor-on");
+
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let ringX = targetX;
+    let ringY = targetY;
+    let rafId = 0;
+
+    const place = (el, x, y) => {
+      el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    };
 
     const onMouseMove = (e) => {
-      // Only translate — never animate top/left/width/height (GPU-safe)
-      cursor.style.transform = `translate(${e.clientX - 12}px, ${e.clientY - 12}px)`;
-      inner.style.transform = `translate(${e.clientX - 3}px, ${e.clientY - 3}px)`;
+      targetX = e.clientX;
+      targetY = e.clientY;
+      place(dot, targetX, targetY);
+      if (reduced) place(ring, targetX, targetY);
     };
+
+    const tick = () => {
+      ringX += (targetX - ringX) * 0.16;
+      ringY += (targetY - ringY) * 0.16;
+      place(ring, ringX, ringY);
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const isInteractive = (t) =>
+      t instanceof Element &&
+      Boolean(t.closest("a, button, [data-cursor], input, select, textarea, label"));
 
     const onMouseOver = (e) => {
-      const target = e.target;
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("a") ||
-        target.closest("button") ||
-        target.dataset.cursorHover
-      ) {
-        cursor.classList.add("hovering");
-        inner.classList.add("hovering");
-      }
+      if (isInteractive(e.target)) ring.classList.add("is-hovering");
     };
-
     const onMouseOut = (e) => {
-      const target = e.target;
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("a") ||
-        target.closest("button") ||
-        target.dataset.cursorHover
-      ) {
-        cursor.classList.remove("hovering");
-        inner.classList.remove("hovering");
-      }
+      if (isInteractive(e.target)) ring.classList.remove("is-hovering");
+    };
+    const onMouseDown = () => ring.classList.add("is-pressed");
+    const onMouseUp = () => ring.classList.remove("is-pressed");
+    const onLeave = () => {
+      dot.style.opacity = "0";
+      ring.style.opacity = "0";
+    };
+    const onEnter = () => {
+      dot.style.opacity = "1";
+      ring.style.opacity = "1";
     };
 
-    const onMouseDown = () => {
-      cursor.classList.add("pressed");
-      inner.classList.add("pressed");
-    };
-
-    const onMouseUp = () => {
-      cursor.classList.remove("pressed");
-      inner.classList.remove("pressed");
-    };
-
-    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mousemove", onMouseMove, { passive: true });
     document.addEventListener("mouseover", onMouseOver);
     document.addEventListener("mouseout", onMouseOut);
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
+    document.documentElement.addEventListener("mouseleave", onLeave);
+    document.documentElement.addEventListener("mouseenter", onEnter);
 
-    // Liquid trail animation — rAF only, transform + opacity only
-    const animateTrails = () => {
-      trails.forEach((trail, i) => {
-        trail.style.transition = `all ${0.12 + i * 0.04}s cubic-bezier(0.23, 1, 0.32, 1)`;
-        trail.style.left = `${mousePosX - 4}px`;
-        trail.style.top = `${mousePosY - 4}px`;
-        trail.style.opacity = `${1 - i * 0.14}`;
-        trail.style.transform = `scale(${1 - i * 0.14})`;
-      });
-      requestAnimationFrame(animateTrails);
-    };
-
-    let mousePosX = 0;
-    let mousePosY = 0;
-    const onMouseMoveTrack = (e) => {
-      mousePosX = e.clientX;
-      mousePosY = e.clientY;
-    };
-    document.addEventListener("mousemove", onMouseMoveTrack);
-    animateTrails();
+    place(dot, targetX, targetY);
+    place(ring, ringX, ringY);
+    if (!reduced) rafId = requestAnimationFrame(tick);
 
     return () => {
+      document.documentElement.classList.remove("dg-cursor-on");
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseout", onMouseOut);
       document.removeEventListener("mousedown", onMouseDown);
       document.removeEventListener("mouseup", onMouseUp);
-      document.removeEventListener("mousemove", onMouseMoveTrack);
-      trails.forEach((trail) => trail.remove());
+      document.documentElement.removeEventListener("mouseleave", onLeave);
+      document.documentElement.removeEventListener("mouseenter", onEnter);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <>
-      {/* Outer shell — double-bezel architecture */}
-      <div
-        ref={cursorRef}
-        className="custom-cursor custom-cursor-outer hidden md:block"
-      />
-      {/* Inner core — liquid core */}
-      <div
-        ref={innerRef}
-        className="custom-cursor custom-cursor-inner hidden md:block"
-      />
+      {/* red center dot, exact tracking */}
+      <div ref={dotRef} aria-hidden="true" className="dg-cursor-dot" />
+      {/* trailing corner-bracket ring */}
+      <div ref={ringRef} aria-hidden="true" className="dg-cursor-ring">
+        <div className="dg-cursor-ring-inner">
+          <span className="dg-cursor-tick dg-cursor-tick--tl" />
+          <span className="dg-cursor-tick dg-cursor-tick--tr" />
+          <span className="dg-cursor-tick dg-cursor-tick--bl" />
+          <span className="dg-cursor-tick dg-cursor-tick--br" />
+        </div>
+      </div>
     </>
   );
 }
