@@ -57,7 +57,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex items-center overflow-hidden bg-themeBg border-t border-themeBorder/40 dg-crt dg-dot-matrix dg-scanlines"
+      className="relative min-h-[100dvh] flex items-center overflow-hidden bg-themeBg border-t border-themeBorder/40 dg-dot-matrix"
     >
       <div className="container mx-auto px-4 md:px-8 py-24 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -131,9 +131,9 @@ export function HeroSection() {
             <a href={`mailto:${social.email}`} className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Email">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </a>
-            <button onClick={() => {}} data-cursor-hover className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Resume">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="Resume">
               <FiFileText className="w-5 h-5" />
-            </button>
+            </a>
           </div>
         </motion.div>
 
