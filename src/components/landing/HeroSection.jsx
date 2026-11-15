@@ -62,16 +62,16 @@ export function HeroSection() {
       id="hero"
       className="relative min-h-dvh flex items-center overflow-hidden bg-[#080808] border-t border-[#CDCBCA]/20 dg-dot-matrix"
     >
-      {/* Parallax dot layers behind content */}
-      <ParallaxLayers className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 opacity-20 dg-dot-grid--dense" />
-        <div className="absolute inset-0 opacity-10 dg-dot-grid--sparse" />
-        <div className="absolute inset-0 opacity-5 bg-[radial-gradient(600px_400px_at_20%_-10%,rgba(200,16,46,0.08),transparent_60%)]" />
+      {/* Background dot matrix - subtle, behind everything */}
+      <ParallaxLayers className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="absolute inset-0 opacity-30 dg-dot-grid--dense" />
+        <div className="absolute inset-0 opacity-15 dg-dot-grid--sparse" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(600px_400px_at_20%_-10%,rgba(200,16,46,0.08),transparent_60%)]" />
       </ParallaxLayers>
 
-      <div className="container mx-auto px-4 md:px-8 py-24 relative z-10 w-full">
-        {/* Backdrop panel behind hero content for readability */}
-        <div className="absolute inset-0 -z-10 bg-[#080808]/40 backdrop-blur-md" />
+      <div className="container mx-auto px-4 md:px-8 py-24 relative z-50 w-full">
+        {/* Solid dark backdrop panel behind content for readability */}
+        <div className="absolute inset-0 -z-10 bg-[#080808]/80 backdrop-blur-sm" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: AIDA Attention with staggered entrance reveal */}
@@ -88,11 +88,11 @@ export function HeroSection() {
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter leading-none text-[#FAF8F3] uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"} style={{ textShadow: '0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(200, 16, 46, 0.4)' }}>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter leading-none text-[#FAF8F3] uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"} style={{ textShadow: '0 0 30px rgba(255, 255, 255, 0.9), 0 0 60px rgba(200, 16, 46, 0.5)' }}>
                 {hero.title || "Muhammed Fahim M"}
               </h1>
 
-              <p className="dg-f-subhead text-[#CDCBCA]/90 leading-relaxed text-lg max-w-lg">
+              <p className="dg-f-subhead text-[#CDCBCA] leading-relaxed text-lg max-w-lg">
                 {hero.body || "I build production APIs, machine learning models, and scalable web applications at the intersection of data engineering and full-stack development."}
               </p>
 
@@ -117,11 +117,11 @@ export function HeroSection() {
           <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-88 sm:h-104 lg:w-[28rem] lg:h-128">
             <Tilt3D maxRotate={10} perspective={1000} className="relative h-full w-full dg-corner dg-corner--blue">
               <div className="absolute inset-[-6px] rounded-none bg-[#C8102E] z-0" />
-              <div className="relative h-full w-full border-2 border-[#CDCBCA]/20 bg-[#080808]/10 overflow-hidden z-10 backdrop-blur-sm">
+              <div className="relative h-full w-full border-2 border-[#CDCBCA]/30 bg-[#080808]/30 overflow-hidden z-10 backdrop-blur-sm">
                 <img
                   src="/my-picture.webp"
                   alt="Muhammed Fahim M"
-                  className="h-full w-full object-cover grayscale-40 hover:grayscale-0 transition-grayscale duration-700"
+                  className="h-full w-full object-cover grayscale-40 hover:grayscale-0 transition-grayscale duration-700 opacity-100"
                   loading="eager"
                 />
               </div>
@@ -130,27 +130,27 @@ export function HeroSection() {
         </div>
 
         {/* Social dock - cyberpunk pill */}
-        <EntranceReveal variant="fade" delay={0.4} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 dg-r-full dg-glass dg-border-neon-red">
+        <EntranceReveal variant="fade" delay={0.4} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dg-r-full dg-glass dg-border-neon-red">
           <div className="px-6 py-2.5 flex items-center gap-4">
-            <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/80 hover:text-[#C8102E] transition-colors" aria-label="GitHub">
+            <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="GitHub">
               <FaGithub className="w-5 h-5" />
             </a>
-            <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/80 hover:text-[#C8102E] transition-colors" aria-label="LinkedIn">
+            <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="LinkedIn">
               <FaLinkedin className="w-5 h-5" />
             </a>
-            <a href={`mailto:${social.email}`} className="text-[#CDCBCA]/80 hover:text-[#C8102E] transition-colors" aria-label="Email">
+            <a href={`mailto:${social.email}`} className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="Email">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/80 hover:text-[#C8102E] transition-colors" aria-label="Resume">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="Resume">
               <FiFileText className="w-5 h-5" />
             </a>
           </div>
         </EntranceReveal>
 
         {/* Scroll indicator */}
-        <EntranceReveal variant="fade" delay={0.5} className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col items-center gap-2 dg-r-full dg-glass dg-border-hairline">
-          <span className="text-[#CDCBCA]/70 text-[10px] tracking-[0.3em] uppercase dg-ui-mono">Scroll</span>
-          <div className="w-5 h-9 rounded-full border border-[#CDCBCA]/30 flex items-start justify-center p-1">
+        <EntranceReveal variant="fade" delay={0.5} className="fixed bottom-6 right-6 z-50 hidden md:flex flex-col items-center gap-2 dg-r-full dg-glass dg-border-hairline">
+          <span className="text-[#CDCBCA]/80 text-[10px] tracking-[0.3em] uppercase dg-ui-mono">Scroll</span>
+          <div className="w-5 h-9 rounded-full border border-[#CDCBCA]/40 flex items-start justify-center p-1">
             <div className="w-1 h-1.5 rounded-full bg-[#C8102E] animate-scroll-dot" />
           </div>
         </EntranceReveal>
