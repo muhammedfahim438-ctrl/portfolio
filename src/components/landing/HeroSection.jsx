@@ -71,7 +71,7 @@ export function HeroSection() {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-themeBg">
+      <section className="relative min-h-[100dvh] flex items-center overflow-hidden bg-themeBg/35 backdrop-blur-sm border-t border-themeBorder/40">
         {/* Brutalist grid background */}
         <div className="absolute inset-0" style={{
           backgroundImage: `linear-gradient(rgba(8,9,11,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,9,11,0.04) 1px, transparent 1px)`,

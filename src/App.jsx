@@ -7,6 +7,7 @@ import { AboutSection } from "@/components/landing/AboutSection";
 import { SkillsTabs } from "@/components/landing/SkillsTabs";
 import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
 import { ContactFooter } from "@/components/landing/ContactFooter";
+import { SorvineBackground } from "@/components/landing/SorvineBackground";
 import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
@@ -40,14 +41,29 @@ function LandingPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-themeBg">
+    <main className="isolate min-h-screen bg-themeBg">
+      {/* Canvas background — fixed behind all content, pointer events pass through */}
+      <SorvineBackground
+        className="fixed inset-0 w-full h-full z-0 pointer-events-none"
+        aria-hidden="true"
+      />
       <CustomCursor />
       <SplashScreen />
-      <HeroSection />
-      <AboutSection />
-      <SkillsTabs />
-      <FeaturedProjects />
-      <ContactFooter />
+      <div className="relative z-10">
+        <HeroSection />
+      </div>
+      <div className="relative z-10">
+        <AboutSection />
+      </div>
+      <div className="relative z-10">
+        <SkillsTabs />
+      </div>
+      <div className="relative z-10">
+        <FeaturedProjects />
+      </div>
+      <div className="relative z-10">
+        <ContactFooter />
+      </div>
     </main>
   );
 }

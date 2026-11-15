@@ -173,7 +173,7 @@ export function SkillsTabs() {
   const activeRole = roles.find((r) => r.id === active) || roles[0];
 
   return (
-    <section id="skills" className="py-20 px-4 border-t border-themeBorder bg-themeBg">
+    <section id="skills" className="py-20 px-4 border-t border-themeBorder/40 bg-themeBg/20 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

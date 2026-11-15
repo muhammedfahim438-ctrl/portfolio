@@ -9,7 +9,7 @@ export function AboutSection() {
   const ref = useRef(null);
 
   return (
-    <section id="about" className="py-20 px-4 border-t border-themeBorder bg-themeBg" ref={ref}>
+    <section id="about" className="py-20 px-4 border-t border-themeBorder/40 bg-themeBg/30 backdrop-blur-sm" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left: JTBD - Jobs to be done */}

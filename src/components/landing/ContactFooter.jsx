@@ -164,7 +164,7 @@ export function ContactFooter() {
 
   return (
     <>
-      <section id="contact" className="py-20 px-4 border-t border-themeBorder bg-themeBg overflow-hidden">
+      <section id="contact" className="py-20 px-4 border-t border-themeBorder/40 bg-themeBg/20 backdrop-blur-sm overflow-hidden">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
