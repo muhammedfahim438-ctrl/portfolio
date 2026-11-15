@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { FiExternalLink } from "react-icons/fi";
 import { getProjects } from "@/lib/firestore";
+import { EntranceReveal } from "@/components/ui/EntranceReveal";
 
 
 const rowVariants = {
@@ -40,13 +41,7 @@ export function FeaturedProjects() {
   return (
     <section id="work" className="py-24 px-4 border-t border-themeBorder/40 bg-themeBg/60 backdrop-blur-sm overflow-hidden dg-glass dg-r-xl dg-border-hairline">
       <div className="mx-auto max-w-[1400px]">
-        <motion.header
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-20 text-start max-w-4xl"
-        >
+        <EntranceReveal variant="slide" delay={0} className="mb-20 text-start max-w-4xl">
           <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4 mb-6 dg-corner dg-corner--red">
             <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono">
               Selected Work
@@ -60,7 +55,7 @@ export function FeaturedProjects() {
           <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg mt-6">
             Production-grade APIs, machine learning models, and cross-platform applications — built for real outcomes. Case studies below.
           </p>
-        </motion.header>
+        </EntranceReveal>
 
         {loading ? (
           <div className="text-center py-24 text-themeTextSecondary">Loading projects…</div>
@@ -68,13 +63,7 @@ export function FeaturedProjects() {
           <div className="text-center py-24 text-themeTextSecondary">No projects yet.</div>
         ) : (
           <>
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 grid-flow-dense"
-            >
+            <EntranceReveal variant="fade" delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 grid-flow-dense">
               {featured.map((p, i) => (
                 <motion.div
                   key={p.id}
@@ -85,7 +74,7 @@ export function FeaturedProjects() {
                   <CaseStudyCard project={p} />
                 </motion.div>
               ))}
-            </motion.div>
+            </EntranceReveal>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -118,15 +107,39 @@ function CaseStudyCard({ project }) {
       <div className="absolute bottom-0 right-0 w-4 h-4 bg-themeAccent/30 group-hover:bg-themeAccent/80 transition-all duration-300 rounded-md" />
 
       <div className="relative h-48 overflow-hidden mb-4 bg-themeBgSecondary/20 border-b border-themeBorder/60 backdrop-blur-sm rounded-lg overflow-hidden">
-        {project.image_url ? (
-          <img src={project.image_url} alt={project.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-        ) : (
-          <div className="h-full w-full flex items-center justify-center bg-themeAccent/10 backdrop-blur-sm">
-            <span className="font-display text-5xl font-black text-themeAccent/30 uppercase">
-              {project.title.charAt(0)}
-            </span>
-          </div>
-        )}
+        {/* Parallax image layer */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          {project.image_url ? (
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-linear"
+              style={{ transform: "scale(1.05)" }}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center bg-themeAccent/10 backdrop-blur-sm">
+              <span className="font-display text-5xl font-black text-themeAccent/30 uppercase">
+                {project.title.charAt(0)}
+              </span>
+            </div>
+          )}
+        </div>
+        <div className="relative h-full w-full">
+          {project.image_url ? (
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{ transform: "scale(1)" }}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center bg-themeAccent/10 backdrop-blur-sm">
+              <span className="font-display text-5xl font-black text-themeAccent/30 uppercase">
+                {project.title.charAt(0)}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="space-y-2">

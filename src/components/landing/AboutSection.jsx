@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
-import { motion } from "framer-motion";
+import { EntranceReveal } from "@/components/ui/EntranceReveal";
+import { Tilt3D } from "@/components/ui/Tilt3D";
 
 export function AboutSection() {
   const ref = useRef(null);
@@ -16,13 +17,7 @@ export function AboutSection() {
       <div className="absolute bottom-0 right-0 w-20 h-20 bg-themeAccent/10 border-4 border-themeAccent/50" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="space-y-12"
-        >
+        <EntranceReveal variant="slide" delay={0} className="space-y-12">
           {/* Section header - cyber brutalism */}
           <div className="relative -mt-4 mb-8 dg-corner dg-corner--red">
             <h2 className="h1 dg-f-display text-themeText uppercase dg-glitch dg-chunky p-4 inline-block border-4 border-themeAccent shadow-[4px_4px_0_0_#080808]" data-text="About Me">
@@ -69,18 +64,15 @@ export function AboutSection() {
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {["Python", "Django", "React", "Next.js", "Flutter", "PostgreSQL", "MongoDB", "Docker", "Git", "Vercel"].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-4 py-2 bg-themeSurface border-2 border-themeAccent text-themeAccent font-mono text-xs font-bold uppercase tracking-wider dg-chunky shadow-[2px_2px_0_0_#080808] hover:bg-themeAccent hover:text-themeBg transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px]"
-                    >
+                    <Tilt3D maxRotate={6} perspective={800} key={tech} className="px-4 py-2 bg-themeSurface border-2 border-themeAccent text-themeAccent font-mono text-xs font-bold uppercase tracking-wider dg-chunky shadow-[2px_2px_0_0_#080808] hover:bg-themeAccent hover:text-themeBg transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px]">
                       {tech}
-                    </span>
+                    </Tilt3D>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </EntranceReveal>
       </div>
     </section>
   );
@@ -95,12 +87,7 @@ function StatCard({ number, label, sub, accent }) {
   const style = styles[accent] || styles.red;
 
   return (
-    <motion.div
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      initial={{ opacity: 0, y: 20 }}
-      className={`relative p-6 overflow-hidden border-4 ${style.border} ${style.bg} ${style.shadow} dg-r-0 dg-chunky`}
-    >
+    <Tilt3D maxRotate={5} perspective={600} className={`relative p-6 overflow-hidden border-4 ${style.border} ${style.bg} ${style.shadow} dg-r-0 dg-chunky`}>
       <div className="absolute top-0 right-0 w-4 h-4 bg-[#080808]" />
       <span className="text-5xl font-display font-bold text-[#080808] uppercase tracking-tighter block leading-none">
         {number}
@@ -111,6 +98,6 @@ function StatCard({ number, label, sub, accent }) {
       <span className="font-mono text-[10px] text-themeTextSecondary/60 uppercase tracking-wider block mt-0.5 dg-ui-mono">
         {sub}
       </span>
-    </motion.div>
+    </Tilt3D>
   );
 }

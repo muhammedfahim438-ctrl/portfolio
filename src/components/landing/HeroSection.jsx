@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { FiFileText, FiSend } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { getHeroData, getSocialData } from "@/lib/firestore";
+import { EntranceReveal } from "@/components/ui/EntranceReveal";
+import { ParallaxLayers } from "@/components/ui/ParallaxLayers";
+import { Tilt3D } from "@/components/ui/Tilt3D";
 
 export function HeroSection() {
   const [social, setSocial] = useState({
@@ -59,68 +62,72 @@ export function HeroSection() {
       id="hero"
       className="relative min-h-[100dvh] flex items-center overflow-hidden bg-themeBg border-t border-themeBorder/40 dg-dot-matrix"
     >
+      {/* Parallax dot layers behind content */}
+      <ParallaxLayers className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 opacity-30 dg-dot-grid--dense" />
+        <div className="absolute inset-0 opacity-15 dg-dot-grid--sparse" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(600px_400px_at_20%_-10%,_rgba(200,16,46,0.08),_transparent_60%)]" />
+      </ParallaxLayers>
+
       <div className="container mx-auto px-4 md:px-8 py-24 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8 max-w-lg"
-          >
-            <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4 dg-corner dg-corner--red">
-              <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono">
-                {hero.subtitle || "Data Science × Full-Stack"}
-              </span>
-            </div>
+          {/* Left: AIDA Attention with staggered entrance reveal */}
+          <EntranceReveal variant="slide" delay={0} className="max-w-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
+              <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4 dg-corner dg-corner--red">
+                <span className="text-themeAccent font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono">
+                  {hero.subtitle || "Data Science × Full-Stack"}
+                </span>
+              </div>
 
-            <h1 className="h1 dg-f-display text-themeText uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"}>
-              {hero.title || "Muhammed Fahim M"}
-            </h1>
+              <h1 className="h1 dg-f-display text-themeText uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"}>
+                {hero.title || "Muhammed Fahim M"}
+              </h1>
 
-            <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg">
-              {hero.body || "I build production APIs, machine learning models, and scalable web applications at the intersection of data engineering and full-stack development."}
-            </p>
+              <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg">
+                {hero.body || "I build production APIs, machine learning models, and scalable web applications at the intersection of data engineering and full-stack development."}
+              </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-8">
-              <a
-                href="#contact"
-                className="btn btn--primary dg-border-neon-red"
-              >
-                Hire Me <FiSend className="w-4 h-4 ml-1.5" />
-              </a>
-              <a
-                href="#work"
-                className="btn btn--secondary dg-border-neon-blue"
-              >
-                View Work <FiFileText className="w-4 h-4 ml-1.5" />
-              </a>
-            </div>
-          </motion.div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-8">
+                <a
+                  href="#contact"
+                  className="btn btn--primary dg-border-neon-red"
+                >
+                  Hire Me <FiSend className="w-4 h-4 ml-1.5" />
+                </a>
+                <a
+                  href="#work"
+                  className="btn btn--secondary dg-border-neon-blue"
+                >
+                  View Work <FiFileText className="w-4 h-4 ml-1.5" />
+                </a>
+              </div>
+            </motion.div>
+          </EntranceReveal>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2 }}
-            className="relative mx-auto w-64 h-72 sm:w-[22rem] sm:h-[26rem] lg:w-[28rem] lg:h-[32rem] dg-corner dg-corner--blue"
-          >
-            <div className="absolute inset-[-6px] rounded-none bg-themeAccent z-0" />
-            <div className="relative h-full w-full border-2 border-themeBorder bg-themeSurface/10 overflow-hidden z-10 backdrop-blur-sm">
-              <img
-                src="/my-picture.webp"
-                alt="Muhammed Fahim M"
-                className="h-full w-full object-cover grayscale-40 hover:grayscale-0 transition-grayscale duration-700"
-                loading="eager"
-              />
-            </div>
-          </motion.div>
+          {/* Right: 3D-tilt portrait */}
+          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-[22rem] sm:h-[26rem] lg:w-[28rem] lg:h-[32rem]">
+            <Tilt3D maxRotate={10} perspective={1000} className="relative h-full w-full dg-corner dg-corner--blue">
+              <div className="absolute inset-[-6px] rounded-none bg-themeAccent z-0" />
+              <div className="relative h-full w-full border-2 border-themeBorder bg-themeSurface/10 overflow-hidden z-10 backdrop-blur-sm">
+                <img
+                  src="/my-picture.webp"
+                  alt="Muhammed Fahim M"
+                  className="h-full w-full object-cover grayscale-40 hover:grayscale-0 transition-grayscale duration-700"
+                  loading="eager"
+                />
+              </div>
+            </Tilt3D>
+          </EntranceReveal>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 dg-r-full dg-glass dg-border-neon-red"
-        >
+        {/* Social dock - cyberpunk pill */}
+        <EntranceReveal variant="fade" delay={0.4} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 dg-r-full dg-glass dg-border-neon-red">
           <div className="px-6 py-2.5 flex items-center gap-4">
             <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-themeTextSecondary hover:text-themeAccent transition-colors" aria-label="GitHub">
               <FaGithub className="w-5 h-5" />
@@ -135,19 +142,15 @@ export function HeroSection() {
               <FiFileText className="w-5 h-5" />
             </a>
           </div>
-        </motion.div>
+        </EntranceReveal>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-          className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col items-center gap-2 dg-r-full dg-glass dg-border-hairline"
-        >
+        {/* Scroll indicator */}
+        <EntranceReveal variant="fade" delay={0.5} className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col items-center gap-2 dg-r-full dg-glass dg-border-hairline">
           <span className="text-[10px] tracking-[0.3em] uppercase text-themeTextSecondary dg-ui-mono">Scroll</span>
           <div className="w-5 h-9 rounded-full border border-themeBorder flex items-start justify-center p-1">
             <div className="w-1 h-1.5 rounded-full bg-themeAccent animate-scroll-dot" />
           </div>
-        </motion.div>
+        </EntranceReveal>
       </div>
     </section>
   );

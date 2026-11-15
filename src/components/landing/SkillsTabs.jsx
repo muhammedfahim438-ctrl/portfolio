@@ -12,6 +12,8 @@ import {
   SiJsonwebtokens, SiRazorpay, SiSqlite,
 } from "react-icons/si";
 import { FiCode, FiServer } from "react-icons/fi";
+import { EntranceReveal } from "@/components/ui/EntranceReveal";
+import { Tilt3D } from "@/components/ui/Tilt3D";
 
 const SKILL_ICONS = {
   "python": SiPython,
@@ -174,17 +176,11 @@ export function SkillsTabs() {
   return (
     <section id="skills" className="py-24 px-4 border-t border-themeBorder/40 bg-themeBg/60 backdrop-blur-sm dg-glass dg-r-xl dg-border-hairline">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-12"
-        >
+        <EntranceReveal variant="slide" delay={0} className="mb-12">
           <h2 className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--red" data-text="Tools I Build With">
             Tools I Build With
           </h2>
-        </motion.div>
+        </EntranceReveal>
 
         {/* Tab pills - cyberpunk */}
         <div className="flex flex-wrap gap-2 mb-12 justify-start">
@@ -204,14 +200,7 @@ export function SkillsTabs() {
         </div>
 
         {/* Bento grid - asymmetric */}
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 grid-flow-dense"
-        >
+        <EntranceReveal variant="fade" delay={0.1} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 grid-flow-dense">
           {activeRole?.skills.map((skill, i) => (
             <motion.div
               key={skill.name}
@@ -221,15 +210,15 @@ export function SkillsTabs() {
               className="dg-glass dg-r-md p-4 flex flex-col items-center justify-center hover:border-themeAccent hover:bg-themeAccent/10 transition-all duration-300 group dg-repel"
               data-cursor-hover
             >
-              <div className="w-8 h-8 rounded-md bg-themeAccent/20 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2 backdrop-blur-sm">
+              <Tilt3D maxRotate={5} perspective={600} className="w-8 h-8 rounded-md bg-themeAccent/20 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2 backdrop-blur-sm">
                 <skill.icon className="w-4 h-4" />
-              </div>
+              </Tilt3D>
               <span className="font-mono text-[10px] font-medium text-themeTextSecondary text-center leading-tight uppercase tracking-[0.1em] dg-ui-mono">
                 {skill.name}
               </span>
             </motion.div>
           ))}
-        </motion.div>
+        </EntranceReveal>
       </div>
     </section>
   );

@@ -36,6 +36,13 @@
   --color-shadow-tint-red: 0 0 24px rgba(200, 16, 46, 0.16);
   --color-shadow-tint-blue: 0 0 24px rgba(0, 47, 108, 0.14);
   --color-shadow-tint-yellow: 0 0 24px rgba(255, 199, 0, 0.12);
+
+  /* ── Parallax & 3D ── */
+  --color-parallax-depth-1: var(--dg-parallax-depth-1);
+  --color-parallax-depth-2: var(--dg-parallax-depth-2);
+  --color-parallax-depth-3: var(--dg-parallax-depth-3);
+  --color-perspective-3d: var(--dg-perspective-3d);
+  --color-tilt-max-rotate: var(--dg-tilt-max-rotate);
 }
 
 :root {
@@ -58,6 +65,13 @@
   --dg-shadow-tint-red: 0 0 24px rgba(200, 16, 46, 0.16);
   --dg-shadow-tint-blue: 0 0 24px rgba(0, 47, 108, 0.14);
   --dg-shadow-tint-yellow: 0 0 24px rgba(255, 199, 0, 0.12);
+
+  /* ── Parallax & 3D ── */
+  --dg-parallax-depth-1: 0.1;
+  --dg-parallax-depth-2: 0.3;
+  --dg-parallax-depth-3: 0.5;
+  --dg-perspective-3d: 1000px;
+  --dg-tilt-max-rotate: 8deg;
 
   /* ── Base overrides ── */
   --themeBg: #080808;
@@ -96,6 +110,13 @@
   --dg-shadow-tint-red: 0 0 24px rgba(200, 16, 46, 0.16);
   --dg-shadow-tint-blue: 0 0 24px rgba(0, 47, 108, 0.14);
   --dg-shadow-tint-yellow: 0 0 24px rgba(255, 199, 0, 0.12);
+
+  /* ── Parallax & 3D ── */
+  --dg-parallax-depth-1: 0.1;
+  --dg-parallax-depth-2: 0.3;
+  --dg-parallax-depth-3: 0.5;
+  --dg-perspective-3d: 1000px;
+  --dg-tilt-max-rotate: 8deg;
 
   --themeBg: #080808;
   --themeBgSecondary: #0A0A0A;
@@ -502,8 +523,115 @@ body {
   .dg-crt::before { opacity: 0.15; }
 }
 
-/* ── Reduced Motion ── */
+/* ── Parallax & 3D Motion ── */
+.parallax-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.parallax-layer--slow {
+  transform: translate3d(0, 0, 0);
+}
+
+.parallax-layer--medium {
+  transform: translate3d(0, 0, 0);
+}
+
+.parallax-layer--fast {
+  transform: translate3d(0, 0, 0);
+}
+
+.entrance-reveal {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.entrance-reveal.revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.entrance-reveal--fade {
+  opacity: 0;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.entrance-reveal--fade.revealed {
+  opacity: 1;
+}
+
+.entrance-reveal--scale {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.entrance-reveal--scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tilt-3d {
+  perspective: var(--dg-perspective-3d);
+  transform-style: preserve-3d;
+  transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.tilt-3d:hover {
+  transform: perspective(var(--dg-perspective-3d)) rotateX(var(--tilt-rotate-x, 0)) rotateY(var(--tilt-rotate-y, 0));
+}
+
+.tilt-3d__inner {
+  transform-style: preserve-3d;
+  transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Reduced Motion overrides for parallax/3D */
 @media (prefers-reduced-motion: reduce) {
+  .parallax-layer,
+  .parallax-layer--slow,
+  .parallax-layer--medium,
+  .parallax-layer--fast {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .entrance-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .entrance-reveal--fade {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .entrance-reveal--scale {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .tilt-3d {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .tilt-3d__inner {
+    transform: none !important;
+    transition: none !important;
+  }
+
   .dg-glitch::before,
   .dg-glitch::after {
     animation: none !important;
