@@ -124,7 +124,7 @@ export default function AdminPage() {
       <AdminHeader />
 
       <main className="relative z-10 max-w-[1200px] mx-auto px-4 py-12">
-        <div className="border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] p-6 mb-12 dg-r-0">
+        <div className="border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] p-6 mb-12 dg-r-0">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-4">
               <span className="text-[10px] font-mono text-themeAccent uppercase tracking-[0.1em] dg-ui-mono">
@@ -136,7 +136,7 @@ export default function AdminPage() {
                 stats.map((s) => (
                   <span
                     key={s.name}
-                    className="flex items-center gap-2 px-4 py-2 border-4 border-themeAccent bg-transparent text-xs font-mono text-themeText-secondary shadow-[2px_2px_0_0_#080808] dg-r-0 dg-chunky"
+                    className="flex items-center gap-2 px-4 py-2 border-4 border-themeAccent bg-transparent text-xs font-mono text-themeText-secondary shadow-[2px_2px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky"
                   >
                     {s.name.replace("_", " ").toUpperCase()}
                     <span className="text-themeAccent font-bold">{s.count}</span>
@@ -150,14 +150,14 @@ export default function AdminPage() {
               <button
                 onClick={handleCleanup}
                 disabled={cleaning}
-                className="flex items-center gap-2 px-5 py-2.5 border-4 border-themeAccent bg-transparent text-themeText text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono"
+                className="flex items-center gap-2 px-5 py-2.5 border-4 border-themeAccent bg-transparent text-themeText text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono"
               >
                 {cleaning ? "Cleaning…" : "Cleanup Duplicates"}
               </button>
               <button
                 onClick={handleReseed}
                 disabled={reseeding}
-                className="flex items-center gap-2 px-5 py-2.5 border-4 border-themeAccent bg-transparent text-themeText text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono"
+                className="flex items-center gap-2 px-5 py-2.5 border-4 border-themeAccent bg-transparent text-themeText text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono"
               >
                 {reseeding ? "Seeding…" : "Re-seed Missing"}
               </button>
@@ -173,8 +173,8 @@ export default function AdminPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-2.5 border-4 border-themeAccent bg-transparent font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
                   activeTab === tab.id
-                    ? "bg-themeAccent text-themeText border-themeAccent shadow-[4px_4px_0_0_#080808]"
-                    : "text-themeText-secondary hover:text-themeText hover:border-themeAccent shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808]"
+                    ? "bg-themeAccent text-themeText border-themeAccent shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
+                    : "text-themeText-secondary hover:text-themeText hover:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
                 } dg-r-0`}
               >
                 {tab.label}
@@ -235,8 +235,8 @@ function QuickActionCard({ title, desc, icon, onClick, active }) {
       onClick={onClick}
       className={`group cursor-pointer p-6 border-4 border-themeAccent bg-themeSurface/30 relative overflow-hidden transition-all duration-150 ${
         active
-          ? "bg-themeAccent/20 border-themeAccent shadow-[4px_4px_0_0_#080808]"
-          : "shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808]"
+          ? "bg-themeAccent/20 border-themeAccent shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
+          : "shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
       } dg-r-0 dg-chunky`}
     >
       <div className="relative z-10 space-y-3">

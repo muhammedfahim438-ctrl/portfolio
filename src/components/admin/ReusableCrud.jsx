@@ -98,7 +98,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
   };
 
   return (
-    <section className="space-y-6 rounded-none p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+    <section className="space-y-6 rounded-none p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky">
       <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] mb-4 dg-f-display">
         {title}
       </h2>
@@ -137,14 +137,14 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => startEdit(item)}
-                          className="px-3 py-1 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_#080808] hover:shadow-[2px_2px_0_0_#080808] transition-all duration-150 active:shadow-[0px_0px_0_0_#080808] active:translate-[1px_1px] dg-f-mono dg-r-0"
+                          className="px-3 py-1 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] active:translate-[1px_1px] dg-f-mono dg-r-0"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(item.id)}
                           disabled={deletingId === item.id}
-                          className="px-3 py-1 text-xs font-medium text-red-400 hover:bg-red-400/10 shadow-[1px_1px_0_0_#080808] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
+                          className="px-3 py-1 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
                         >
                           {deletingId === item.id ? "…" : "Delete"}
                         </button>
@@ -176,14 +176,14 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       value={getFieldValue(field.key)}
                       onChange={(e) => setFieldValue(field.key, e.target.value)}
                       rows={field.rows || 3}
-                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 resize-y dg-r-0"
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 resize-y dg-r-0"
                     />
                   ) : field.type === "select" ? (
                     <select
                       id={`crud-${field.key}`}
                       value={getFieldValue(field.key)}
                       onChange={(e) => setFieldValue(field.key, e.target.value)}
-                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
                     >
                       {field.options.map((opt) => (
                         <option key={opt} value={opt}>{opt}</option>
@@ -196,7 +196,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                         type="checkbox"
                         checked={getFieldValue(field.key) === "true" || getFieldValue(field.key) === true}
                         onChange={(e) => setFieldValue(field.key, e.target.checked)}
-                        className="w-4 h-4 border-4 border-themeAccent text-themeAccent bg-themeInput shadow-[1px_1px_0_0_#080808] dg-r-0"
+                        className="w-4 h-4 border-4 border-themeAccent text-themeAccent bg-themeInput shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
                       />
                       <span className="text-xs font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                         {field.label}
@@ -209,7 +209,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       value={getFieldValue(field.key)}
                       onChange={(e) => setFieldValue(field.key, e.target.value.split(",").map((t) => t.trim()).filter(Boolean))}
                       placeholder={field.placeholder || "tag1, tag2, tag3"}
-                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
                     />
                   ) : field.type === "lines" ? (
                     <textarea
@@ -217,7 +217,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       value={getFieldValue(field.key)}
                       onChange={(e) => setFieldValue(field.key, e.target.value.split("\n"))}
                       rows={field.rows || 4}
-                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 resize-y dg-r-0"
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 resize-y dg-r-0"
                     />
                   ) : (
                     <input
@@ -226,7 +226,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       value={getFieldValue(field.key)}
                       onChange={(e) => setFieldValue(field.key, e.target.value)}
                       placeholder={field.placeholder || ""}
-                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
                     />
                   )}
                 </div>
@@ -236,14 +236,14 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                 <button
                   type="button"
                   onClick={cancelEdit}
-                  className="px-5 py-2.5 border-4 border-themeAccent text-themeTextSecondary text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[1px_1px] dg-f-mono dg-r-0"
+                  className="px-5 py-2.5 border-4 border-themeAccent text-themeTextSecondary text-xs font-medium uppercase tracking-wider hover:bg-themeAccent hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[1px_1px] dg-f-mono dg-r-0"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2.5 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
+                  className="px-5 py-2.5 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
                 >
                   {saving ? "Saving…" : editingId ? "Update" : "Create"}
                 </button>

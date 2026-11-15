@@ -22,8 +22,8 @@ export function TabSettings() {
             onClick={() => setActive(t.id)}
             className={`px-5 py-2.5 border-4 border-themeAccent bg-transparent font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
               active === t.id
-                ? "bg-themeAccent text-themeText border-themeAccent shadow-[4px_4px_0_0_#080808]"
-                : "text-themeText-secondary hover:text-themeText hover:border-themeAccent shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808]"
+                ? "bg-themeAccent text-themeText border-themeAccent shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
+                : "text-themeText-secondary hover:text-themeText hover:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
             } dg-r-0 dg-f-mono`}
           >
             {t.label}

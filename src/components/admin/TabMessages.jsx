@@ -100,7 +100,7 @@ export function TabMessages() {
               </div>
               <button
                 onClick={() => handleDelete(selected.id)}
-                className="text-xs text-red-400 hover:text-red-300 font-mono"
+                className="text-xs text-themeAccent hover:text-themeText font-mono"
               >
                 Delete
               </button>

@@ -228,7 +228,7 @@ function SkillsManager() {
                           </button>
                           <button
                             onClick={() => handleDelete(skill.id)}
-                            className="text-red-400 hover:text-red-300 text-[10px]"
+                            className="text-themeAccent hover:text-themeText text-[10px]"
                           >
                             ✕
                           </button>
@@ -396,7 +396,7 @@ function CertificationsManager() {
           {certs.map((cert) => (
             <div key={cert.id} className="py-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-10 h-10 rounded-none bg-themeBgSecondary border border-themeBorder flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-10 h-10 rounded-none bg-themeBg-secondary border border-themeBorder flex items-center justify-center shrink-0 overflow-hidden">
                   {cert.badge_image_url ? (
                     <img src={cert.badge_image_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -433,7 +433,7 @@ function CertificationsManager() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleDelete(cert.id)}
-                    className="text-xs text-red-400 hover:text-red-300"
+                    className="text-xs text-themeAccent hover:text-themeText"
                   >
                     Delete
                   </button>

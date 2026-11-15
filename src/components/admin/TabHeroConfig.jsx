@@ -64,7 +64,7 @@ export function TabHeroConfig() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <div className="space-y-6 p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+      <div className="space-y-6 p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky">
         <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] dg-f-display">
           Edit Hero Section
         </h2>
@@ -78,7 +78,7 @@ export function TabHeroConfig() {
             type="text"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
           />
         </div>
 
@@ -91,7 +91,7 @@ export function TabHeroConfig() {
             type="text"
             value={form.subtitle}
             onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
-            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 dg-r-0"
+            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
           />
         </div>
 
@@ -104,7 +104,7 @@ export function TabHeroConfig() {
             rows={4}
             value={form.voice_text}
             onChange={(e) => setForm({ ...form, voice_text: e.target.value })}
-            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_#080808] focus:shadow-[4px_4px_0_0_#080808] transition-all duration-150 resize-y dg-r-0"
+            className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 resize-y dg-r-0"
           />
         </div>
 
@@ -123,18 +123,18 @@ export function TabHeroConfig() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_#080808] hover:shadow-[4px_4px_0_0_#080808] transition-all duration-150 active:shadow-[1px_1px_0_0_#080808] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
         >
           {saving ? "Saving…" : "Save Changes"}
         </button>
       </div>
 
-      <div className="space-y-6 p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_#080808] dg-r-0 dg-chunky">
+      <div className="space-y-6 p-6 border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky">
         <h2 className="text-lg font-display font-bold text-themeText uppercase tracking-[0.05em] dg-f-display">
           Preview
         </h2>
         <div className="flex flex-col items-center gap-4 text-center">
-          <div className="relative h-44 w-48 border-4 border-themeAccent/50 bg-themeSurface flex items-center justify-center text-themeTextSecondary font-mono text-sm dg-r-0 shadow-[2px_2px_0_0_#080808]">
+          <div className="relative h-44 w-48 border-4 border-themeAccent/50 bg-themeSurface flex items-center justify-center text-themeTextSecondary font-mono text-sm dg-r-0 shadow-[2px_2px_0_0_var(--dg-bg-deep)]">
             {form.photo_url ? (
               <img src={form.photo_url} alt="Hero preview" className="h-full w-full object-cover" />
             ) : (

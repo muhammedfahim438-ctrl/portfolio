@@ -261,7 +261,7 @@ export function TabTestimonials() {
           <div className="divide-y divide-themeBorder/50">
             {items.map((item) => (
               <div key={item.id} className="py-4 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-none shrink-0 overflow-hidden border border-themeBorder bg-themeBgSecondary">
+                <div className="w-10 h-10 rounded-none shrink-0 overflow-hidden border border-themeBorder bg-themeBg-secondary">
                   {item.avatar_url ? (
                     <img src={item.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -329,7 +329,7 @@ export function TabTestimonials() {
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="text-[10px] text-red-400 hover:text-red-300 transition-colors"
+                      className="text-[10px] text-themeAccent hover:text-themeText transition-colors"
                     >
                       Delete
                     </button>

@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-themeBg relative overflow-hidden">
       {/* Ambient mesh */}
       <div className="absolute inset-0 z-0" style={{
-        backgroundImage: `radial-gradient(600px 300px at 30% -10%, rgba(205,242,43,0.06), transparent 60%), radial-gradient(400px 400px at 80% 30%, rgba(205,242,43,0.03), transparent 50%)`,
+        backgroundImage: `radial-gradient(600px 300px at 30% -10%, rgba(200,16,46,0.06), transparent 60%), radial-gradient(400px 400px at 80% 30%, rgba(0,47,108,0.05), transparent 50%)`,
         backgroundSize: "200% 200%",
       }} />
 
@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
             </div>
 
             {error && (
-              <p className="text-xs text-red-400 text-center font-mono">{error}</p>
+              <p className="text-xs text-themeAccent text-center font-mono">{error}</p>
             )}
 
             <button
