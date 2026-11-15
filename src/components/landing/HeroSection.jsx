@@ -85,7 +85,7 @@ export function HeroSection() {
                 </span>
               </div>
 
-              <h1 className="h1 dg-f-display text-themeText uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"}>
+              <h1 className="h1 dg-f-display text-themeText uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"} style={{ textShadow: '0 0 20px rgba(205, 203, 202, 0.6)' }}>
                 {hero.title || "Muhammed Fahim M"}
               </h1>
 
@@ -111,7 +111,7 @@ export function HeroSection() {
           </EntranceReveal>
 
           {/* Right: 3D-tilt portrait */}
-          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-88 sm:h-104 lg:w-[28rem] lg:h-128">
+          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-88 sm:h-104 lg:w-md lg:h-128">
             <Tilt3D maxRotate={10} perspective={1000} className="relative h-full w-full dg-corner dg-corner--blue">
               <div className="absolute -inset-1.5 rounded-none bg-themeAccent z-0" />
               <div className="relative h-full w-full border-2 border-themeBorder bg-themeSurface/10 overflow-hidden z-10 backdrop-blur-sm">

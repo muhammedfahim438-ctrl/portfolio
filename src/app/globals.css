@@ -318,7 +318,7 @@ body {
   background-color: var(--dg-bg-deep);
   background-image: radial-gradient(#CDCBCA 1px, transparent 1px);
   background-size: 10px 10px;
-  opacity: 0.10;
+  opacity: 0.06;
 }
 .dg-dot-grid--sparse {
   background-image: radial-gradient(#CDCBCA 1px, transparent 1px);
