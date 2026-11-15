@@ -36,6 +36,16 @@ export function EntranceReveal({
     mq.addEventListener("change", onChange);
 
     if (!reducedMotion) {
+      // Failsafe: never leave content hidden. Instant scroll jumps (anchor
+      // links, scroll restoration, screenshots) can skip the IntersectionObserver
+      // window entirely, so force-reveal anything not already shown after a beat.
+      const failsafe = setTimeout(() => {
+        if (!hasRevealed.current) {
+          setRevealed(true);
+          hasRevealed.current = true;
+        }
+      }, 1800);
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -47,13 +57,16 @@ export function EntranceReveal({
             setRevealed(false);
           }
         },
-        { threshold },
+        { threshold: 0, rootMargin: "0px 0px -8% 0px" },
       );
 
       const el = ref.current;
       if (el) observer.observe(el);
 
-      return () => observer.disconnect();
+      return () => {
+        clearTimeout(failsafe);
+        observer.disconnect();
+      };
     }
   }, [once, threshold, reducedMotion]);
 
