@@ -2,11 +2,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FiFileText, FiSend } from "react-icons/fi";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { getHeroData, getSocialData } from "@/lib/firestore";
 import { EntranceReveal } from "@/components/ui/EntranceReveal";
 import { ParallaxLayers } from "@/components/ui/ParallaxLayers";
-import { Tilt3D } from "@/components/ui/Tilt3D";
 
 export function HeroSection() {
   const [social, setSocial] = useState({
@@ -16,8 +14,8 @@ export function HeroSection() {
   });
 
   const [hero, setHero] = useState({
-    title: "Muhammed Fahim M",
-    subtitle: "Data Science × Full-Stack",
+    title: "MUHAMMED FAHIM M",
+    subtitle: "DATA SCIENCE × FULL-STACK",
     body: "I build production APIs, machine learning models, and scalable web applications at the intersection of data engineering and full-stack development.",
   });
 
@@ -32,8 +30,8 @@ export function HeroSection() {
         if (!mounted) return;
         if (heroData) {
           setHero((prev) => ({
-            title: heroData.title || prev.title,
-            subtitle: heroData.subtitle || prev.subtitle,
+            title: (heroData.title || prev.title).toUpperCase(),
+            subtitle: (heroData.subtitle || prev.subtitle).toUpperCase(),
             body: heroData.voice_text || prev.body,
           }));
         }
@@ -43,9 +41,6 @@ export function HeroSection() {
             linkedin: socialData.linkedin || prev.linkedin,
             email: socialData.email || prev.email,
           }));
-          if (socialData.resume_pdf_url) {
-            // resume URL from social data
-          }
         }
       } catch {
         // fallback to defaults
@@ -60,98 +55,106 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-dvh flex items-center overflow-hidden bg-[#080808] border-t border-[#CDCBCA]/20 dg-dot-matrix"
+      className="relative min-h-dvh flex items-center overflow-hidden bg-[#080808] border-t-4 border-[#C8102E] dg-dot-matrix"
     >
       {/* Background dot matrix - subtle, behind everything */}
       <ParallaxLayers className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute inset-0 opacity-30 dg-dot-grid--dense" />
-        <div className="absolute inset-0 opacity-15 dg-dot-grid--sparse" />
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(600px_400px_at_20%_-10%,rgba(200,16,46,0.08),transparent_60%)]" />
+        <div className="absolute inset-0 opacity-40 dg-dot-grid--dense" />
+        <div className="absolute inset-0 opacity-20 dg-dot-grid--sparse" />
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(600px_400px_at_20%_-10%,rgba(200,16,46,0.12),transparent_60%)]" />
       </ParallaxLayers>
 
-      <div className="container mx-auto px-4 md:px-8 py-24 relative z-50 w-full">
-        {/* Solid dark backdrop panel behind content for readability */}
-        <div className="absolute inset-0 -z-10 bg-[#080808]/80 backdrop-blur-sm" />
+      {/* CRT scanline overlay for cyberpunk feel */}
+      <div className="absolute inset-0 -z-10 pointer-events-none" style={{
+        background: "repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
+        opacity: 0.4,
+      }} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-4 md:px-8 py-24 relative z-50 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: AIDA Attention with staggered entrance reveal */}
           <EntranceReveal variant="slide" delay={0} className="max-w-lg">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <div className="flex items-center gap-3 border-l-4 border-[#C8102E] pl-4 dg-corner dg-corner--red">
-                <span className="text-[#C8102E] font-mono text-xs tracking-[0.3em] uppercase dg-ui-mono">
-                  {hero.subtitle || "Data Science × Full-Stack"}
+              {/* Eyebrow - chunky monospace */}
+              <div className="flex items-center gap-3 border-l-4 border-[#C8102E] pl-4">
+                <span className="text-[#C8102E] font-mono text-[11px] tracking-[0.4em] uppercase dg-ui-mono font-bold">
+                  {hero.subtitle}
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter leading-none text-[#FAF8F3] uppercase dg-glitch" data-text={hero.title || "Muhammed Fahim M"} style={{ textShadow: '0 0 30px rgba(255, 255, 255, 0.9), 0 0 60px rgba(200, 16, 46, 0.5)' }}>
-                {hero.title || "Muhammed Fahim M"}
+              {/* Main Headline - massive, chunky, glitch */}
+              <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-display font-black tracking-tighter leading-none text-[#FAF8F3] uppercase dg-glitch dg-chunky p-6 inline-block border-4 border-[#C8102E] shadow-[8px_8px_0_0_#080808]" data-text={hero.title}>
+                {hero.title}
               </h1>
 
-              <p className="dg-f-subhead text-[#CDCBCA] leading-relaxed text-lg max-w-lg">
-                {hero.body || "I build production APIs, machine learning models, and scalable web applications at the intersection of data engineering and full-stack development."}
+              {/* Subtext - monospace, high contrast */}
+              <p className="dg-f-subhead text-[#CDCBCA] leading-relaxed text-lg max-w-lg font-mono">
+                {hero.body}
               </p>
 
+              {/* CTA Buttons - chunky brutalist */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-8">
                 <a
                   href="#contact"
-                  className="btn btn--primary dg-border-neon-red"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#C8102E] text-[#080808] font-display font-bold text-lg uppercase tracking-tight border-4 border-[#C8102E] shadow-[8px_8px_0_0_#080808] hover:bg-[#FFC700] hover:text-[#080808] hover:shadow-[8px_8px_0_0_#080808] transition-all duration-150 active:shadow-[4px_4px_0_0_#080808] active:translate-[4px_4px] dg-f-mono dg-r-0"
                 >
-                  Hire Me <FiSend className="w-4 h-4 ml-1.5" />
+                  HIRE ME <FiSend className="w-4 h-4 ml-2" />
                 </a>
                 <a
                   href="#work"
-                  className="btn btn--secondary dg-border-neon-blue"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 border-4 border-[#CDCBCA] text-[#CDCBCA] font-display font-bold text-lg uppercase tracking-tight shadow-[8px_8px_0_0_#080808] hover:bg-[#CDCBCA] hover:text-[#080808] hover:shadow-[8px_8px_0_0_#080808] transition-all duration-150 active:shadow-[4px_4px_0_0_#080808] active:translate-[4px_4px] dg-f-mono dg-r-0"
                 >
-                  View Work <FiFileText className="w-4 h-4 ml-1.5" />
+                  VIEW WORK <FiFileText className="w-4 h-4 ml-2" />
                 </a>
               </div>
             </motion.div>
           </EntranceReveal>
 
-          {/* Right: 3D-tilt portrait */}
-          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-88 sm:h-104 lg:w-[28rem] lg:h-128">
-            <Tilt3D maxRotate={10} perspective={1000} className="relative h-full w-full dg-corner dg-corner--blue">
-              <div className="absolute inset-[-6px] rounded-none bg-[#C8102E] z-0" />
-              <div className="relative h-full w-full border-2 border-[#CDCBCA]/30 bg-[#080808]/30 overflow-hidden z-10 backdrop-blur-sm">
-                <img
-                  src="/my-picture.webp"
-                  alt="Muhammed Fahim M"
-                  className="h-full w-full object-cover grayscale-40 hover:grayscale-0 transition-grayscale duration-700 opacity-100"
-                  loading="eager"
-                />
-              </div>
-            </Tilt3D>
+          {/* Right: Portrait with brutalist frame */}
+          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-72 h-80 sm:w-96 sm:h-112 lg:w-[32rem] lg:h-[40rem]">
+            <div className="relative h-full w-full border-8 border-[#C8102E] bg-[#080808] shadow-[8px_8px_0_0_#002F6C] dg-r-0 overflow-hidden group">
+              {/* Top-left corner accent */}
+              <div className="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-[#C8102E] bg-[#080808]" />
+              {/* Bottom-right corner accent */}
+              <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-[#C8102E] bg-[#080808]" />
+              <img
+                src="/my-picture.webp"
+                alt="Muhammed Fahim M"
+                className="h-full w-full object-cover grayscale-30 hover:grayscale-0 transition-all duration-500 opacity-100"
+                loading="eager"
+              />
+            </div>
           </EntranceReveal>
         </div>
 
-        {/* Social dock - cyberpunk pill */}
-        <EntranceReveal variant="fade" delay={0.4} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dg-r-full dg-glass dg-border-neon-red">
-          <div className="px-6 py-2.5 flex items-center gap-4">
-            <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="GitHub">
-              <FaGithub className="w-5 h-5" />
+        {/* Social dock - brutalist pill at bottom */}
+        <EntranceReveal variant="fade" delay={0.4} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <div className="flex items-center gap-4 border-8 border-[#C8102E] bg-[#080808] shadow-[8px_8px_0_0_#080808] px-8 py-3 dg-r-0">
+            <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA] hover:text-[#C8102E] transition-colors font-mono text-xs uppercase tracking-wider" aria-label="GitHub">
+              GITHUB
             </a>
-            <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="LinkedIn">
-              <FaLinkedin className="w-5 h-5" />
+            <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA] hover:text-[#C8102E] transition-colors font-mono text-xs uppercase tracking-wider" aria-label="LinkedIn">
+              LINKEDIN
             </a>
-            <a href={`mailto:${social.email}`} className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="Email">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href={`mailto:${social.email}`} className="text-[#CDCBCA] hover:text-[#C8102E] transition-colors font-mono text-xs uppercase tracking-wider" aria-label="Email">
+              EMAIL
             </a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA]/90 hover:text-[#C8102E] transition-colors" aria-label="Resume">
-              <FiFileText className="w-5 h-5" />
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA] hover:text-[#C8102E] transition-colors font-mono text-xs uppercase tracking-wider" aria-label="Resume">
+              RESUME
             </a>
           </div>
         </EntranceReveal>
 
         {/* Scroll indicator */}
-        <EntranceReveal variant="fade" delay={0.5} className="fixed bottom-6 right-6 z-50 hidden md:flex flex-col items-center gap-2 dg-r-full dg-glass dg-border-hairline">
-          <span className="text-[#CDCBCA]/80 text-[10px] tracking-[0.3em] uppercase dg-ui-mono">Scroll</span>
-          <div className="w-5 h-9 rounded-full border border-[#CDCBCA]/40 flex items-start justify-center p-1">
-            <div className="w-1 h-1.5 rounded-full bg-[#C8102E] animate-scroll-dot" />
+        <EntranceReveal variant="fade" delay={0.5} className="fixed bottom-6 right-6 z-50 hidden md:flex flex-col items-center gap-2 dg-r-0">
+          <span className="text-[#CDCBCA]/70 text-[10px] tracking-[0.4em] uppercase font-mono font-bold">SCROLL</span>
+          <div className="w-4 h-12 border-4 border-[#C8102E] flex items-start justify-center px-1 bg-[#080808]">
+            <div className="w-1 h-2 bg-[#C8102E] animate-scroll-dot" />
           </div>
         </EntranceReveal>
       </div>
