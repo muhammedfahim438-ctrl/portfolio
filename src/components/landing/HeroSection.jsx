@@ -60,13 +60,13 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex items-center overflow-hidden bg-themeBg border-t border-themeBorder/40 dg-dot-matrix"
+      className="relative min-h-dvh flex items-center overflow-hidden bg-themeBg border-t border-themeBorder/40 dg-dot-matrix"
     >
       {/* Parallax dot layers behind content */}
       <ParallaxLayers className="absolute inset-0 -z-10">
         <div className="absolute inset-0 opacity-30 dg-dot-grid--dense" />
         <div className="absolute inset-0 opacity-15 dg-dot-grid--sparse" />
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(600px_400px_at_20%_-10%,_rgba(200,16,46,0.08),_transparent_60%)]" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(600px_400px_at_20%_-10%,rgba(200,16,46,0.08),transparent_60%)]" />
       </ParallaxLayers>
 
       <div className="container mx-auto px-4 md:px-8 py-24 relative z-10 w-full">
@@ -111,9 +111,9 @@ export function HeroSection() {
           </EntranceReveal>
 
           {/* Right: 3D-tilt portrait */}
-          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-[22rem] sm:h-[26rem] lg:w-[28rem] lg:h-[32rem]">
+          <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-64 h-72 sm:w-88 sm:h-104 lg:w-[28rem] lg:h-128">
             <Tilt3D maxRotate={10} perspective={1000} className="relative h-full w-full dg-corner dg-corner--blue">
-              <div className="absolute inset-[-6px] rounded-none bg-themeAccent z-0" />
+              <div className="absolute -inset-1.5 rounded-none bg-themeAccent z-0" />
               <div className="relative h-full w-full border-2 border-themeBorder bg-themeSurface/10 overflow-hidden z-10 backdrop-blur-sm">
                 <img
                   src="/my-picture.webp"
