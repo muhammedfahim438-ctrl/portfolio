@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { FiFileText, FiSend } from "react-icons/fi";
 import { getHeroData, getSocialData } from "@/lib/firestore";
 import { EntranceReveal } from "@/components/ui/EntranceReveal";
-import { ParallaxLayers } from "@/components/ui/ParallaxLayers";
 
 export function HeroSection() {
   const [social, setSocial] = useState({
@@ -55,24 +54,17 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-dvh flex items-center overflow-hidden bg-[#080808] border-t-4 border-[#C8102E] dg-dot-matrix"
+      className="relative min-h-dvh flex items-center overflow-hidden bg-[#080808] border-t-4 border-[#C8102E]"
     >
-      {/* Background dot matrix - subtle, behind everything */}
-      <ParallaxLayers className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute inset-0 opacity-40 dg-dot-grid--dense" />
-        <div className="absolute inset-0 opacity-20 dg-dot-grid--sparse" />
-        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(600px_400px_at_20%_-10%,rgba(200,16,46,0.12),transparent_60%)]" />
-      </ParallaxLayers>
+      {/* Layer 1: Background dot matrix - UNDERNEATH everything, z-0 */}
+      <div className="absolute inset-0 -z-10 pointer-events-none opacity-20 dg-dot-matrix" />
 
-      {/* CRT scanline overlay for cyberpunk feel */}
-      <div className="absolute inset-0 -z-10 pointer-events-none" style={{
-        background: "repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
-        opacity: 0.4,
-      }} />
+      {/* Layer 2: Dark backdrop panel behind content */}
+      <div className="absolute inset-0 -z-5 bg-[#080808]/85 backdrop-blur-md pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-8 py-24 relative z-50 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left: AIDA Attention with staggered entrance reveal */}
+          {/* Left: AIDA Attention */}
           <EntranceReveal variant="slide" delay={0} className="max-w-lg">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -80,28 +72,24 @@ export function HeroSection() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              {/* Eyebrow - chunky monospace */}
               <div className="flex items-center gap-3 border-l-4 border-[#C8102E] pl-4">
                 <span className="text-[#C8102E] font-mono text-[11px] tracking-[0.4em] uppercase dg-ui-mono font-bold">
                   {hero.subtitle}
                 </span>
               </div>
 
-              {/* Main Headline - massive, chunky, glitch */}
-              <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-display font-black tracking-tighter leading-none text-[#FAF8F3] uppercase dg-glitch dg-chunky p-6 inline-block border-4 border-[#C8102E] shadow-[8px_8px_0_0_#080808]" data-text={hero.title}>
+              <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-display font-black tracking-tighter leading-none text-[#FAF8F3] uppercase dg-glitch dg-chunky p-6 inline-block border-4 border-[#C8102E] shadow-[8px_8px_0_0_#080808]" data-text={hero.title} style={{ textShadow: '0 0 30px rgba(255, 255, 255, 0.9), 0 0 60px rgba(200, 16, 46, 0.5)' }}>
                 {hero.title}
               </h1>
 
-              {/* Subtext - monospace, high contrast */}
               <p className="dg-f-subhead text-[#CDCBCA] leading-relaxed text-lg max-w-lg font-mono">
                 {hero.body}
               </p>
 
-              {/* CTA Buttons - chunky brutalist */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-8">
                 <a
                   href="#contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#C8102E] text-[#080808] font-display font-bold text-lg uppercase tracking-tight border-4 border-[#C8102E] shadow-[8px_8px_0_0_#080808] hover:bg-[#FFC700] hover:text-[#080808] hover:shadow-[8px_8px_0_0_#080808] transition-all duration-150 active:shadow-[4px_4px_0_0_#080808] active:translate-[4px_4px] dg-f-mono dg-r-0"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#C8102E] text-[#080808] font-display font-bold text-lg uppercase tracking-tight border-4 border-[#C8102E] shadow-[8px_8px_0_0_#080808] hover:bg-[#FFC70E] hover:text-[#080808] hover:shadow-[8px_8px_0_0_#080808] transition-all duration-150 active:shadow-[4px_4px_0_0_#080808] active:translate-[4px_4px] dg-f-mono dg-r-0"
                 >
                   HIRE ME <FiSend className="w-4 h-4 ml-2" />
                 </a>
@@ -117,10 +105,8 @@ export function HeroSection() {
 
           {/* Right: Portrait with brutalist frame */}
           <EntranceReveal variant="scale" delay={0.2} className="relative mx-auto w-72 h-80 sm:w-96 sm:h-112 lg:w-[32rem] lg:h-[40rem]">
-            <div className="relative h-full w-full border-8 border-[#C8102E] bg-[#080808] shadow-[8px_8px_0_0_#002F6C] dg-r-0 overflow-hidden group">
-              {/* Top-left corner accent */}
+            <div className="relative h-full w-full border-8 border-[#C8102E] bg-[#080808] shadow-[8px_8px_0_0_#002F6C] dg-r-0 overflow-hidden">
               <div className="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-[#C8102E] bg-[#080808]" />
-              {/* Bottom-right corner accent */}
               <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-[#C8102E] bg-[#080808]" />
               <img
                 src="/my-picture.webp"
@@ -132,7 +118,7 @@ export function HeroSection() {
           </EntranceReveal>
         </div>
 
-        {/* Social dock - brutalist pill at bottom */}
+        {/* Social dock */}
         <EntranceReveal variant="fade" delay={0.4} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
           <div className="flex items-center gap-4 border-8 border-[#C8102E] bg-[#080808] shadow-[8px_8px_0_0_#080808] px-8 py-3 dg-r-0">
             <a href={social.github} target="_blank" rel="noopener noreferrer" className="text-[#CDCBCA] hover:text-[#C8102E] transition-colors font-mono text-xs uppercase tracking-wider" aria-label="GitHub">
