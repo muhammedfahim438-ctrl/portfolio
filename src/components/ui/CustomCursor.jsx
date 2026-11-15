@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * CustomCursor — dot-matrix reticle.
+ * CustomCursor - dot-matrix reticle.
  * A red center dot tracks the pointer exactly; a yellow corner-bracket ring
  * trails behind with lerped easing. Pointer-fine devices only. The native
  * cursor is hidden while mounted via the `dg-cursor-on` class on <html>.

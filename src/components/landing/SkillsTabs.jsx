@@ -174,11 +174,11 @@ export function SkillsTabs() {
   const activeRole = roles.find((r) => r.id === active) || roles[0];
 
   return (
-    <section id="skills" className="py-24 px-4 border-t border-themeBorder/40 bg-themeBg/60 backdrop-blur-sm dg-glass dg-r-xl dg-border-hairline">
+    <section id="skills" className="border-t border-themeBorder/40 bg-themeBg py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <EntranceReveal variant="slide" delay={0} className="mb-12">
-          <h2 className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--red" data-text="Tools I Build With">
-            Tools I Build With
+          <h2 className="h2 dg-f-display text-themeText dg-glitch dg-corner dg-corner--red" data-text="Tools I build with">
+            Tools I build with
           </h2>
         </EntranceReveal>
 
@@ -188,7 +188,7 @@ export function SkillsTabs() {
             <button
               key={role.id}
               onClick={() => setActive(role.id)}
-              className={`px-6 py-3 text-xs font-mono uppercase tracking-wider transition-all duration-300 dg-r-md ${
+              className={`px-6 py-3 text-xs font-mono uppercase tracking-wider transition-all duration-300 dg-r-0 ${
                 active === role.id
                   ? "bg-themeAccent text-themeText border-2 border-themeAccent dg-shadow--tint-red shadow-lg"
                   : "bg-transparent text-themeTextSecondary border-2 border-themeBorder/60 hover:border-themeAccent hover:text-themeText hover:bg-themeAccent/10"
@@ -207,10 +207,10 @@ export function SkillsTabs() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.04 }}
-              className="dg-glass dg-r-md p-4 flex flex-col items-center justify-center hover:border-themeAccent hover:bg-themeAccent/10 transition-all duration-300 group dg-repel"
+              className="dg-glass dg-r-0 p-4 flex flex-col items-center justify-center hover:border-themeAccent hover:bg-themeAccent/10 transition-all duration-300 group dg-repel"
               data-cursor-hover
             >
-              <Tilt3D maxRotate={5} perspective={600} className="w-8 h-8 rounded-md bg-themeAccent/20 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2 backdrop-blur-sm">
+              <Tilt3D maxRotate={5} perspective={600} className="w-8 h-8 rounded-none bg-themeAccent/20 flex items-center justify-center text-themeAccent group-hover:bg-themeAccent group-hover:text-themeText transition-colors duration-300 mb-2">
                 <skill.icon className="w-4 h-4" />
               </Tilt3D>
               <span className="font-mono text-[10px] font-medium text-themeTextSecondary text-center leading-tight uppercase tracking-[0.1em] dg-ui-mono">

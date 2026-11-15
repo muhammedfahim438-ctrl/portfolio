@@ -129,7 +129,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                             {item[f.key].join(", ")}
                           </span>
                         ) : (
-                          item[f.key] ?? "—"
+                          item[f.key] ?? "-"
                         )}
                       </td>
                     ))}

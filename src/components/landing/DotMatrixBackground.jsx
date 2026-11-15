@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 
 // ---------------------------------------------------------------------------
-// DotMatrixBackground — React wrapper for the vanilla canvas dot-matrix engine
+// DotMatrixBackground - React wrapper for the vanilla canvas dot-matrix engine
 // Full-page fixed canvas (z-index 0), pointer events pass through.
 // ---------------------------------------------------------------------------
 

@@ -90,7 +90,7 @@ export default function AdminPage() {
       toast.success(
         removedTotal > 0
           ? `Cleaned up ${removedTotal} duplicate(s)`
-          : "No duplicates found — all clean"
+          : "No duplicates found. All clean"
       );
       await loadStats();
     } catch {
@@ -110,7 +110,7 @@ export default function AdminPage() {
     setReseeding(true);
     try {
       await seedAll();
-      toast.success("Seed complete — missing items added");
+      toast.success("Seed complete. Missing items added");
       await loadStats();
     } catch {
       toast.error("Reseed failed");

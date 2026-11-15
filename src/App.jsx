@@ -42,7 +42,7 @@ function LandingPage() {
 
   return (
     <main className="isolate min-h-[100dvh] bg-themeBg overflow-x-hidden">
-      {/* Dot-matrix background — fixed behind all content, pointer events pass through */}
+      {/* Dot-matrix background - fixed behind all content, pointer events pass through */}
       <DotMatrixBackground aria-hidden="true" />
       <CustomCursor />
       <SplashScreen />

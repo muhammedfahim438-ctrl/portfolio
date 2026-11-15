@@ -61,6 +61,7 @@
   --color-themeSurface: var(--themeSurface);
   --color-themeText: var(--themeText);
   --color-themeText-secondary: var(--themeTextSecondary);
+  --color-themeTextSecondary: var(--themeTextSecondary);
   --color-themeAccent: var(--themeAccent);
   --color-themeAccent-hover: var(--themeAccentHover);
   --color-themeSecondary: var(--themeSecondary);
@@ -152,7 +153,7 @@
 }
 
 .dark {
-  /* Same deep palette — dark-first, single theme */
+  /* Same deep palette - dark-first, single theme */
   --dg-bg-deep: #080808;
   --dg-surf: #B1B3B3;
   --dg-high: #CDCBCA;
@@ -218,7 +219,7 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 0.5px solid var(--dg-glass-border);
   box-shadow: var(--dg-shadow-glass);
-  border-radius: var(--dg-r-lg);
+  border-radius: var(--dg-r-0);
 }
 
 .dg-glass--strong {
@@ -274,7 +275,7 @@ body {
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   border: 0.5px solid var(--dg-glass-border);
-  border-radius: var(--dg-r-lg);
+  border-radius: var(--dg-r-0);
   box-shadow:
     inset 0 1px 0 var(--dg-glass-border-li),
     inset 0 -1px 0 var(--dg-glass-border-lo),
@@ -513,6 +514,36 @@ body {
 .dg-f-subhead { font-family: var(--font-subhead); letter-spacing: -0.01em; }
 .dg-f-mono { font-family: var(--font-mono); letter-spacing: 0.02em; }
 
+/* ── Radius scale (plain classes, not Tailwind utilities) ── */
+.dg-r-0 { border-radius: var(--dg-r-0); }
+.dg-r-sm { border-radius: var(--dg-r-sm); }
+.dg-r-md { border-radius: var(--dg-r-md); }
+.dg-r-lg { border-radius: var(--dg-r-lg); }
+.dg-r-xl { border-radius: var(--dg-r-xl); }
+.dg-r-full { border-radius: 9999px; }
+
+/* Hairline inset for glass surfaces; box-shadow so it never
+   fights border-width utilities */
+.dg-border-hairline { box-shadow: inset 0 0 0 0.5px var(--dg-glass-border-li); }
+
+/* Micro-lift for skill tiles */
+.dg-repel { transition: transform 0.3s ease; }
+.dg-repel:hover { transform: translateY(-4px); }
+
+/* 404 typography */
+.theme-display {
+  font-family: var(--font-subhead);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--themeText);
+}
+.theme-lede {
+  max-width: 34rem;
+  color: var(--themeTextSecondary);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
 .h1 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -569,16 +600,21 @@ body {
 .btn:active { transform: scale(0.97); }
 
 .btn--primary {
-  background: transparent;
+  background: var(--dg-accent-p);
   border: 1px solid var(--dg-accent-p);
-  color: var(--dg-accent-p);
-  text-shadow: 0 0 8px rgba(200, 16, 46, 0.70);
-  box-shadow: 0 0 8px rgba(200, 16, 46, 0.30);
+  color: var(--dg-bg-deep);
+  box-shadow: 4px 4px 0 0 var(--dg-accent-s);
 }
 .btn--primary:hover {
   background: var(--dg-accent-p);
-  color: #080808;
-  box-shadow: 0 0 16px rgba(200, 16, 46, 0.60);
+  border-color: var(--dg-accent-p);
+  color: var(--dg-bg-deep);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--dg-accent-s);
+}
+.btn--primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--dg-accent-s);
 }
 
 .btn--secondary {
@@ -590,7 +626,7 @@ body {
 }
 .btn--secondary:hover {
   background: var(--dg-accent-s);
-  color: #CDCBCA;
+  color: var(--dg-high);
   box-shadow: 0 0 16px rgba(0, 47, 108, 0.60);
 }
 
@@ -603,7 +639,7 @@ body {
 }
 .btn--warn:hover {
   background: var(--dg-warn);
-  color: #080808;
+  color: var(--dg-bg-deep);
   box-shadow: 0 0 16px rgba(255, 199, 0, 0.60);
 }
 
@@ -613,16 +649,16 @@ body {
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 0.5px solid var(--dg-glass-border);
-  border-radius: var(--dg-r-xl);
+  border-radius: var(--dg-r-0);
   box-shadow: var(--dg-shadow-glass);
   overflow: hidden;
 }
 
 /* ── Form Inputs ── */
 .input-cyber {
-  background: #0A0A0A;
+  background: var(--themeInput);
   border: 0.5px solid var(--dg-glass-border);
-  border-radius: var(--dg-r-md);
+  border-radius: var(--dg-r-0);
   color: var(--dg-high);
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -803,7 +839,7 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--dg-glass-border);
   box-shadow: 0 0 0 1px var(--dg-glass-border), 0 8px 32px var(--themeShadow);
-  border-radius: var(--radius-glass);
+  border-radius: var(--dg-r-0);
 }
 
 .text-gradient {

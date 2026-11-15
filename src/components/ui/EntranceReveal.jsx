@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * EntranceReveal — scroll-triggered reveal component.
+ * EntranceReveal - scroll-triggered reveal component.
  * Element fades/slides/scales into view when it enters the viewport.
  * Supports variants: default (slide), fade, scale.
  * Respects prefers-reduced-motion.

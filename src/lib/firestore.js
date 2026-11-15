@@ -264,7 +264,7 @@ export async function updateSocialData(data) {
   await setDoc(doc(db, "profile", "social_data"), data, { merge: true });
 }
 
-// Messages — deterministic doc id for per-email-per-day rate limiting.
+// Messages - deterministic doc id for per-email-per-day rate limiting.
 export async function sendMessage(data) {
   const { doc, setDoc, serverTimestamp, db } = await ready();
   const id = messageDocId(data.sender_email);

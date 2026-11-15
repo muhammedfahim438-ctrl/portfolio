@@ -25,7 +25,7 @@ export function useAuthGuard() {
     return () => unsubscribe();
   }, []);
 
-  // Derived state — never setState inside an effect body (react-hooks v7
+  // Derived state - never setState inside an effect body (react-hooks v7
   // `set-state-in-effect` rule).
   const status = loading
     ? "loading"

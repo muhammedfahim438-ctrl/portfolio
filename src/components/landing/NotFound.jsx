@@ -8,22 +8,20 @@ import { FiArrowLeft } from "react-icons/fi";
 const NAV_LINKS = [
   { label: "About", href: "/#about" },
   { label: "Skills", href: "/#skills" },
-  { label: "Projects", href: "/#projects" },
-  { label: "Certifications", href: "/#certifications" },
-  { label: "Testimonials", href: "/#testimonials" },
+  { label: "Work", href: "/#work" },
   { label: "Contact", href: "/#contact" },
 ];
 
 export function NotFound() {
   useEffect(() => {
-    document.title = "404 — Page not found | Muhammed Fahim M";
+    document.title = "404: Page not found | Muhammed Fahim M";
     return () => {
       document.title = "Muhammed Fahim M | Data Science & Full-Stack Developer";
     };
   }, []);
 
   return (
-    <main className="min-h-screen bg-themeBg flex flex-col items-center justify-center px-4 py-24 text-center">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-themeBg px-4 py-24 text-center">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -32,7 +30,7 @@ export function NotFound() {
       >
         <p className="theme-eyebrow mb-6">Error 404</p>
 
-        <h1 className="font-display font-bold leading-none tracking-tight text-[clamp(4rem,18vw,9rem)]">
+        <h1 className="font-display text-[clamp(4rem,18vw,9rem)] font-bold leading-none tracking-tight">
           <span className="text-themeAccent">4</span>
           <span className="text-themeText">0</span>
           <span className="text-themeAccent">4</span>
@@ -41,14 +39,14 @@ export function NotFound() {
         <p className="theme-display mt-6">Page not found</p>
 
         <p className="theme-lede mt-4">
-          That route doesn't exist — it may have been moved, renamed, or
-          never shipped. The rest of the site is very much alive.
+          That route does not exist. It may have moved, been renamed, or never
+          shipped. The rest of the site is very much alive.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/"
-            className="inline-flex items-center gap-3 rounded-xl bg-linear-to-r from-themeAccent to-themeAccent-hover px-7 py-3.5 font-display font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+            className="btn btn--primary dg-border-neon-red"
           >
             <FiArrowLeft className="w-4 h-4" aria-hidden="true" />
             Back to home

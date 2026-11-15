@@ -33,7 +33,7 @@ export const CONTACT_LOCATION = "Palakkad, Kerala, India";
 export const GITHUB_URL = "https://github.com/muhammedfahim438-ctrl";
 export const LINKEDIN_URL = "https://linkedin.com/in/muhammed-fahim-m";
 
-// Contact form validation limits — mirrored exactly by firestore.rules so the
+// Contact form validation limits - mirrored exactly by firestore.rules so the
 // client never accepts something the server would reject.
 export const MESSAGE_LIMITS = {
   sender_name: 100,

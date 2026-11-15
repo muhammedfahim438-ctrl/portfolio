@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * Tilt3D — 3D hover tilt component.
+ * Tilt3D - 3D hover tilt component.
  * Follows the mouse cursor with smooth rotateX/rotateY.
  * Disabled on mobile and under prefers-reduced-motion.
  */

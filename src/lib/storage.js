@@ -30,6 +30,6 @@ export async function deleteFile(path) {
   try {
     await deleteObject(ref(storage, path));
   } catch {
-    // ignore — file may not exist
+    // ignore - file may not exist
   }
 }

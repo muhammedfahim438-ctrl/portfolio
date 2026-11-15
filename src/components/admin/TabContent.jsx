@@ -34,7 +34,7 @@ const SECTIONS = [
     collection: "experience",
     empty: { period: "", title: "", org: "", tag: "Career", points: [] },
     schemas: [
-      { key: "period", label: "Period", type: "text", placeholder: "2026 — Present" },
+      { key: "period", label: "Period", type: "text", placeholder: "2026 to present" },
       { key: "title", label: "Title", type: "text" },
       { key: "org", label: "Org / Place", type: "text" },
       {

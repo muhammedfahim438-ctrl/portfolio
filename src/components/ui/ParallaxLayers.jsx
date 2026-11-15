@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, Children, isValidElement, cloneElement } from "react";
 
 /**
- * ParallaxLayers — multi-layer scroll parallax component.
+ * ParallaxLayers - multi-layer scroll parallax component.
  * Each layer moves at a different speed based on scroll progress.
  * Respects prefers-reduced-motion.
  */

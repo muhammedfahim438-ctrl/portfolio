@@ -18,10 +18,10 @@ import {
 
 
 const REASONS = [
-  "HIRE ME — PROJECT WORK",
-  "PROJECT COLLABORATION",
-  "SPEAKING / EVENT INVITATION",
-  "JUST SAYING HELLO",
+  "Project work",
+  "Collaboration",
+  "Speaking or event invitation",
+  "Just saying hello",
 ];
 
 const NAV_LINKS = [
@@ -163,7 +163,7 @@ export function ContactFooter() {
 
   return (
     <>
-      <section id="contact" className="py-24 px-4 border-t border-themeBorder/40 bg-themeBg/60 backdrop-blur-sm overflow-hidden dg-glass dg-r-xl dg-border-hairline">
+      <section id="contact" className="overflow-hidden border-t border-themeBorder/40 bg-themeBg py-24 px-4">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -178,8 +178,8 @@ export function ContactFooter() {
               </span>
             </div>
 
-            <h2 className="h2 dg-f-display text-themeText uppercase dg-glitch dg-corner dg-corner--blue" data-text="Let's Build Something">
-              Let's Build Something
+            <h2 className="h2 dg-f-display text-themeText dg-glitch dg-corner dg-corner--blue" data-text="Let's build something">
+              Let&apos;s build something
             </h2>
 
             <p className="dg-f-subhead text-themeTextSecondary leading-relaxed text-lg max-w-lg mt-6">
@@ -191,7 +191,7 @@ export function ContactFooter() {
                 onClick={scrollToForm}
                 className="btn btn--primary dg-border-neon-red"
               >
-                Start a Project <FiSend className="w-4 h-4 ml-1.5" />
+                GET IN TOUCH <FiSend className="w-4 h-4 ml-1.5" />
               </button>
               <a
                 href="/resume.pdf"
@@ -217,20 +217,20 @@ export function ContactFooter() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="dg-r-xl p-10 border-2 border-themeBorder/60 bg-themeSurface/30 text-center dg-glass dg-border-hairline"
+                  className="dg-r-0 p-10 border-2 border-themeBorder/60 bg-themeSurface/30 text-center dg-glass dg-border-hairline"
                 >
                   <div className="w-12 h-12 mx-auto mb-4 border-2 border-themeAccent flex items-center justify-center text-themeAccent">
                     <FiSend className="w-6 h-6" />
                   </div>
-                  <h3 className="font-display font-bold text-themeText text-xl mb-2 uppercase">
-                    Message Sent
+                  <h3 className="font-display font-bold text-themeText text-xl mb-2">
+                    Message sent
                   </h3>
                   <p className="dg-f-subhead text-themeTextSecondary">
                     Thanks for reaching out. I'll get back to you within 24 hours.
                   </p>
                   <button
                     onClick={() => setSent(false)}
-                    className="mt-6 px-6 py-2.5 rounded-md border-2 border-themeBorder text-themeTextSecondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors dg-ui-mono"
+                    className="mt-6 px-6 py-2.5 rounded-none border-2 border-themeBorder text-themeTextSecondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors dg-ui-mono"
                   >
                     Send Another
                   </button>
@@ -266,7 +266,7 @@ export function ContactFooter() {
                     className="w-full btn btn--primary dg-border-neon-red"
                   >
                     {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/50 border-t-themeAccent rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-themeText/30 border-t-themeAccent rounded-full animate-spin" />
                     ) : (
                       <>
                         <FiSend className="w-4 h-4" />
@@ -291,9 +291,9 @@ export function ContactFooter() {
                 <BrandContactItem icon={<FiMapPin className="w-4 h-4 shrink-0" />} label="LOCATION" value={social.location} />
               </div>
 
-              <div className="dg-r-xl p-8 border-2 border-themeBorder/60 bg-themeSurface/20 dg-glass dg-border-hairline">
-                <p className="font-display font-bold text-themeText text-base mb-4 uppercase dg-f-subhead">
-                  Find Me On
+              <div className="dg-r-0 p-8 border-2 border-themeBorder/60 bg-themeSurface/20 dg-glass dg-border-hairline">
+                <p className="font-display font-bold text-themeText text-base mb-4 dg-f-subhead">
+                  Find me on
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <BrandSocial href={social.github} icon={<FaGithub className="w-4 h-4" />} label="GITHUB" />
@@ -355,13 +355,13 @@ function BrandInput({ id, type, value, onChange, placeholder, required, children
         {id}{required && <span className="text-themeAccent">*</span>}
       </label>
       {isSelect ? (
-        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber">
+        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber">
           {children}
         </select>
       ) : isTextarea ? (
-        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={placeholder ? 1 : undefined} placeholder={placeholder} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber resize-none" />
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={placeholder ? 1 : undefined} placeholder={placeholder} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber resize-none" />
       ) : (
-        <input id={id} type={type} autoComplete={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-md border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText placeholder-themeTextSecondary/40 focus:outline-none focus:border-themeAccent transition-colors input-cyber" />
+        <input id={id} type={type} autoComplete={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText placeholder-themeTextSecondary/40 focus:outline-none focus:border-themeAccent transition-colors input-cyber" />
       )}
     </div>
   );
@@ -378,7 +378,7 @@ function BrandContactItem({ icon, value, href }) {
 
 function BrandSocial({ href, icon, label }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2.5 rounded-md border-2 border-themeBorder/60 text-themeTextSecondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors uppercase tracking-[0.1em] dg-ui-mono">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2.5 rounded-none border-2 border-themeBorder/60 text-themeTextSecondary text-sm font-medium hover:border-themeAccent hover:text-themeAccent transition-colors uppercase tracking-[0.1em] dg-ui-mono">
       {icon}
       <span>{label}</span>
     </a>

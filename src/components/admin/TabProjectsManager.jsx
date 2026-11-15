@@ -200,7 +200,7 @@ export function TabProjectsManager() {
                   <td className="px-5 py-4 text-themeText font-medium">{project.title}</td>
                   <td className="px-5 py-4">
                     <span className="text-[10px] px-2.5 py-1 border-2 border-themeAccent bg-themeAccent/20 text-themeAccent font-bold uppercase tracking-tighter">
-                      {project.category || "—"}
+                      {project.category || "-"}
                     </span>
                   </td>
                   <td className="px-5 py-4">

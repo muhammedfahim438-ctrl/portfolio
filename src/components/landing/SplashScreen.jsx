@@ -113,7 +113,7 @@ export function SplashScreen() {
           initial={{ opacity: 1 }}
           exit={{ y: "-100%" }}
           transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
-          className="fixed inset-0 z-[80] flex flex-col items-center justify-center overflow-hidden bg-[#080808]"
+          className="fixed inset-0 z-[80] flex flex-col items-center justify-center overflow-hidden bg-themeBg"
         >
           {/* dot-matrix boot grid */}
           <div
