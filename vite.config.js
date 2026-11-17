@@ -92,6 +92,14 @@ export default defineConfig({
             return "motion";
           }
 
+          // --- 3D: Three.js + React Three Fiber stay off the landing path ---
+          if (
+            id.includes("node_modules/three") ||
+            id.includes("node_modules/@react-three/")
+          ) {
+            return "three";
+          }
+
           // --- UI (checked BEFORE react, since react-hot-toast and
           // --- react-icons both contain "node_modules/react" in their path) ---
           if (

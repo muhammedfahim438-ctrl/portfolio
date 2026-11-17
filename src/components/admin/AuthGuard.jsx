@@ -8,7 +8,7 @@ export function AuthGuard({ children }) {
 
   if (loading || status === "loading") {
     return (
-      <div className="min-h-screen bg-themeBg flex items-center justify-center">
+      <div className="relative z-10 flex min-h-dvh items-center justify-center">
         <LoadingSpinner size="lg" />
       </div>
     );

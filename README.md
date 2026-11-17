@@ -1,6 +1,8 @@
 # Portfolio — Muhammed Fahim M
 
-A single-page personal portfolio for a **Data Science & Full-Stack Developer** based in Kerala, India.
+A single-page personal portfolio for a **Data Product Engineer** based in Kerala, India.
+The positioning is deliberately narrow: *raw data → model → API → interface*, with every
+claim backed by a shipped system rather than an adjective.
 React 19 + Vite 6 + Tailwind CSS v4 on the front end, with Firebase (Firestore, Authentication,
 Storage) used as a headless CMS so the site can be edited without touching code.
 
@@ -43,14 +45,16 @@ until the files are dropped in.
 
 - Dark/light theme with an inline no-flash script in `index.html` and a persisted `ThemeProvider`
 - Animated splash screen with a roulette-word sequence (`site_config/splash_data`)
-- Hero with Web Speech API voice intro, availability badge and a crossfading portrait
+- Hero with a proof strip, two CTAs and a portrait, all editable from the Brand Studio
+- About section with profile facts, stat readouts and tech chips
+- Experience band driven by the `experience` collection, with a bundled fallback
 - Role-based skills tabs driven by the `skills` collection (Firestore) with a static fallback
 - Projects section with an overlay, a detail modal and an image/gallery model
-- Experience, services, work-process, open-source, "now" log, recognition, certifications,
-  testimonials and trusted-by sections — all Firestore-driven
+- Services, work-process, open-source, "now" log, recognition, certifications and trusted-by
+  sections — all Firestore-driven
 - Contact form writing to Firestore with a honeypot, a minimum fill time, length caps,
   server-side validation and a per-email-per-UTC-day rate limit
-- Admin dashboard at `/admin` with **seven** tabs and schema-driven CRUD
+- Admin dashboard at `/admin` with **seven** tabs, including a schema-driven **Brand Studio**
 - Firebase Storage image uploads from the admin dashboard
 - Lenis smooth scrolling, custom cursor, Framer Motion scroll reveals
 
@@ -77,8 +81,8 @@ The `/seed` browser route was removed — seeding is now a CLI: `npm run seed`.
 npm install
 
 # 2. Create your environment file
-cp .env.example .env        # Windows PowerShell: copy .env.example .env
-#    then fill in the Firebase values from the console (see "Environment Variables")
+#    There is no committed template — create .env and fill in the Firebase
+#    values from the console (see "Environment Variables")
 
 # 3. Seed Firestore with the starter content
 npm run seed
@@ -115,7 +119,8 @@ There is no `test` script and no `typecheck` script — this is a JavaScript-onl
 
 ## Environment Variables
 
-Create a `.env` file in the project root (see `.env.example`).
+Create a `.env` file in the project root. It is git-ignored and there is no committed
+`.env.example`; copy the keys below.
 
 | Variable | Required | Description |
 |----------|----------|-------------|
@@ -177,18 +182,28 @@ This writes:
 
 | Target | Contents |
 |--------|----------|
-| `site_config/hero_data` | `title`, `subtitle`, `voice_text`, `photo_url` |
+| `site_config/brand_data` | `name`, `role`, `tagline`, `brandLine`, `location`, `metaTitle`, `metaDescription` |
+| `site_config/hero_data` | `eyebrow`, `headline`, `subhead`, `proof`, both CTA label/href pairs, `footerLine`, `portraitAlt`, `photo_url` |
+| `site_config/about_data` | `label`, `revision`, `display`, `lead`, `paragraphs`, `facts`, `stats`, `tech`, CTA copy |
+| `site_config/sections_data` | `experience`, `skills`, `work`, `contact` headings, subheads and CTA copy |
+| `site_config/footer_data` | `copyright`, `brandLine`, `credit`, `nav`, `splashFinal` |
 | `profile/social_data` | `email`, `phone`, `location`, `github`, `linkedin`, `kaggle`, `leetcode`, `resume_pdf_url` |
-| `projects` | 12 portfolio projects |
+| `projects` | 11 portfolio projects |
+| `experience` | 2 internships (TechFifo, Bluestock) |
 | `skills` | 31 skills (name, category, level, icon) |
 | `certifications` | 5 certificates |
-| `recognition` | 4 recognition entries |
-| `testimonials` | 4 testimonials |
+| `recognition` | 4 verifiable-build entries |
 | `trusted_by` | 8 logos/names |
 
-The collections `services`, `work_steps`, `experience`, `open_source`, `now_log` and `marquee` are
-**not** seeded — they are edited from the admin dashboard's *Content* tab and each landing section
-falls back to static defaults while they are empty.
+Config seeding is **field-level**: an existing field always wins, so re-running the seeder adds new
+keys (for example the Brand Studio fields) without overwriting copy edited in the admin.
+
+Testimonials are intentionally **not** seeded. Invented quotes attributed to an employer or a
+community are a liability — add real, consented quotes in the admin when they exist.
+
+The collections `services`, `work_steps`, `open_source`, `now_log` and `marquee` are **not** seeded —
+they are edited from the admin dashboard's *Content* tab and each landing section falls back to
+static defaults while they are empty.
 
 ### 4. (Optional) App Check
 
@@ -210,13 +225,23 @@ Go to `/admin/login` and sign in with the admin account.
 
 | Tab | Component | Backed by |
 |-----|-----------|-----------|
-| Hero & Config | `TabHeroConfig` | `site_config/hero_data` |
+| Brand Studio | `TabBrandStudio` | `site_config/brand_data`, `hero_data`, `about_data`, `sections_data`, `footer_data`, `splash_data` |
 | Projects | `TabProjectsManager` | `projects` (custom form + Storage image upload) |
 | Content | `TabContent` | `services`, `work_steps`, `experience`, `open_source`, `now_log`, `recognition`, `certifications`, `trusted_by`, `marquee` |
 | Settings | `TabSettings` | `site_config/availability_data`, `site_config/portrait_data`, `site_config/splash_data`, `profile/social_data` |
 | Skills & Links | `TabSkillsLinks` | `skills`, `certifications`, `profile/social_data` (social links) |
 | Testimonials | `TabTestimonials` | `testimonials` |
 | Messages | `TabMessages` | `messages` (live `onSnapshot`, newest first) |
+
+**Brand Studio** is nine sub-tabs — Identity, Hero, About, Experience, Stack, Work, Contact,
+Footer & Splash, and SEO — each a schema-driven form for one config document. Every field falls back
+to `src/data/brandDefaults.js`, and each form has a **Load brand defaults** button that fills the
+inputs (it only publishes when you press **Save changes**). Saving writes with `set(..., { merge: true })`,
+so editing the Contact block never clears the Work block in the same document.
+
+The SEO sub-tab updates the tab title and in-page meta description live, but Open Graph / Twitter
+cards are baked into `index.html` at build time — change `brandDefaults.js` (or `index.html`) and
+redeploy for link previews to update.
 
 The header bar shows a live document count per collection and offers two actions, both behind a
 `confirm()` dialog:
@@ -235,7 +260,6 @@ The header bar shows a live document count per collection and offers two actions
 ```
 D:\portfolio
 ├─ .github\workflows\ci.yml       Lint + build on every push/PR to main
-├─ .env.example                   Template for the local .env
 ├─ AGENTS.md                      Architecture notes for AI agents / contributors
 ├─ eslint.config.js               ESLint flat config (JS/JSX only)
 ├─ firebase.json                  Firestore + Storage rules deployment config
@@ -258,24 +282,23 @@ D:\portfolio
    │     └─ login\page.jsx          Email/password sign-in
    ├─ components\
    │  ├─ landing\                  Public sections (one file per section)
-   │  │  ├─ SplashScreen.jsx  HeroSection.jsx  MarqueeTicker.jsx  AboutSection.jsx
-   │  │  ├─ SkillsTabs.jsx    ExperienceSection.jsx  ServicesSection.jsx
-   │  │  ├─ FeaturedProjects.jsx  ProjectOverlay.jsx  ProjectDetailModal.jsx
-   │  │  ├─ OpenSourceSection.jsx  CertificationsSection.jsx  RecognitionSection.jsx
-   │  │  ├─ NowSection.jsx    TestimonialsSection.jsx  TrustedBySection.jsx
-   │  │  ├─ WorkWithMeSection.jsx  ContactFooter.jsx
-   │  │  ├─ NotFound.jsx         AnimatedPortrait.jsx  ScenicScene.jsx
+   │  │  ├─ SplashScreen.jsx  HeroSection.jsx  AboutSection.jsx
+   │  │  ├─ ExperienceSection.jsx  SkillsTabs.jsx  FeaturedProjects.jsx
+   │  │  ├─ ContactFooter.jsx  DotMatrixBackground.jsx  NotFound.jsx
    │  ├─ admin\                    Tab components + ConfigEditor + ReusableCrud + ImageUploader
    │  │  ├─ AdminHeader.jsx  AuthGuard.jsx  ConfigEditor.jsx  ReusableCrud.jsx
-   │  │  ├─ TabHeroConfig.jsx  TabProjectsManager.jsx  TabContent.jsx  TabSettings.jsx
+   │  │  ├─ TabBrandStudio.jsx  TabProjectsManager.jsx  TabContent.jsx  TabSettings.jsx
    │  │  ├─ TabSkillsLinks.jsx  TabTestimonials.jsx  TabMessages.jsx  ImageUploader.jsx
-   │  ├─ providers\ThemeProvider.jsx
+   │  │  ├─ brand\                 BrandForm.jsx  BrandPreview.jsx  BrandGuideCard.jsx
+   │  ├─ providers\
+   │  │  ├─ ThemeProvider.jsx      dark/light class + localStorage
+   │  │  └─ BrandContentProvider.jsx  loads brand docs, merges defaults, syncs meta tags
    │  └─ ui\                       Shared primitives
-   │     ├─ Button.jsx  Modal.jsx  ThemeToggle.jsx  SplitText.jsx  ScrambleText.jsx
-   │     ├─ CustomCursor.jsx  LoadingSpinner.jsx  MagneticButton.jsx  ResumeModal.jsx
-   │     └─ WordHighlight.jsx
+   │     ├─ CustomCursor.jsx  EntranceReveal.jsx  LoadingSpinner.jsx
+   │     └─ ParallaxLayers.jsx  Tilt3D.jsx
    ├─ hooks\
    │  ├─ useAuthGuard.js           Firebase Auth state + redirect
+   │  ├─ useBrandContent.js        Brand copy from context (defaults outside the provider)
    │  ├─ useTheme.js               Theme context consumer
    │  └─ useSpeech.js              Web Speech API wrapper
    ├─ lib\
@@ -286,9 +309,11 @@ D:\portfolio
    │  ├─ firestore.js              The only module that talks to Firestore (lazy-loaded)
    │  ├─ auth.js                   Sign-in / sign-out helpers
    │  ├─ storage.js                Resumable upload / delete helpers
+   │  ├─ contentMerge.js           mergeDeep / getAt / setAt for brand documents
    │  ├─ iconMap.js                ICON_MAP / ICON_KEYS for admin icon pickers
    │  └─ constants.js              Owner contact details, message limits, email regex
    └─ data\
+      ├─ brandDefaults.js          Single source of truth for every brand string + fallback
       └─ seed.js                   Seed data + seedAll()
 ```
 
@@ -298,12 +323,22 @@ D:\portfolio
 
 | Path | Shape |
 |------|-------|
-| `site_config/hero_data` | `title`, `subtitle`, `voice_text`, `photo_url` |
+| `site_config/brand_data` | `name`, `shortName`, `monogram`, `role`, `tagline`, `brandLine`, `location`, `metaTitle`, `metaDescription` |
+| `site_config/hero_data` | `eyebrow`, `headline`, `subhead`, `proof` (array), `ctaPrimary*`, `ctaSecondary*`, `footerLine`, `portraitAlt`, `photo_url` |
+| `site_config/about_data` | `label`, `revision`, `display`, `lead`, `paragraphs` (array), `facts` (`{term,value}`), `stats` (`{value,label}`), `tech` (array) |
+| `site_config/sections_data` | nested `experience`, `skills`, `work`, `contact` — each with `label`, `heading`, `subhead` and its CTA copy |
+| `site_config/footer_data` | `copyright`, `brandLine`, `credit`, `nav` (`{label,href}`), `splashFinal` |
 | `site_config/availability_data` | `available` (bool), `label` |
 | `site_config/portrait_data` | `photos` (array of URLs; empty = bundled `/portrait.svg`) |
 | `site_config/splash_data` | `words` (array), `final` |
 | `profile/social_data` | `email`, `phone`, `location`, `github`, `linkedin`, `kaggle`, `leetcode`, `resume_pdf_url` |
 | `messages` | contact submissions — `sender_name`, `sender_email`, `sender_phone`, `reason`, `message_body`, `created_at` |
+
+The five Brand Studio documents (`brand_data`, `hero_data`, `about_data`, `sections_data`,
+`footer_data`) are mirrored in `src/data/brandDefaults.js`. The provider merges the stored document
+over the defaults one field at a time (arrays replace, nested objects merge), so a missing or
+half-written document still renders complete copy. `availability_data`, `portrait_data` and
+`splash_data` are edited in the Settings tab.
 
 **Collections** (all documents are `{id, ...data}`):
 `projects`, `skills`, `certifications`, `recognition`, `testimonials`, `trusted_by`, `services`,
@@ -358,3 +393,7 @@ dependency, commit `package.json` and `package-lock.json` in the same commit**, 
 - **Auth gating is client-side.** `AuthGuard` is UX, not security. `firestore.rules` is the boundary.
 - **Firestore composite indexes are not configured.** Queries that need one will fail until  `firestore.indexes.json` is updated and redeployed.
 - **App Check and the CLI seeder conflict.** reCAPTCHA v3 cannot run in Node.
+- **Open Graph / Twitter cards are build-time.** Editing `brand_data` updates the tab title and meta
+  description in the browser, but crawlers keep reading `index.html` until the site is redeployed.
+- **The resume PDF is a separate artifact.** `public/resume.pdf` still carries its own wording and
+  education details; the site does not parse it. Update the file itself when the copy changes.

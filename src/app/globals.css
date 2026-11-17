@@ -1,18 +1,12 @@
 @import "tailwindcss";
 
 /* ── Fonts ─────────────────────────────────────────────────────────────
- * NDot55 (display), Ntype82 (subhead/body), Lettera Mono LL (mono/UI).
+ * Ntype82 (headline + body), Ntype82 Mono (labels/UI/readouts),
+ * NDot55 (product names/logotypes/special items), NDot57 (data numerals).
  * Drop the woff2 files into public/fonts/ with these exact names:
- *   NDot55.woff2  Ntype82.woff2  LetteraMonoLL.woff2
+ *   Ntype82.woff2  Ntype82-Mono.woff2  NDot55.woff2  NDot57.woff2
  * Until then the stack falls back to system faces and the layout holds.
  * ──────────────────────────────────────────────────────────────────── */
-@font-face {
-  font-family: "NDot55";
-  src: url("/fonts/NDot55.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 @font-face {
   font-family: "Ntype82";
   src: url("/fonts/Ntype82.woff2") format("woff2");
@@ -21,28 +15,42 @@
   font-display: swap;
 }
 @font-face {
-  font-family: "Lettera Mono LL";
-  src: url("/fonts/LetteraMonoLL.woff2") format("woff2");
+  font-family: "Ntype82 Mono";
+  src: url("/fonts/Ntype82-Mono.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NDot55";
+  src: url("/fonts/NDot55.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NDot57";
+  src: url("/fonts/NDot57.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @theme inline {
-  /* ── Typography ── */
-  --font-display: "NDot55", ui-sans-serif, system-ui, sans-serif;
+  /* ── Typography ──
+   * display = Ntype82 headline cut (h1-h3). subhead/sans = Ntype82 body.
+   * mono = Ntype82 Mono (labels, buttons, badges). logo = NDot55
+   * (product names/logotypes). data = NDot57 (numbers/readouts). */
+  --font-display: "Ntype82", ui-sans-serif, system-ui, sans-serif;
   --font-subhead: "Ntype82", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Ntype82", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Lettera Mono LL", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-mono: "Ntype82 Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-logo: "NDot55", ui-sans-serif, system-ui, sans-serif;
+  --font-data: "NDot57", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
 
   /* ── Radius ── */
   --radius-glass: 0.75rem;
   --dg-r-0: 0;
-  --dg-r-sm: 4px;
-  --dg-r-md: 8px;
-  --dg-r-lg: 12px;
-  --dg-r-xl: 16px;
-  --dg-r-full: 9999px;
 
   /* ── Core Palette ── */
   --color-bg-deep: var(--dg-bg-deep);
@@ -69,6 +77,7 @@
   --color-themeCard: var(--themeCard);
   --color-themeInput: var(--themeInput);
   --color-themeWarn: var(--themeWarn);
+  --color-themeAlert: var(--dg-alert);
   --color-themeGradientStart: var(--themeGradientStart);
   --color-themeGradientEnd: var(--themeGradientEnd);
   --color-themeWaveform: var(--themeWaveform);
@@ -81,9 +90,6 @@
 
   /* ── Shadows ── */
   --color-shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.52);
-  --color-shadow-tint-red: 0 0 24px rgba(200, 16, 46, 0.16);
-  --color-shadow-tint-blue: 0 0 24px rgba(0, 47, 108, 0.14);
-  --color-shadow-tint-yellow: 0 0 24px rgba(255, 199, 0, 0.12);
 
   /* ── Parallax & 3D ── */
   --color-parallax-depth-1: var(--dg-parallax-depth-1);
@@ -95,28 +101,28 @@
 
 :root {
   /* ── Core Palette ──
-   * Target ratio across a screen: black 70 / silver 12 / grey 10 /
-   * blue 4 / red 3 / yellow 1. Red = signal and primary actions,
-   * blue = depth and interactive states, yellow = micro accents only.
+   * Industrial-brutalist system on a single #080808 substrate.
+   * Red-line #C8102E draws borders/hairlines; red-fill #D71920 signals
+   * fills/alerts/active states; yellow #FFC700 is reserved for micro
+   * signals (scanlines, active tab, focus ring). Per-section ratios are
+   * tuned per component; global average: 80/15/5.
    */
   --dg-bg-deep: #080808;
-  --dg-surf: #B1B3B3;
-  --dg-high: #CDCBCA;
+  --dg-surf: #CDCBCA;
+  --dg-high: #DCD7D2;
   --dg-accent-p: #C8102E;
-  --dg-accent-s: #002F6C;
+  --dg-accent-s: #FFC700;
+  --dg-alert: #D71920;
   --dg-warn: #FFC700;
 
   /* ── Glass Foundation ── */
-  --dg-glass-bg: rgba(14, 14, 14, 0.62);
+  --dg-glass-bg: rgba(8, 8, 8, 0.62);
   --dg-glass-border: rgba(205, 203, 202, 0.30);
   --dg-glass-border-li: rgba(255, 255, 255, 0.50);
   --dg-glass-border-lo: rgba(0, 0, 0, 0.30);
 
   /* ── Shadows ── */
   --dg-shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.52);
-  --dg-shadow-tint-red: 0 0 24px rgba(200, 16, 46, 0.16);
-  --dg-shadow-tint-blue: 0 0 24px rgba(0, 47, 108, 0.14);
-  --dg-shadow-tint-yellow: 0 0 24px rgba(255, 199, 0, 0.12);
 
   /* ── Parallax & 3D ── */
   --dg-parallax-depth-1: 0.1;
@@ -128,20 +134,21 @@
   /* ── Base overrides ── */
   --themeBg: #080808;
   --themeBgSecondary: #0A0A0A;
-  --themeSurface: #B1B3B3;
-  --themeText: #CDCBCA;
-  --themeTextSecondary: #8A8A8A;
+  --themeSurface: #CDCBCA;
+  --themeText: #DCD7D2;
+  --themeTextSecondary: #CDCBCA;
   --themeAccent: #C8102E;
-  --themeAccentHover: #FFC700;
-  --themeSecondary: #CDCBCA;
+  --themeAccentHover: #D71920;
+  --themeSecondary: #DCD7D2;
   --themeBorder: rgba(205, 203, 202, 0.30);
-  --themeCard: rgba(14, 14, 14, 0.62);
+  --themeCard: rgba(8, 8, 8, 0.62);
   --themeInput: #0A0A0A;
 
   --themeShadow: rgba(0, 0, 0, 0.52);
   --themeGradientStart: #C8102E;
-  --themeGradientEnd: #002F6C;
+  --themeGradientEnd: #FFC700;
   --themeWaveform: #FFC700;
+  --themeWarn: #FFC700;
 
   /* ── Z-index scale ── */
   --dg-z-bg: 0;
@@ -153,23 +160,21 @@
 }
 
 .dark {
-  /* Same deep palette - dark-first, single theme */
+  /* Dark-first, single theme - mirrors :root */
   --dg-bg-deep: #080808;
-  --dg-surf: #B1B3B3;
-  --dg-high: #CDCBCA;
+  --dg-surf: #CDCBCA;
+  --dg-high: #DCD7D2;
   --dg-accent-p: #C8102E;
-  --dg-accent-s: #002F6C;
+  --dg-accent-s: #FFC700;
+  --dg-alert: #D71920;
   --dg-warn: #FFC700;
 
-  --dg-glass-bg: rgba(14, 14, 14, 0.62);
+  --dg-glass-bg: rgba(8, 8, 8, 0.62);
   --dg-glass-border: rgba(205, 203, 202, 0.30);
   --dg-glass-border-li: rgba(255, 255, 255, 0.50);
   --dg-glass-border-lo: rgba(0, 0, 0, 0.30);
 
   --dg-shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.52);
-  --dg-shadow-tint-red: 0 0 24px rgba(200, 16, 46, 0.16);
-  --dg-shadow-tint-blue: 0 0 24px rgba(0, 47, 108, 0.14);
-  --dg-shadow-tint-yellow: 0 0 24px rgba(255, 199, 0, 0.12);
 
   /* ── Parallax & 3D ── */
   --dg-parallax-depth-1: 0.1;
@@ -180,20 +185,21 @@
 
   --themeBg: #080808;
   --themeBgSecondary: #0A0A0A;
-  --themeSurface: #B1B3B3;
-  --themeText: #CDCBCA;
-  --themeTextSecondary: #8A8A8A;
+  --themeSurface: #CDCBCA;
+  --themeText: #DCD7D2;
+  --themeTextSecondary: #CDCBCA;
   --themeAccent: #C8102E;
-  --themeAccentHover: #FFC700;
-  --themeSecondary: #CDCBCA;
+  --themeAccentHover: #D71920;
+  --themeSecondary: #DCD7D2;
   --themeBorder: rgba(205, 203, 202, 0.30);
-  --themeCard: rgba(14, 14, 14, 0.62);
+  --themeCard: rgba(8, 8, 8, 0.62);
   --themeInput: #0A0A0A;
 
   --themeShadow: rgba(0, 0, 0, 0.52);
   --themeGradientStart: #C8102E;
-  --themeGradientEnd: #002F6C;
+  --themeGradientEnd: #FFC700;
   --themeWaveform: #FFC700;
+  --themeWarn: #FFC700;
 }
 
 /* ── Base ── */
@@ -202,6 +208,19 @@ body {
   color: var(--themeText);
   font-family: var(--font-subhead);
   overflow-x: hidden;
+  /* Nothing/brutalist voice: everything renders uppercase. Display-only
+     transform — source strings, input values and Firestore copy are
+     unchanged. SVG <text> nodes are not affected. */
+  text-transform: uppercase;
+}
+
+/* All headings render uppercase (landing + admin). text-transform is an
+   inherited property, so generated glitch pseudo-layers (::before/::after)
+   uppercase in sync with the element. */
+h1,
+h2,
+h3 {
+  text-transform: uppercase;
 }
 
 /* Accessible focus ring on every interactive element */
@@ -222,47 +241,6 @@ body {
   border-radius: var(--dg-r-0);
 }
 
-.dg-glass--strong {
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border-width: 0.5px;
-  border-color: rgba(205, 203, 202, 0.45);
-}
-
-.dg-bezel-double {
-  position: relative;
-  border: 0.5px solid var(--dg-glass-border);
-  border-radius: inherit;
-  box-shadow:
-    inset 0 0 0 0.5px var(--dg-glass-border-li),
-    inset 0 1px 1px rgba(0, 0, 0, 0.40),
-    0 10px 28px -6px rgba(0, 0, 0, 0.50);
-}
-
-.dg-bezel-double::before {
-  content: "";
-  position: absolute;
-  inset: -0.5px;
-  border: 0.5px solid var(--dg-glass-border-lo);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 0;
-}
-.dg-bezel-double > * {
-  position: relative;
-  z-index: 1;
-}
-
-.dg-shadow--tint-red {
-  box-shadow: var(--dg-shadow-glass), var(--dg-shadow-tint-red);
-}
-.dg-shadow--tint-blue {
-  box-shadow: var(--dg-shadow-glass), var(--dg-shadow-tint-blue);
-}
-.dg-shadow--tint-yellow {
-  box-shadow: var(--dg-shadow-glass), var(--dg-shadow-tint-yellow);
-}
-
 /* ── Liquid Glass (approximation, no backdrop blur cost at rest) ── */
 .dg-liquid {
   position: relative;
@@ -270,7 +248,7 @@ body {
     135deg,
     rgba(205, 203, 202, 0.10),
     rgba(205, 203, 202, 0.03) 42%,
-    rgba(0, 47, 108, 0.12)
+    rgba(255, 199, 0, 0.12)
   );
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
@@ -296,35 +274,101 @@ body {
   transform: translateX(120%);
 }
 
-/* ── Dot-matrix textures ── */
-.dg-halftone {
-  background-image: radial-gradient(circle at 50% 50%, rgba(205, 203, 202, 0.16) 1px, transparent 1.6px);
-  background-size: 7px 7px;
+/* ── Liquid sheen: the hover payoff. Add to any plate to get the
+ * specular streak sweep on hover without adopting .dg-liquid's fill. */
+.dg-sheen {
+  position: relative;
+  overflow: hidden;
 }
+.dg-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.07) 45%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.9s ease;
+}
+.dg-sheen:hover::before {
+  transform: translateX(120%);
+}
+
+/* ── Section screen: every section floats on a translucent glass-liquid
+ * plate while the fixed dot-matrix canvas (z-0) shows through behind it.
+ * Fill sits at ~55-65% effective alpha so the HUD dots read under content.
+ * Degradation path: drop the backdrop-filter, keep the translucent fill. */
+.dg-screen {
+  position: relative;
+  background-color: rgba(8, 8, 8, 0.55);
+  /* Layer order (top → bottom): CRT scanlines, blueprint line matrix
+   * (h + v), diagonal silver sheen + faint red corner, top-to-bottom
+   * depth fade. The line + dot matrix pair: dots live on the fixed
+   * canvas behind, lines live inside every screen. */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.16) 0,
+      rgba(0, 0, 0, 0.16) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(90deg, rgba(205, 203, 202, 0.055) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(205, 203, 202, 0.055) 1px, transparent 1px),
+    linear-gradient(
+      160deg,
+      rgba(205, 203, 202, 0.14),
+      rgba(205, 203, 202, 0.05) 42%,
+      rgba(200, 16, 46, 0.06)
+    ),
+    linear-gradient(0deg, rgba(8, 8, 8, 0.35), transparent 30%);
+  background-size:
+    auto,
+    56px 56px,
+    56px 56px,
+    auto,
+    auto;
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  /* hairline via shadow so it never fights Tailwind section borders */
+  box-shadow:
+    inset 0 0 0 0.5px var(--dg-glass-border),
+    inset 0 1px 0 var(--dg-glass-border-li),
+    inset 0 -1px 0 var(--dg-glass-border-lo),
+    var(--dg-shadow-glass);
+}
+
+/* ── Grid textures ── */
 .dg-blueprint {
   background-image:
-    linear-gradient(rgba(0, 47, 108, 0.28) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 47, 108, 0.28) 1px, transparent 1px);
+    linear-gradient(rgba(205, 203, 202, 0.26) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(205, 203, 202, 0.26) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
 /* ── Transparency fallbacks (no backdrop-filter support or user opt-out) ── */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .dg-glass,
-  .dg-card-glass,
-  .dg-liquid {
+  .dg-liquid,
+  .dg-screen {
     background: rgba(10, 10, 10, 0.96);
   }
 }
 @media (prefers-reduced-transparency: reduce) {
   .dg-glass,
-  .dg-card-glass,
-  .dg-liquid {
+  .dg-liquid,
+  .dg-screen {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: rgba(10, 10, 10, 0.96);
   }
-  .dg-liquid::before {
+  .dg-liquid::before,
+  .dg-sheen::before {
     display: none;
   }
 }
@@ -336,30 +380,11 @@ body {
     0 0 8px rgba(200, 16, 46, 0.55),
     0 0 16px rgba(200, 16, 46, 0.25) inset;
 }
-.dg-border-neon-blue {
+.dg-border-neon-signal {
   border: 1px solid var(--dg-accent-s);
-  box-shadow:
-    0 0 8px rgba(0, 47, 108, 0.55),
-    0 0 16px rgba(0, 47, 108, 0.25) inset;
-}
-.dg-border-neon-warn {
-  border: 1px solid var(--dg-warn);
   box-shadow:
     0 0 8px rgba(255, 199, 0, 0.55),
     0 0 16px rgba(255, 199, 0, 0.25) inset;
-}
-
-.dg-text-neon-red {
-  color: var(--dg-accent-p);
-  text-shadow: 0 0 8px rgba(200, 16, 46, 0.70);
-}
-.dg-text-neon-blue {
-  color: var(--dg-accent-s);
-  text-shadow: 0 0 8px rgba(0, 47, 108, 0.70);
-}
-.dg-text-neon-warn {
-  color: var(--dg-warn);
-  text-shadow: 0 0 8px rgba(255, 199, 0, 0.70);
 }
 
 /* ── Glitch ──
@@ -411,73 +436,12 @@ body {
   100% { clip-path: inset(45% 0 55% 0); transform: translate(0, 0); }
 }
 
-/* ── Scanlines / CRT ── */
-.dg-scanlines {
-  position: relative;
-  overflow: hidden;
-}
-.dg-scanlines::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  background:
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.20) 50%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.04) 50%),
-    linear-gradient(#CDCBCA 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 3px;
-  opacity: 0.35;
-}
-
-.dg-crt {
-  position: relative;
-  overflow: hidden;
-}
-.dg-crt::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-  background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 0, 0, 0.12) 2px, rgba(0, 0, 0, 0.12) 4px);
-  opacity: 0.30;
-}
-.dg-crt::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.55) 100%);
-}
-
-/* ── Dot Matrix Backgrounds ── */
-.dg-dot-matrix {
-  background-color: var(--dg-bg-deep);
-  background-image: radial-gradient(#CDCBCA 1px, transparent 1px);
-  background-size: 10px 10px;
-  opacity: 0.02;
-}
-.dg-dot-grid--sparse {
-  background-image: radial-gradient(#CDCBCA 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.08;
-}
-.dg-dot-grid--dense {
-  background-image: radial-gradient(#CDCBCA 1px, transparent 1px);
-  background-size: 6px 6px;
-  opacity: 0.12;
-}
-
 /* ── Corner Brackets ── */
 .dg-corner {
   position: relative;
 }
 .dg-corner::before,
-.dg-corner::after,
-.dg-corner .dg-corner-bl::before,
-.dg-corner .dg-corner-br::after {
+.dg-corner::after {
   content: "";
   position: absolute;
   width: 12px;
@@ -486,11 +450,8 @@ body {
 }
 .dg-corner::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
 .dg-corner::after { top: -1px; right: -1px; border-left: none; border-bottom: none; }
-.dg-corner .dg-corner-bl::before { bottom: -1px; left: -1px; border-right: none; border-top: none; }
-.dg-corner .dg-corner-br::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-.dg-corner--blue * { border-color: var(--dg-accent-s); }
-.dg-corner--warn * { border-color: var(--dg-warn); }
+.dg-corner--signal * { border-color: var(--dg-accent-s); }
 
 /* ── Chunky ──
  * Dark glass plate with hard-edged red border and blue offset shadow.
@@ -513,14 +474,13 @@ body {
 .dg-f-display { font-family: var(--font-display); letter-spacing: -0.02em; }
 .dg-f-subhead { font-family: var(--font-subhead); letter-spacing: -0.01em; }
 .dg-f-mono { font-family: var(--font-mono); letter-spacing: 0.02em; }
+/* Product names, logotypes, monograms — NDot55 */
+.dg-f-logo { font-family: var(--font-logo); letter-spacing: 0.02em; }
+/* Data numerals and readouts — NDot57 */
+.dg-f-data { font-family: var(--font-data); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
 
 /* ── Radius scale (plain classes, not Tailwind utilities) ── */
 .dg-r-0 { border-radius: var(--dg-r-0); }
-.dg-r-sm { border-radius: var(--dg-r-sm); }
-.dg-r-md { border-radius: var(--dg-r-md); }
-.dg-r-lg { border-radius: var(--dg-r-lg); }
-.dg-r-xl { border-radius: var(--dg-r-xl); }
-.dg-r-full { border-radius: 9999px; }
 
 /* Hairline inset for glass surfaces; box-shadow so it never
    fights border-width utilities */
@@ -544,14 +504,6 @@ body {
   line-height: 1.6;
 }
 
-.h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
 .h2 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -559,41 +511,25 @@ body {
   line-height: 1.1;
   letter-spacing: -0.015em;
   text-wrap: balance;
-}
-.h3 {
-  font-family: var(--font-subhead);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
+  text-transform: uppercase;
 }
 
 .dg-ui-mono {
   font-family: var(--font-mono);
   font-feature-settings: "liga" 0, "calt" 0;
 }
-.dg-scramble {
-  display: inline-block;
-  animation: dg-scramble 0.35s steps(1, jump-end) infinite;
-}
-@keyframes dg-scramble {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-3px) rotate(-1deg); }
-  50% { transform: translateY(3px) rotate(1deg); }
-  75% { transform: translateY(-1px); }
-}
 
 /* ── Component Patterns ── */
 .btn {
   @apply inline-flex items-center justify-center gap-2;
+  padding: 0.75rem 1.5rem;
   font-family: var(--font-mono);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-size: 0.875rem;
-  min-height: 44px;
-  min-width: 120px;
+  min-height: 2.75rem;
+  min-width: 7.5rem;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
@@ -621,37 +557,13 @@ body {
   background: transparent;
   border: 1px solid var(--dg-accent-s);
   color: var(--dg-accent-s);
-  text-shadow: 0 0 8px rgba(0, 47, 108, 0.70);
-  box-shadow: 0 0 8px rgba(0, 47, 108, 0.30);
+  text-shadow: 0 0 8px rgba(255, 199, 0, 0.70);
+  box-shadow: 0 0 8px rgba(255, 199, 0, 0.30);
 }
 .btn--secondary:hover {
   background: var(--dg-accent-s);
   color: var(--dg-high);
-  box-shadow: 0 0 16px rgba(0, 47, 108, 0.60);
-}
-
-.btn--warn {
-  background: transparent;
-  border: 1px solid var(--dg-warn);
-  color: var(--dg-warn);
-  text-shadow: 0 0 8px rgba(255, 199, 0, 0.70);
-  box-shadow: 0 0 8px rgba(255, 199, 0, 0.30);
-}
-.btn--warn:hover {
-  background: var(--dg-warn);
-  color: var(--dg-bg-deep);
   box-shadow: 0 0 16px rgba(255, 199, 0, 0.60);
-}
-
-/* ── Glass Card ── */
-.dg-card-glass {
-  background: var(--dg-glass-bg);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 0.5px solid var(--dg-glass-border);
-  border-radius: var(--dg-r-0);
-  box-shadow: var(--dg-shadow-glass);
-  overflow: hidden;
 }
 
 /* ── Form Inputs ── */
@@ -668,39 +580,15 @@ body {
 .input-cyber:focus {
   outline: none;
   border-color: var(--dg-accent-s);
-  box-shadow: 0 0 12px rgba(0, 47, 108, 0.35);
+  box-shadow: 0 0 12px rgba(255, 199, 0, 0.35);
 }
-
-/* ── Layout ── */
-.dg-layout-asym {
-  display: grid;
-  grid-template-columns: 1fr 0.55fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 2rem;
-}
-.dg-asym--offset-a { grid-column: 2; grid-row: 1; transform: rotate(-1deg); }
-.dg-asym--offset-b { grid-column: 3; grid-row: 2; transform: rotate(1.5deg); }
-.dg-asym--offset-c { grid-column: 1; grid-row: 2; align-self: end; }
 
 @media (max-width: 768px) {
-  .dg-layout-asym {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-  .dg-asym--offset-a,
-  .dg-asym--offset-b,
-  .dg-asym--offset-c {
-    transform: none;
-    grid-column: 1;
-  }
   .dg-corner::before,
-  .dg-corner::after,
-  .dg-corner .dg-corner-bl::before,
-  .dg-corner .dg-corner-br::after {
+  .dg-corner::after {
     width: 8px;
     height: 8px;
   }
-  .dg-crt::before { opacity: 0.15; }
 }
 
 /* ── Parallax & 3D Motion ── */
@@ -769,6 +657,11 @@ body {
 }
 
 .tilt-3d__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
   transform-style: preserve-3d;
   transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -817,12 +710,6 @@ body {
     animation: none !important;
     display: none !important;
   }
-  .dg-scramble {
-    animation: none !important;
-  }
-  .dg-crt::before {
-    animation: none !important;
-  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -831,27 +718,9 @@ body {
   }
 }
 
-/* ── Legacy compat (keep existing classes working) ── */
-.glass {
-  position: relative;
-  background: var(--dg-glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--dg-glass-border);
-  box-shadow: 0 0 0 1px var(--dg-glass-border), 0 8px 32px var(--themeShadow);
-  border-radius: var(--dg-r-0);
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, var(--dg-accent-p), var(--dg-accent-s));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 ::selection {
   background-color: var(--dg-accent-p);
-  color: #CDCBCA;
+  color: #DCD7D2;
 }
 
 /* Lenis */
@@ -864,18 +733,7 @@ html.lenis, html.lenis body { height: auto; }
 ::-webkit-scrollbar-track { background: var(--themeBgSecondary); }
 ::-webkit-scrollbar-thumb { background: var(--dg-accent-p); border-radius: 3px; }
 
-/* Legacy animation keys still referenced elsewhere */
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-.cursor-blink { animation: blink 1s step-end infinite; }
-@keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.animate-marquee { animation: marquee-scroll 30s linear infinite; }
-.animate-marquee:hover { animation-play-state: paused; }
-@keyframes orb-drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(18px, -26px) scale(1.08); }
-  66% { transform: translate(-16px, 16px) scale(0.95); }
-}
-.animate-orb { animation: orb-drift 16s ease-in-out infinite; }
+/* Scroll hint dot — used by the hero */
 @keyframes scroll-dot {
   0% { transform: translateY(0); opacity: 0; }
   30% { opacity: 1; }
@@ -976,18 +834,3 @@ html.lenis, html.lenis body { height: auto; }
   transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .link-underline:hover::after { transform: scaleX(1); transform-origin: left; }
-
-.text-shimmer {
-  background: linear-gradient(100deg, var(--dg-accent-p) 20%, var(--dg-accent-s) 42%, var(--dg-accent-p) 64%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  background-size: 220% 100%;
-  animation: shimmer-slide 5s ease-in-out infinite;
-}
-@keyframes shimmer-slide {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}

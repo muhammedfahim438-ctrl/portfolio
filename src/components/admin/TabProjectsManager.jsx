@@ -175,7 +175,7 @@ export function TabProjectsManager() {
           <p className="text-themeTextSecondary text-sm uppercase tracking-[0.1em] dg-ui-mono">
             No projects yet
           </p>
-          <p className="text-[10px] text-themeTextSecondary/50 mt-1 uppercase tracking-wider dg-ui-mono">
+          <p className="text-[0.625rem] text-themeTextSecondary/50 mt-1 uppercase tracking-wider dg-ui-mono">
             Click "Add New Project" to get started
           </p>
         </div>
@@ -184,11 +184,11 @@ export function TabProjectsManager() {
           <table className="w-full text-left text-sm">
             <thead className="border-b-4 border-themeAccent text-themeTextSecondary/60">
               <tr>
-                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider">Title</th>
-                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider">Category</th>
-                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider">Tags</th>
-                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider text-right">Featured</th>
-                <th className="px-5 py-4 font-mono text-[10px] uppercase tracking-wider text-right">Actions</th>
+                <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider">Title</th>
+                <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider">Category</th>
+                <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider">Tags</th>
+                <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider text-right">Featured</th>
+                <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-themeAccent/30">
@@ -199,7 +199,7 @@ export function TabProjectsManager() {
                 >
                   <td className="px-5 py-4 text-themeText font-medium">{project.title}</td>
                   <td className="px-5 py-4">
-                    <span className="text-[10px] px-2.5 py-1 border-2 border-themeAccent bg-themeAccent/20 text-themeAccent font-bold uppercase tracking-tighter">
+                    <span className="text-[0.625rem] px-2.5 py-1 border-2 border-themeAccent bg-themeAccent/20 text-themeAccent font-bold uppercase tracking-tighter">
                       {project.category || "-"}
                     </span>
                   </td>
@@ -208,7 +208,7 @@ export function TabProjectsManager() {
                       {(project.tags ?? []).slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="inline-block border-2 border-themeAccent px-2 py-0.5 text-[10px] text-themeAccent uppercase tracking-[0.1em] shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
+                          className="inline-block border-2 border-themeAccent px-2 py-0.5 text-[0.625rem] text-themeAccent uppercase tracking-[0.1em] shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
                         >
                           {tag}
                         </span>
@@ -275,7 +275,7 @@ export function TabProjectsManager() {
               </h3>
 
               <div className="space-y-1.5">
-                <label htmlFor="proj-title" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label htmlFor="proj-title" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Title
                 </label>
                 <input
@@ -288,7 +288,7 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="proj-desc" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label htmlFor="proj-desc" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Short Description (for cards)
                 </label>
                 <textarea
@@ -301,7 +301,7 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="proj-long-desc" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label htmlFor="proj-long-desc" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Detailed Description
                 </label>
                 <textarea
@@ -315,7 +315,7 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Category
                 </label>
                 <select
@@ -330,14 +330,14 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Main Thumbnail Image
                 </label>
                 <div className="flex items-center gap-3">
                   {form.image_url ? (
                     <img src={form.image_url} alt="" className="w-16 h-16 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_var(--dg-bg-deep)]" />
                   ) : (
-                    <div className="w-16 h-16 border-4 border-dashed border-themeAccent flex items-center justify-center text-[10px] text-themeTextSecondary/50 uppercase tracking-wider">
+                    <div className="w-16 h-16 border-4 border-dashed border-themeAccent flex items-center justify-center text-[0.625rem] text-themeTextSecondary/50 uppercase tracking-wider">
                       none
                     </div>
                   )}
@@ -352,7 +352,7 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Gallery Images
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -361,7 +361,7 @@ export function TabProjectsManager() {
                       <img src={url} alt="" className="w-16 h-16 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_var(--dg-bg-deep)]" />
                       <button
                         onClick={() => removeGalleryImage(i)}
-                        className="absolute -top-1 -right-1 w-6 h-6 bg-themeAccent text-themeText text-[10px] flex items-center justify-center shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
+                        className="absolute -top-1 -right-1 w-6 h-6 bg-themeAccent text-themeText text-[0.625rem] flex items-center justify-center shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
                       >
                         ✕
                       </button>
@@ -389,7 +389,7 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="proj-video" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label htmlFor="proj-video" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Video URL (YouTube/Vimeo embed)
                 </label>
                 <input
@@ -404,7 +404,7 @@ export function TabProjectsManager() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label htmlFor="proj-live" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                  <label htmlFor="proj-live" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                     Live URL
                   </label>
                   <input
@@ -416,7 +416,7 @@ export function TabProjectsManager() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label htmlFor="proj-gh" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                  <label htmlFor="proj-gh" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                     GitHub URL
                   </label>
                   <input
@@ -430,7 +430,7 @@ export function TabProjectsManager() {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="proj-tags" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+                <label htmlFor="proj-tags" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   Tags (comma-separated)
                 </label>
                 <input

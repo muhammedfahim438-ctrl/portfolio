@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { TabHeroConfig } from "@/components/admin/TabHeroConfig";
+import { TabBrandStudio } from "@/components/admin/TabBrandStudio";
 import { TabProjectsManager } from "@/components/admin/TabProjectsManager";
 import { TabSkillsLinks } from "@/components/admin/TabSkillsLinks";
 import { TabTestimonials } from "@/components/admin/TabTestimonials";
@@ -15,7 +15,7 @@ import { getCollectionDocs, dedupeCollection } from "@/lib/firestore";
 import { seedAll } from "@/data/seed";
 
 const tabs = [
-  { id: "hero", label: "Hero & Config" },
+  { id: "brand", label: "Brand Studio" },
   { id: "projects", label: "Projects" },
   { id: "content", label: "Content" },
   { id: "settings", label: "Settings" },
@@ -45,7 +45,7 @@ const sectionVariants = {
 };
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState("hero");
+  const [activeTab, setActiveTab] = useState("brand");
   const [stats, setStats] = useState(null);
   const [loadingStats, setLoadingStats] = useState(true);
   const [cleaning, setCleaning] = useState(false);
@@ -120,14 +120,14 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-themeBg relative overflow-hidden">
+    <div className="relative z-10 min-h-dvh overflow-hidden">
       <AdminHeader />
 
-      <main className="relative z-10 max-w-[1200px] mx-auto px-4 py-12">
-        <div className="border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] p-6 mb-12 dg-r-0">
+      <main className="relative z-10 max-w-[75rem] mx-auto px-4 py-12">
+        <div className="border-4 border-themeAccent bg-themeSurface/25 backdrop-blur-md shadow-[4px_4px_0_0_var(--dg-bg-deep)] p-6 mb-12 dg-r-0">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-4">
-              <span className="text-[10px] font-mono text-themeAccent uppercase tracking-[0.1em] dg-ui-mono">
+              <span className="text-[0.625rem] font-mono text-themeAccent uppercase tracking-[0.1em] dg-ui-mono">
                 Collection Stats
               </span>
               {loadingStats ? (
@@ -191,11 +191,11 @@ export default function AdminPage() {
         >
           <div className="lg:col-span-3 space-y-6">
             <QuickActionCard
-              title="Hero Config"
-              desc="Edit hero title, voice text, and profile photo."
+              title="Brand Studio"
+              desc="Identity, hero, about, section copy, CTAs, footer and SEO."
               icon="⚙"
-              onClick={() => setActiveTab("hero")}
-              active={activeTab === "hero"}
+              onClick={() => setActiveTab("brand")}
+              active={activeTab === "brand"}
             />
             <QuickActionCard
               title="Projects"
@@ -214,7 +214,7 @@ export default function AdminPage() {
           </div>
 
           <div className="lg:col-span-9">
-            {activeTab === "hero" && <TabHeroConfig />}
+            {activeTab === "brand" && <TabBrandStudio />}
             {activeTab === "projects" && <TabProjectsManager />}
             {activeTab === "content" && <TabContent />}
             {activeTab === "settings" && <TabSettings />}
@@ -242,14 +242,14 @@ function QuickActionCard({ title, desc, icon, onClick, active }) {
       <div className="relative z-10 space-y-3">
         <div className="flex items-center gap-2">
           <span className="text-xs">{icon}</span>
-          <span className="ml-auto text-[10px] font-mono uppercase tracking-wider text-themeText-secondary/60 group-hover:text-themeAccent transition-colors">
+          <span className="ml-auto text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary/60 group-hover:text-themeAccent transition-colors">
             Open
           </span>
         </div>
         <h3 className="font-display font-bold text-themeText text-base leading-tight group-hover:text-themeAccent transition-colors">
           {title}
         </h3>
-        <p className="text-xs text-themeTextSecondary leading-relaxed max-w-[200px]">
+        <p className="text-xs text-themeTextSecondary leading-relaxed max-w-[12.5rem]">
           {desc}
         </p>
       </div>

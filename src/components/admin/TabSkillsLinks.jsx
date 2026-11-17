@@ -165,7 +165,7 @@ function SkillsManager() {
             if (!items?.length) return null;
             return (
               <div key={cat}>
-                <h3 className="mb-3 text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+                <h3 className="mb-3 text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
                   {cat}
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -180,13 +180,13 @@ function SkillsManager() {
                             type="text"
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
-                            className="w-28 rounded-none border border-themeBorder bg-themeBg px-2 py-1 text-themeText text-[10px] focus:outline-none focus:border-themeAccent"
+                            className="w-28 rounded-none border border-themeBorder bg-themeBg px-2 py-1 text-themeText text-[0.625rem] focus:outline-none focus:border-themeAccent"
                             autoFocus
                           />
                           <select
                             value={editCategory}
                             onChange={(e) => setEditCategory(e.target.value)}
-                            className="rounded-none border border-themeBorder bg-themeBg px-2 py-1 text-themeText text-[10px] focus:outline-none focus:border-themeAccent"
+                            className="rounded-none border border-themeBorder bg-themeBg px-2 py-1 text-themeText text-[0.625rem] focus:outline-none focus:border-themeAccent"
                           >
                             {CATEGORIES.map((c) => (
                               <option key={c} value={c}>{c}</option>
@@ -200,17 +200,17 @@ function SkillsManager() {
                             onChange={(e) => setEditLevel(Number(e.target.value))}
                             className="w-16 accent-themeAccent"
                           />
-                          <span className="text-themeAccent font-mono text-[10px] w-6">{editLevel}</span>
+                          <span className="text-themeAccent font-mono text-[0.625rem] w-6">{editLevel}</span>
                           <button
                             onClick={() => handleSaveEdit(skill.id)}
                             disabled={savingEdit}
-                            className="text-themeAccent hover:text-themeAccent-hover text-[10px] font-medium"
+                            className="text-themeAccent hover:text-themeAccent-hover text-[0.625rem] font-medium"
                           >
                             {savingEdit ? "…" : "✓"}
                           </button>
                           <button
                             onClick={cancelEdit}
-                            className="text-themeText-secondary hover:text-themeText text-[10px]"
+                            className="text-themeText-secondary hover:text-themeText text-[0.625rem]"
                           >
                             ✕
                           </button>
@@ -218,17 +218,17 @@ function SkillsManager() {
                       ) : (
                         <>
                           <span>{skill.name}</span>
-                          <span className="text-themeAccent font-mono text-[10px]">{skill.level}</span>
+                          <span className="text-themeAccent font-mono text-[0.625rem]">{skill.level}</span>
                           <button
                             onClick={() => startEdit(skill)}
-                            className="ml-1 text-themeText-secondary hover:text-themeAccent text-[10px]"
+                            className="ml-1 text-themeText-secondary hover:text-themeAccent text-[0.625rem]"
                             title="Edit skill"
                           >
                             ✎
                           </button>
                           <button
                             onClick={() => handleDelete(skill.id)}
-                            className="text-themeAccent hover:text-themeText text-[10px]"
+                            className="text-themeAccent hover:text-themeText text-[0.625rem]"
                           >
                             ✕
                           </button>
@@ -245,7 +245,7 @@ function SkillsManager() {
 
       <div className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end border-t border-themeBorder pt-5">
         <div className="space-y-1.5">
-          <label htmlFor="skill-name" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="skill-name" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Skill Name
           </label>
           <input
@@ -258,7 +258,7 @@ function SkillsManager() {
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="skill-cat" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="skill-cat" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Category
           </label>
           <select
@@ -276,7 +276,7 @@ function SkillsManager() {
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="skill-level" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="skill-level" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Level: {level}
           </label>
           <input
@@ -396,7 +396,7 @@ function CertificationsManager() {
           {certs.map((cert) => (
             <div key={cert.id} className="py-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-10 h-10 rounded-none bg-themeBg-secondary border border-themeBorder flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-10 h-10 rounded-none bg-themeBg/50 border border-themeBorder/70 backdrop-blur-sm flex items-center justify-center shrink-0 overflow-hidden">
                   {cert.badge_image_url ? (
                     <img src={cert.badge_image_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -446,7 +446,7 @@ function CertificationsManager() {
 
       <div className="grid grid-cols-2 gap-3 border-t border-themeBorder pt-5">
         <div className="space-y-1.5">
-          <label htmlFor="cert-title" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="cert-title" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Title
           </label>
           <input
@@ -458,7 +458,7 @@ function CertificationsManager() {
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="cert-issuer" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="cert-issuer" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Issuer
           </label>
           <input
@@ -470,7 +470,7 @@ function CertificationsManager() {
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="cert-year" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="cert-year" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Year
           </label>
           <input
@@ -483,7 +483,7 @@ function CertificationsManager() {
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="cert-url" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="cert-url" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Credential URL
           </label>
           <input
@@ -575,7 +575,7 @@ function SocialLinksManager() {
       <div className="space-y-4">
         {fields.map((f) => (
           <div key={f.key} className="space-y-1.5">
-            <label htmlFor={`social-${f.key}`} className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+            <label htmlFor={`social-${f.key}`} className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
               {f.label}
             </label>
             <input
@@ -600,7 +600,7 @@ function SocialLinksManager() {
           the field empty to use it, or enter an override URL/path.
         </p>
         <div className="space-y-1.5">
-          <label htmlFor="social-resume" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="social-resume" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Resume URL (override)
           </label>
           <input

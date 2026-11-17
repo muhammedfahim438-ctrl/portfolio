@@ -144,7 +144,7 @@ export function TabTestimonials() {
         </h2>
 
         <div className="space-y-1.5">
-          <label htmlFor="t-quote" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="t-quote" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Quote
           </label>
           <textarea
@@ -159,7 +159,7 @@ export function TabTestimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label htmlFor="t-author" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+            <label htmlFor="t-author" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
               Author
             </label>
             <input
@@ -173,7 +173,7 @@ export function TabTestimonials() {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="t-role" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+            <label htmlFor="t-role" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
               Role / Company
             </label>
             <input
@@ -188,7 +188,7 @@ export function TabTestimonials() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Rating
           </label>
           <div className="flex items-center gap-2">
@@ -209,14 +209,14 @@ export function TabTestimonials() {
                 />
               </button>
             ))}
-            <span className="ml-2 font-mono text-[10px] text-themeText-secondary">
+            <span className="ml-2 font-mono text-[0.625rem] text-themeText-secondary">
               {form.rating} / 5
             </span>
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="t-avatar" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary">
+          <label htmlFor="t-avatar" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Avatar Image URL
           </label>
           <input
@@ -261,7 +261,7 @@ export function TabTestimonials() {
           <div className="divide-y divide-themeBorder/50">
             {items.map((item) => (
               <div key={item.id} className="py-4 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-none shrink-0 overflow-hidden border border-themeBorder bg-themeBg-secondary">
+                <div className="w-10 h-10 rounded-none shrink-0 overflow-hidden border border-themeBorder/70 bg-themeBg/50 backdrop-blur-sm">
                   {item.avatar_url ? (
                     <img src={item.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -310,11 +310,11 @@ export function TabTestimonials() {
                         if (e.key === "Enter") handleAvatarSave(item.id);
                       }}
                       placeholder="Avatar image URL"
-                      className="w-44 rounded-none border-2 border-themeBorder bg-themeInput px-2 py-1.5 text-[10px] text-themeText focus:outline-none focus:border-themeAccent"
+                      className="w-44 rounded-none border-2 border-themeBorder bg-themeInput px-2 py-1.5 text-[0.625rem] text-themeText focus:outline-none focus:border-themeAccent"
                     />
                     <button
                       onClick={() => handleAvatarSave(item.id)}
-                      className="text-[10px] text-themeAccent hover:text-themeAccent-hover font-medium"
+                      className="text-[0.625rem] text-themeAccent hover:text-themeAccent-hover font-medium"
                     >
                       Save
                     </button>
@@ -322,14 +322,14 @@ export function TabTestimonials() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => startEdit(item)}
-                      className="text-[10px] text-themeText-secondary/60 hover:text-themeAccent transition-colors"
+                      className="text-[0.625rem] text-themeText-secondary/60 hover:text-themeAccent transition-colors"
                       title="Edit testimonial"
                     >
                       ✎ Edit
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="text-[10px] text-themeAccent hover:text-themeText transition-colors"
+                      className="text-[0.625rem] text-themeAccent hover:text-themeText transition-colors"
                     >
                       Delete
                     </button>

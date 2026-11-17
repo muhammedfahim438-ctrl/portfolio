@@ -5,12 +5,14 @@ import { DotMatrixBackground } from "@/components/landing/DotMatrixBackground";
 import { SplashScreen } from "@/components/landing/SplashScreen";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { AboutSection } from "@/components/landing/AboutSection";
+import { ExperienceSection } from "@/components/landing/ExperienceSection";
 import { SkillsTabs } from "@/components/landing/SkillsTabs";
 import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
 import { ContactFooter } from "@/components/landing/ContactFooter";
 import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { BrandContentProvider } from "@/components/providers/BrandContentProvider";
 
 const AdminPage = lazy(() => import("@/app/admin/page"));
 const LoginPage = lazy(() => import("@/app/admin/login/page"));
@@ -41,27 +43,30 @@ function LandingPage() {
   }, []);
 
   return (
-    <main className="isolate min-h-[100dvh] bg-themeBg overflow-x-hidden">
-      {/* Dot-matrix background - fixed behind all content, pointer events pass through */}
-      <DotMatrixBackground aria-hidden="true" />
-      <CustomCursor />
-      <SplashScreen />
-      <div className="relative z-10">
-        <HeroSection />
-      </div>
-      <div className="relative z-10">
-        <AboutSection />
-      </div>
-      <div className="relative z-10">
-        <SkillsTabs />
-      </div>
-      <div className="relative z-10">
-        <FeaturedProjects />
-      </div>
-      <div className="relative z-10">
-        <ContactFooter />
-      </div>
-    </main>
+    <BrandContentProvider>
+      <main className="isolate min-h-[100dvh] overflow-x-hidden">
+        <CustomCursor />
+        <SplashScreen />
+        <div className="relative z-10">
+          <HeroSection />
+        </div>
+        <div className="relative z-10">
+          <AboutSection />
+        </div>
+        <div className="relative z-10">
+          <ExperienceSection />
+        </div>
+        <div className="relative z-10">
+          <SkillsTabs />
+        </div>
+        <div className="relative z-10">
+          <FeaturedProjects />
+        </div>
+        <div className="relative z-10">
+          <ContactFooter />
+        </div>
+      </main>
+    </BrandContentProvider>
   );
 }
 
@@ -77,7 +82,7 @@ function ProtectedAdmin() {
 
 function RouteFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-themeBg">
+    <div className="relative z-10 flex min-h-dvh items-center justify-center">
       <LoadingSpinner />
     </div>
   );
@@ -86,6 +91,9 @@ function RouteFallback() {
 export default function App() {
   return (
     <Suspense fallback={<RouteFallback />}>
+      {/* Dot-matrix HUD: one fixed canvas behind every route, pointer events
+          pass through; sections above it are translucent .dg-screen plates */}
+      <DotMatrixBackground aria-hidden="true" />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/admin/login" element={<LoginPage />} />

@@ -63,7 +63,7 @@ export function TabMessages() {
   }
 
   return (
-    <div className="rounded-none grid h-[600px] grid-cols-[320px_1fr] overflow-hidden border border-themeBorder bg-themeSurface/20">
+    <div className="rounded-none grid h-[37.5rem] grid-cols-[20rem_1fr] overflow-hidden border border-themeBorder bg-themeSurface/20">
       <div className="divide-y divide-themeBorder/50 overflow-y-auto">
         {messages.map((msg) => {
           const isActive = selected?.id === msg.id;

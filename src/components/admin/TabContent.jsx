@@ -32,16 +32,22 @@ const SECTIONS = [
     id: "experience",
     label: "Experience",
     collection: "experience",
-    empty: { period: "", title: "", org: "", tag: "Career", points: [] },
+    empty: {
+      period: "", title: "", org: "", location: "",
+      tag: "Career", order: 1, points: [], tools: [],
+    },
     schemas: [
-      { key: "period", label: "Period", type: "text", placeholder: "2026 to present" },
+      { key: "period", label: "Period", type: "text", placeholder: "2026" },
       { key: "title", label: "Title", type: "text" },
       { key: "org", label: "Org / Place", type: "text" },
+      { key: "location", label: "Location", type: "text", placeholder: "Palakkad, Kerala or Remote" },
       {
         key: "tag", label: "Tag", type: "select",
         options: ["Career", "Data", "Education", "Growth", "Freelance"],
       },
+      { key: "order", label: "Display Order", type: "number", placeholder: "1" },
       { key: "points", label: "Bullet Points (one per line)", type: "lines", rows: 4 },
+      { key: "tools", label: "Tools (comma-separated)", type: "tags" },
     ],
   },
   {

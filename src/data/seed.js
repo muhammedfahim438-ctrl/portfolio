@@ -1,7 +1,15 @@
 import {
-  doc, setDoc, addDoc, collection, getDocs,
+  doc, setDoc, addDoc, collection, getDocs, getDoc,
 } from "firebase/firestore";
 import { db } from "@/lib/firestoreDb";
+import {
+  BRAND,
+  HERO,
+  ABOUT,
+  SECTIONS,
+  FOOTER,
+  DEFAULT_EXPERIENCE,
+} from "@/data/brandDefaults";
 
 // Which field uniquely identifies a document in each seeded collection.
 // "name"  -> skills, trusted_by
@@ -49,23 +57,49 @@ async function seedNoDuplicates(name, items) {
   console.log(`Seeded ${added} ${name} (${items.length - added} already present)`);
 }
 
+// Config documents are written field by field: an existing value always wins.
+// Re-seeding adds what is missing (for example the new hero keys) without
+// overwriting copy the owner has already edited.
+async function seedConfigMissing(key, defaults) {
+  const ref = doc(db, "site_config", key);
+  const snap = await getDoc(ref);
+  const existing = snap.exists() ? snap.data() : {};
+
+  const missing = {};
+  for (const [field, value] of Object.entries(defaults)) {
+    if (!(field in existing)) missing[field] = value;
+  }
+
+  if (Object.keys(missing).length === 0) {
+    console.log(`Skipped ${key} (complete)`);
+    return;
+  }
+
+  await setDoc(ref, missing, { merge: true });
+  console.log(`Seeded ${key} (${Object.keys(missing).length} new field(s))`);
+}
+
 export async function seedHeroConfig() {
-  const data = {
-    title: "Hi, I'm Muhammed Fahim M",
-    subtitle: "Data Science & Full-Stack Developer",
-    voice_text: "Hi! I'm Muhammed Fahim M, a Data Science and Full-Stack Developer from Kerala, India. I build production APIs, ML models, and scalable web apps. Let's connect!",
-    photo_url: "",
-  };
-  await setDoc(doc(db, "site_config", "hero_data"), data, { merge: true });
-  console.log("Seeded hero_data");
+  await seedConfigMissing("hero_data", HERO);
+}
+
+export async function seedBrandConfigs() {
+  await seedConfigMissing("brand_data", BRAND);
+  await seedConfigMissing("about_data", ABOUT);
+  await seedConfigMissing("sections_data", SECTIONS);
+  await seedConfigMissing("footer_data", FOOTER);
+}
+
+export async function seedExperience() {
+  await seedNoDuplicates("experience", DEFAULT_EXPERIENCE);
 }
 
 export async function seedProjects() {
   const projects = [
     {
       title: "India Geo API",
-      description: "SaaS REST API serving 619,000+ villages with hierarchical geographic data",
-      long_description: "Built a production-grade SaaS REST API platform serving India's village-level geographic data. Parsed 619,000+ villages from Census XLS files into a NeonDB PostgreSQL database. Implemented Redis caching for high-performance queries, JWT + API key authentication with tiered rate limiting, and Razorpay subscription payments for monetization. The API serves geographic hierarchies (State → District → Sub-District → Village) with search, filter, and export capabilities.",
+      description: "SaaS REST API serving 619,246 village records with hierarchical geographic data",
+      long_description: "Built a production-grade SaaS REST API platform serving India's village-level geographic data. Parsed 619,246 villages from 30 Census XLS files into a NeonDB PostgreSQL database, covering 30 states, 586 districts and 5,764 sub-districts. Implemented Redis caching for high-performance queries, JWT + API key authentication with tiered rate limiting, and Razorpay subscription payments for monetization. The API serves geographic hierarchies (State → District → Sub-District → Village) with search, filter, and export capabilities.",
       image_url: "",
       images: [],
       video_url: "",
@@ -78,7 +112,7 @@ export async function seedProjects() {
     {
       title: "VitaSense AI",
       description: "98.2% accuracy diabetes prediction using ensemble ML models",
-      long_description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) using a Random Forest + Gradient Boosting voting ensemble trained on 5,000 patient records with SMOTE-based class balancing. Built a Flask REST API and web app delivering real-time risk prediction, an educational chatbot explaining risk factors, and an analytics dashboard with interactive charts. The system includes data preprocessing pipelines, feature engineering, and model versioning.",
+      long_description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) using a Random Forest + Gradient Boosting voting ensemble trained on 5,000 synthetic records with SMOTE-based class balancing. Built a Flask REST API and web app delivering real-time risk prediction, an educational chatbot explaining risk factors, and an analytics dashboard with interactive charts. The system includes data preprocessing pipelines, feature engineering, and model versioning.",
       image_url: "",
       images: [],
       video_url: "",
@@ -165,19 +199,6 @@ export async function seedProjects() {
       github_url: "https://github.com/muhammedfahim438-ctrl/aptitude-test-platform",
       featured: false,
       tags: ["HTML", "Django", "JavaScript"],
-    },
-    {
-      title: "Nehru Arts & Science College Website",
-      description: "Responsive college website with department pages and event calendars",
-      long_description: "Responsive college website built with JavaScript frontend featuring department pages, event calendars, faculty directories, and admission information. Clean UI with mobile-first design approach.",
-      image_url: "",
-      images: [],
-      video_url: "",
-      category: "Frontend",
-      live_url: "",
-      github_url: "https://github.com/muhammedfahim438-ctrl/COLLEGE-WEBSITE",
-      featured: false,
-      tags: ["JavaScript", "HTML", "CSS"],
     },
     {
       title: "Greencycle",
@@ -276,27 +297,27 @@ export async function seedCertifications() {
 export async function seedRecognition() {
   const items = [
     {
-      title: "Top Contributor",
-      description: "Recognized for building a SaaS API serving 619,000+ villages with production-grade architecture",
-      icon: "award",
-      color: "#FFC700",
-    },
-    {
-      title: "ML Excellence",
-      description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) in diabetes prediction using ensemble models",
-      icon: "trending-up",
+      title: "Live SaaS API",
+      description: "India Geo API serves 619,246 village records from Census data with JWT auth, Redis caching and Razorpay billing",
+      icon: "FiGlobe",
       color: "#C8102E",
     },
     {
-      title: "Hackathon Winner",
-      description: "Built UniPath, a cross-platform Flutter app for college counselling and wellness",
-      icon: "zap",
+      title: "Solo Data Warehouse",
+      description: "Nifty 100 platform: Python ETL, PostgreSQL star schema, 7 Power BI dashboards and an HMAC-SHA256 partner API",
+      icon: "FiTrendingUp",
       color: "#FFC700",
     },
     {
-      title: "Open Source Advocate",
-      description: "13+ public repositories on GitHub with production-grade projects and documentation",
-      icon: "star",
+      title: "Team ML Build",
+      description: "VitaSense AI: 98.2% on the held-out split of a 5,000-record synthetic dataset, built with a four-person team",
+      icon: "FiUsers",
+      color: "#C8102E",
+    },
+    {
+      title: "15 Public Repositories",
+      description: "Openly published builds across data, backend, frontend and mobile",
+      icon: "FiStar",
       color: "#CDCBCA",
     },
   ];
@@ -304,41 +325,9 @@ export async function seedRecognition() {
   await seedNoDuplicates("recognition", items);
 }
 
-export async function seedTestimonials() {
-  const items = [
-    {
-      quote: "Fahim built a production-grade SaaS API that handles 619,000+ villages with Redis caching, JWT auth, and tiered rate limiting. Impressive technical depth.",
-      author: "TechFifo Team",
-      role: "Engineering Team",
-      rating: 5,
-      avatar_url: "",
-    },
-    {
-      quote: "The VitaSense AI project achieved 98.2% accuracy in diabetes prediction using ensemble ML models. A solid demonstration of ML engineering skills.",
-      author: "Bluestock Fintech",
-      role: "Data Analytics Team",
-      rating: 5,
-      avatar_url: "",
-    },
-    {
-      quote: "UniPath is a well-designed Flutter app with OTP authentication, appointment booking, and AI chatbot. Great mobile development capabilities.",
-      author: "College Project Review",
-      role: "Academic Panel",
-      rating: 4,
-      avatar_url: "",
-    },
-    {
-      quote: "Clean code, meaningful documentation, and production-ready deployments. Fahim's work stands out in both quality and presentation.",
-      author: "Open Source Community",
-      role: "GitHub Collaborators",
-      rating: 5,
-      avatar_url: "",
-    },
-  ];
-
-  await seedNoDuplicates("testimonials", items);
-}
-
+// Testimonials are intentionally not seeded. Invented quotes attributed to a
+// team or community are a liability; add real, consented quotes in the admin
+// when they exist.
 export async function seedTrustedBy() {
   const items = [
     { name: "Python", icon_url: "" },
@@ -372,11 +361,12 @@ export async function seedProfile() {
 export async function seedAll() {
   console.log("Starting seed...");
   await seedHeroConfig();
+  await seedBrandConfigs();
   await seedProjects();
+  await seedExperience();
   await seedSkills();
   await seedCertifications();
   await seedRecognition();
-  await seedTestimonials();
   await seedTrustedBy();
   await seedProfile();
   console.log("Seed complete! All data uploaded to Firestore.");

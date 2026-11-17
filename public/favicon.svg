@@ -10,5 +10,5 @@
   </g>
   <circle cx="45" cy="14" r="3.1" fill="#C8102E"/>
   <path d="M2 12 V2 H12" fill="none" stroke="#FFC700" stroke-width="2.5"/>
-  <path d="M62 52 V62 H52" fill="none" stroke="#002F6C" stroke-width="2.5"/>
+  <path d="M62 52 V62 H52" fill="none" stroke="#FFC700" stroke-width="2.5"/>
 </svg>

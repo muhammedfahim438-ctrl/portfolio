@@ -60,25 +60,25 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-themeBg relative overflow-hidden">
+    <div className="relative z-10 min-h-dvh overflow-hidden">
       {/* Ambient mesh */}
       <div className="absolute inset-0 z-0" style={{
-        backgroundImage: `radial-gradient(600px 300px at 30% -10%, rgba(200,16,46,0.06), transparent 60%), radial-gradient(400px 400px at 80% 30%, rgba(0,47,108,0.05), transparent 50%)`,
+        backgroundImage: `radial-gradient(600px 300px at 30% -10%, rgba(200,16,46,0.06), transparent 60%), radial-gradient(400px 400px at 80% 30%, rgba(255,199,0,0.05), transparent 50%)`,
         backgroundSize: "200% 200%",
       }} />
 
-      <main className="relative z-10 flex items-center justify-center min-h-screen px-4">
+      <main className="relative z-10 flex items-center justify-center min-h-dvh px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="w-full max-w-md rounded-none p-8 border border-themeBorder bg-themeSurface/20"
+          className="dg-liquid w-full max-w-md p-8"
         >
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-none border border-themeBorder bg-themeAccent flex items-center justify-center text-themeText font-display font-bold text-xs">
+            <div className="w-8 h-8 rounded-none border border-themeBorder bg-themeAccent flex items-center justify-center text-themeText dg-f-logo font-bold text-xs">
               MF
             </div>
-            <h1 className="font-display font-bold text-themeText text-lg tracking-tight uppercase">
+            <h1 className="dg-f-logo font-bold text-themeText text-lg tracking-tight uppercase">
               Portfolio Admin
             </h1>
           </div>
@@ -88,14 +88,14 @@ export default function AdminLoginPage() {
           </p>
 
           {notice && (
-            <p className="mb-4 rounded-none border border-themeBorder bg-themeSurface px-4 py-3 text-sm text-themeText-secondary">
+            <p className="mb-4 rounded-none border border-themeBorder bg-themeBg/60 px-4 py-3 text-sm text-themeText backdrop-blur-sm">
               {notice}
             </p>
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label htmlFor="admin-password" className="block text-[10px] font-mono uppercase tracking-wider text-themeText-secondary mb-1.5">
+              <label htmlFor="admin-password" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary mb-1.5">
                 Password
               </label>
               <input

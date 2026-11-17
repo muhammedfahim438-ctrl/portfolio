@@ -7,7 +7,7 @@ export function ImageUploader({ value, onChange, label }) {
 
   return (
     <div className="space-y-3">
-      <label htmlFor="image-upload" className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
+      <label htmlFor="image-upload" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
         {label || "Image URL"}
       </label>
       <div className="flex items-center gap-2">

@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiArrowLeft } from "react-icons/fi";
+import { BRAND } from "@/data/brandDefaults";
 
 const NAV_LINKS = [
   { label: "About", href: "/#about" },
+  { label: "Experience", href: "/#experience" },
   { label: "Skills", href: "/#skills" },
   { label: "Work", href: "/#work" },
   { label: "Contact", href: "/#contact" },
@@ -16,21 +18,21 @@ export function NotFound() {
   useEffect(() => {
     document.title = "404: Page not found | Muhammed Fahim M";
     return () => {
-      document.title = "Muhammed Fahim M | Data Science & Full-Stack Developer";
+      document.title = BRAND.metaTitle;
     };
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-themeBg px-4 py-24 text-center">
+    <main className="relative z-10 flex min-h-dvh flex-col items-center justify-center px-4 py-24 text-center">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 flex max-w-2xl flex-col items-center"
+        className="dg-screen relative z-10 flex max-w-2xl flex-col items-center border border-themeBorder/60 p-8 sm:p-12"
       >
         <p className="theme-eyebrow mb-6">Error 404</p>
 
-        <h1 className="font-display text-[clamp(4rem,18vw,9rem)] font-bold leading-none tracking-tight">
+        <h1 className="dg-f-data text-[clamp(4rem,18vw,9rem)] font-bold leading-none tracking-tight">
           <span className="text-themeAccent">4</span>
           <span className="text-themeText">0</span>
           <span className="text-themeAccent">4</span>

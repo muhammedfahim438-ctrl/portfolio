@@ -2,10 +2,10 @@
 import { writeFileSync } from "node:fs";
 
 const BG = "#080808";
-const SILVER = "#CDCBCA";
-const GREY = "#B1B3B3";
+const SILVER = "#DCD7D2";
+const GREY = "#CDCBCA";
 const RED = "#C8102E";
-const BLUE = "#002F6C";
+const SIGNAL = "#FFC700";
 const YELLOW = "#FFC700";
 
 // Faint full-panel dot grid
@@ -20,7 +20,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <rect width="1200" height="630" fill="${BG}"/>
   <defs>
     <pattern id="dots" width="15" height="15" patternUnits="userSpaceOnUse">
-      <rect width="15" height="15" fill="${BLUE}"/>
+      <rect width="15" height="15" fill="${SIGNAL}"/>
       <circle cx="7.5" cy="7.5" r="4.35" fill="${SILVER}"/>
     </pattern>
     <pattern id="dotsFine" width="9" height="9" patternUnits="userSpaceOnUse">
@@ -35,7 +35,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   </defs>
   <g>${grid.join("")}</g>
 
-  <!-- Left monogram panel: deep blue offset plate with dot-matrix MF -->
+  <!-- Left monogram panel: signal-yellow offset plate with dot-matrix MF -->
   <rect x="78" y="98" width="352" height="434" fill="none" stroke="${SILVER}" stroke-opacity="0.34" stroke-width="1.5"/>
   <rect x="62" y="82" width="352" height="434" fill="url(#dots)"/>
   <rect x="62" y="82" width="352" height="434" fill="none" stroke="${SILVER}" stroke-opacity="0.55" stroke-width="2"/>
@@ -48,7 +48,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <text x="488" y="352" font-family="'Lettera Mono LL', Consolas, Menlo, monospace" font-weight="700" font-size="72" fill="${SILVER}" letter-spacing="2">FAHIM M</text>
   <text x="492" y="414" font-family="'Lettera Mono LL', Consolas, Menlo, monospace" font-size="21" letter-spacing="4.5" fill="${GREY}">DATA SCIENCE &amp; FULL-STACK</text>
   <text x="492" y="444" font-family="'Lettera Mono LL', Consolas, Menlo, monospace" font-size="21" letter-spacing="4.5" fill="${GREY}">DEVELOPER / KERALA, INDIA</text>
-  <rect x="492" y="476" width="120" height="3" fill="${BLUE}"/>
+  <rect x="492" y="476" width="120" height="3" fill="${SIGNAL}"/>
   <circle cx="500" cy="512" r="3.4" fill="${RED}"/>
   <circle cx="518" cy="512" r="3.4" fill="${SILVER}" opacity="0.7"/>
   <circle cx="536" cy="512" r="3.4" fill="${SILVER}" opacity="0.45"/>

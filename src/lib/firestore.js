@@ -26,17 +26,6 @@ function messageDocId(senderEmail) {
   return id;
 }
 
-export async function getHeroData() {
-  const { doc, getDoc, db } = await ready();
-  const snap = await getDoc(doc(db, "site_config", "hero_data"));
-  return snap.exists() ? snap.data() : null;
-}
-
-export async function updateHeroData(data) {
-  const { doc, updateDoc, db } = await ready();
-  await updateDoc(doc(db, "site_config", "hero_data"), data);
-}
-
 export async function getConfig(key, fallback = null) {
   const { doc, getDoc, db } = await ready();
   const snap = await getDoc(doc(db, "site_config", key));

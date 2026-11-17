@@ -112,11 +112,11 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
               <thead className="border-b-4 border-themeAccent text-themeTextSecondary/60">
                 <tr>
                   {schema.map((f) => (
-                    <th key={f.key} className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-left">
+                    <th key={f.key} className="px-4 py-3 font-mono text-[0.625rem] uppercase tracking-wider text-left">
                       {f.label}
                     </th>
                   ))}
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-right">Actions</th>
+                  <th className="px-4 py-3 font-mono text-[0.625rem] uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-themeAccent/30">
@@ -125,7 +125,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                     {schema.map((f) => (
                       <td key={f.key} className="px-4 py-3 text-themeText font-medium">
                         {f.type === "tags" && Array.isArray(item[f.key]) ? (
-                          <span className="text-[10px] text-themeAccent dg-ui-mono">
+                          <span className="text-[0.625rem] text-themeAccent dg-ui-mono">
                             {item[f.key].join(", ")}
                           </span>
                         ) : (
@@ -166,7 +166,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                 <div key={field.key} className="space-y-1.5">
                   <label
                     htmlFor={`crud-${field.key}`}
-                    className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono"
+                    className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono"
                   >
                     {field.label}
                   </label>
@@ -218,6 +218,20 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       onChange={(e) => setFieldValue(field.key, e.target.value.split("\n"))}
                       rows={field.rows || 4}
                       className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 resize-y dg-r-0"
+                    />
+                  ) : field.type === "number" ? (
+                    <input
+                      id={`crud-${field.key}`}
+                      type="number"
+                      value={getFieldValue(field.key)}
+                      onChange={(e) =>
+                        setFieldValue(
+                          field.key,
+                          e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                      }
+                      placeholder={field.placeholder || ""}
+                      className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
                     />
                   ) : (
                     <input

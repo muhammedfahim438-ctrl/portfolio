@@ -5,11 +5,11 @@ import { writeFileSync } from "node:fs";
 
 const W = 480, H = 600;
 const BG = "#080808";
-const SILVER = "#CDCBCA";
+const SILVER = "#DCD7D2";
 const RED = "#C8102E";
-const BLUE = "#002F6C";
+const SIGNAL = "#FFC700";
 const YELLOW = "#FFC700";
-const GREY = "#B1B3B3";
+const GREY = "#CDCBCA";
 
 // mulberry32 seeded RNG
 function mulberry32(seed) {
@@ -99,8 +99,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" rol
   <g>${ambient.join("")}</g>
   <g>${dots.map(d => `<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="${d.fill}" opacity="${d.opacity.toFixed(2)}"/>`).join("")}</g>
   <g>${eyeDots.join("")}</g>
-  <rect x="10" y="10" width="${W - 20}" height="${H - 20}" fill="none" stroke="${BLUE}" stroke-opacity="0.55" stroke-width="1.5"/>
-  <rect x="16" y="16" width="${W - 32}" height="${H - 32}" fill="none" stroke="${BLUE}" stroke-opacity="0.22" stroke-width="0.75"/>
+  <rect x="10" y="10" width="${W - 20}" height="${H - 20}" fill="none" stroke="${SIGNAL}" stroke-opacity="0.55" stroke-width="1.5"/>
+  <rect x="16" y="16" width="${W - 32}" height="${H - 32}" fill="none" stroke="${SIGNAL}" stroke-opacity="0.22" stroke-width="0.75"/>
   <path d="M10 34 V10 H34" fill="none" stroke="${YELLOW}" stroke-width="3"/>
   <path d="M${W - 34} 10 H${W - 10} V34" fill="none" stroke="${YELLOW}" stroke-width="3"/>
   <path d="M10 ${H - 34} V${H - 10} H34" fill="none" stroke="${YELLOW}" stroke-width="3"/>

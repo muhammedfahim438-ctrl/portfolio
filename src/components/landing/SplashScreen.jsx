@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getConfig } from "@/lib/firestore";
+import { useBrandContent } from "@/hooks/useBrandContent";
 
-const DEFAULT_FINAL = "DATA SCIENCE × FULL-STACK";
+const DEFAULT_FINAL = "RAW DATA → SHIPPED PRODUCT";
 const SEEN_KEY = "mf-splash-v1";
 const CAP_MS = 2800;
 
@@ -21,6 +22,8 @@ const DOTS = Array.from({ length: 25 }, (_, i) => {
 });
 
 export function SplashScreen() {
+  const { footer } = useBrandContent();
+  const fallbackFinal = footer.splashFinal || DEFAULT_FINAL;
   const [seen] = useState(() => {
     try {
       return sessionStorage.getItem(SEEN_KEY) === "1";
@@ -30,7 +33,7 @@ export function SplashScreen() {
   });
   const [visible, setVisible] = useState(!seen);
   const [pct, setPct] = useState(0);
-  const [final, setFinal] = useState(DEFAULT_FINAL);
+  const [final, setFinal] = useState("");
   const doneRef = useRef(false);
   const [reducedNow] = useState(
     () =>
@@ -134,12 +137,12 @@ export function SplashScreen() {
           </div>
 
           {/* tagline from site_config/splash_data */}
-          <p className="dg-ui-mono mt-8 text-[11px] uppercase tracking-[0.4em] text-themeText-secondary">
-            {final}
+          <p className="dg-ui-mono mt-8 text-[0.6875rem] uppercase tracking-[0.4em] text-themeText-secondary">
+            {final || fallbackFinal}
           </p>
 
           {/* percentage readout */}
-          <p className="dg-ui-mono mt-3 text-xs tracking-[0.2em] text-themeAccent" aria-hidden="true">
+          <p className="dg-f-data mt-3 text-xs tracking-[0.2em] text-themeAccent" aria-hidden="true">
             {String(pct).padStart(3, "0")}%
           </p>
 

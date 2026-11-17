@@ -64,10 +64,10 @@ export function TabSettings() {
         <ConfigEditor
           configKey="splash_data"
           title="Splash Screen"
-          fallback={{ words: [], final: "DATA SCIENCE × FULL-STACK" }}
+          fallback={{ words: [], final: "RAW DATA → SHIPPED PRODUCT" }}
           schema={[
             { key: "words", label: "Roulette Words (comma-separated)", type: "tags" },
-            { key: "final", label: "Final Tagline", type: "text", placeholder: "DATA SCIENCE × FULL-STACK" },
+            { key: "final", label: "Final Tagline", type: "text", placeholder: "RAW DATA → SHIPPED PRODUCT" },
           ]}
         />
       )}

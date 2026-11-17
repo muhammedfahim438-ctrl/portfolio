@@ -60,7 +60,7 @@ export function ConfigEditor({ configKey, title, schema, fallback, profile }) {
           <div key={field.key} className="space-y-1.5">
             <label
               htmlFor={`config-${configKey}-${field.key}`}
-              className="block text-[10px] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono"
+              className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono"
             >
               {field.label}
             </label>
@@ -79,6 +79,56 @@ export function ConfigEditor({ configKey, title, schema, fallback, profile }) {
                   {field.label}
                 </span>
               </div>
+            ) : field.type === "textarea" ? (
+              <textarea
+                id={`config-${configKey}-${field.key}`}
+                rows={field.rows || 3}
+                value={form[field.key] ?? ""}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, [field.key]: e.target.value }))
+                }
+                placeholder={field.placeholder || ""}
+                className="w-full resize-y rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
+              />
+            ) : field.type === "lines" ? (
+              <textarea
+                id={`config-${configKey}-${field.key}`}
+                rows={field.rows || 4}
+                value={
+                  Array.isArray(form[field.key])
+                    ? form[field.key].join("\n")
+                    : form[field.key] ?? ""
+                }
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    [field.key]: e.target.value.split("\n").filter((line) => line.trim()),
+                  }))
+                }
+                placeholder={field.placeholder || "One item per line"}
+                className="w-full resize-y rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
+              />
+            ) : field.type === "tags" ? (
+              <input
+                id={`config-${configKey}-${field.key}`}
+                type="text"
+                value={
+                  Array.isArray(form[field.key])
+                    ? form[field.key].join(", ")
+                    : form[field.key] ?? ""
+                }
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    [field.key]: e.target.value
+                      .split(",")
+                      .map((tag) => tag.trim())
+                      .filter(Boolean),
+                  }))
+                }
+                placeholder={field.placeholder || "Comma-separated"}
+                className="w-full rounded-none border-4 border-themeAccent bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent shadow-[2px_2px_0_0_var(--dg-bg-deep)] focus:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 dg-r-0"
+              />
             ) : (
               <input
                 id={`config-${configKey}-${field.key}`}

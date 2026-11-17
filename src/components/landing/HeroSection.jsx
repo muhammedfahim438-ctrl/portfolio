@@ -1,13 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { FiFileText, FiSend } from "react-icons/fi";
-import { getHeroData, getSocialData } from "@/lib/firestore";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiArrowRight, FiSend } from "react-icons/fi";
+import { getConfig, getSocialData } from "@/lib/firestore";
+import { useBrandContent } from "@/hooks/useBrandContent";
 import { EntranceReveal } from "@/components/ui/EntranceReveal";
 import { ParallaxLayers } from "@/components/ui/ParallaxLayers";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 
 export function HeroSection() {
+  const { hero } = useBrandContent();
+
   const [social, setSocial] = useState({
     github: "https://github.com/muhammedfahim438-ctrl",
     linkedin: "https://linkedin.com/in/muhammed-fahim-m",
@@ -15,41 +18,53 @@ export function HeroSection() {
     resume: "",
   });
 
-  const [hero, setHero] = useState({
-    title: "Muhammed Fahim M",
-    subtitle: "Data Science & Full-Stack Developer",
-    body: "Data science and full-stack development from Palakkad, Kerala. I ship production APIs, machine learning models, and web apps that solve real problems.",
-  });
+  // `portrait_data.photos` is a list of optional hero portraits. One image is
+  // shown at a time; when several are configured the hero rotates through them.
+  const [portraits, setPortraits] = useState([]);
+  const [portraitIndex, setPortraitIndex] = useState(0);
 
   useEffect(() => {
     let mounted = true;
-    async function fetchData() {
-      try {
-        const [heroData, socialData] = await Promise.all([
-          getHeroData(),
-          getSocialData(),
-        ]);
+    getConfig("portrait_data")
+      .then((data) => {
         if (!mounted) return;
-        if (heroData) {
-          setHero((prev) => ({
-            title: heroData.title || prev.title,
-            subtitle: heroData.subtitle || prev.subtitle,
-            body: heroData.voice_text || prev.body,
-          }));
-        }
-        if (socialData) {
-          setSocial((prev) => ({
-            github: socialData.github || prev.github,
-            linkedin: socialData.linkedin || prev.linkedin,
-            email: socialData.email || prev.email,
-            resume: socialData.resume_pdf_url || "",
-          }));
-        }
+        const photos = Array.isArray(data?.photos)
+          ? data.photos.filter(Boolean)
+          : [];
+        setPortraits(photos);
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (portraits.length < 2) return;
+    const id = setInterval(
+      () => setPortraitIndex((index) => (index + 1) % portraits.length),
+      6000
+    );
+    return () => clearInterval(id);
+  }, [portraits.length]);
+
+  useEffect(() => {
+    let mounted = true;
+    async function fetchSocial() {
+      try {
+        const socialData = await getSocialData();
+        if (!mounted || !socialData) return;
+        setSocial((prev) => ({
+          github: socialData.github || prev.github,
+          linkedin: socialData.linkedin || prev.linkedin,
+          email: socialData.email || prev.email,
+          resume: socialData.resume_pdf_url || "",
+        }));
       } catch {
         // fallback to defaults
       }
     }
-    fetchData();
+    fetchSocial();
     return () => {
       mounted = false;
     };
@@ -64,15 +79,16 @@ export function HeroSection() {
     dock.push({ label: "Resume", href: social.resume, external: true });
   }
 
+  const proof = Array.isArray(hero.proof) ? hero.proof.filter(Boolean) : [];
+
   return (
     <section
       id="hero"
-      className="relative flex min-h-dvh items-center overflow-hidden border-t-2 border-themeAccent bg-themeBg"
+      className="dg-screen relative flex min-h-dvh items-center overflow-hidden border-t-2 border-themeAccent"
     >
-      {/* Parallax background: dot grid, blueprint grid, accent glows */}
+      {/* Parallax background: blueprint grid + accent glows over the dot HUD */}
       <div className="absolute inset-0" aria-hidden="true">
         <ParallaxLayers className="h-full w-full">
-          <div className="dg-halftone absolute inset-0 opacity-20" />
           <div className="dg-blueprint absolute inset-0 opacity-10" />
           <div className="absolute inset-0">
             <div className="absolute -left-24 top-1/4 h-72 w-72 bg-themeSecondary/20 blur-3xl" />
@@ -84,7 +100,7 @@ export function HeroSection() {
       <div className="container relative z-10 mx-auto px-4 py-24 md:px-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
           {/* Left: copy */}
-          <EntranceReveal variant="slide" delay={0} className="max-w-lg">
+          <EntranceReveal variant="slide" delay={0} className="max-w-xl">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -92,34 +108,58 @@ export function HeroSection() {
               className="space-y-8"
             >
               <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4">
-                <span className="dg-ui-mono text-[11px] font-bold uppercase tracking-[0.4em] text-themeAccent">
-                  {hero.subtitle}
+                <span className="dg-ui-mono text-[0.6875rem] font-bold uppercase tracking-[0.4em] text-themeAccent">
+                  {hero.eyebrow}
                 </span>
               </div>
 
               <h1
-                className="h1 dg-glitch text-themeText"
-                data-text={hero.title}
+                className="dg-f-display dg-glitch text-themeText"
+                data-text={hero.headline}
+                style={{
+                  fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
+                  lineHeight: 1.02,
+                  letterSpacing: "-0.03em",
+                  fontWeight: 800,
+                  textWrap: "balance",
+                }}
               >
-                {hero.title}
+                {hero.headline}
               </h1>
 
               <p className="dg-f-subhead text-lg leading-relaxed text-themeText">
-                {hero.body}
+                {hero.subhead}
               </p>
 
-              <div className="flex flex-col items-start gap-4 pt-8 sm:flex-row sm:items-center">
+              {proof.length > 0 && (
+                <ul className="flex flex-wrap gap-x-6 gap-y-2 border-t border-themeBorder/40 pt-6">
+                  {proof.map((item) => (
+                    <li
+                      key={item}
+                      className="dg-ui-mono flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.15em] text-themeTextSecondary"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="h-1.5 w-1.5 shrink-0 bg-themeAccent"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a
-                  href="#contact"
+                  href={hero.ctaPrimaryHref || "#contact"}
                   className="btn btn--primary dg-border-neon-red"
                 >
-                  GET IN TOUCH <FiSend className="ml-2 w-4 h-4" />
+                  {hero.ctaPrimaryLabel} <FiSend className="ml-2 w-4 h-4" />
                 </a>
                 <a
-                  href="#work"
+                  href={hero.ctaSecondaryHref || "#work"}
                   className="btn btn--secondary"
                 >
-                  VIEW WORK <FiFileText className="ml-2 w-4 h-4" />
+                  {hero.ctaSecondaryLabel} <FiArrowRight className="ml-2 w-4 h-4" />
                 </a>
               </div>
             </motion.div>
@@ -132,15 +172,30 @@ export function HeroSection() {
             className="relative mx-auto w-72 h-80 sm:w-96 sm:h-112 lg:w-lg lg:h-160"
           >
             <Tilt3D maxRotate={6} perspective={900} scale={1.01} className="h-full w-full">
-              <div className="relative h-full w-full overflow-hidden border-2 border-themeAccent bg-themeBg shadow-[8px_8px_0_0_var(--dg-accent-s)] dg-r-0">
-                <div className="absolute top-0 left-0 h-16 w-16 border-t-2 border-l-2 border-themeWarn bg-themeBg" />
-                <div className="absolute right-0 bottom-0 h-16 w-16 border-r-2 border-b-2 border-themeWarn bg-themeBg" />
-                <img
-                  src="/portrait.svg"
-                  alt="Dot-matrix portrait of Muhammed Fahim M"
-                  className="h-full w-full object-cover opacity-100 grayscale-[30%] transition-all duration-500 hover:grayscale-0"
-                  loading="eager"
-                />
+              <div className="dg-sheen relative h-full w-full overflow-hidden border-2 border-themeAccent bg-themeBg shadow-[8px_8px_0_0_var(--dg-accent-s)] dg-r-0">
+                <div className="absolute top-0 left-0 h-16 w-16 border-t-2 border-l-2 border-themeWarn" />
+                <div className="absolute right-0 bottom-0 h-16 w-16 border-r-2 border-b-2 border-themeWarn" />
+                <AnimatePresence initial={false}>
+                  <motion.img
+                    key={
+                      hero.photo_url ||
+                      portraits[portraitIndex] ||
+                      "/portrait.svg"
+                    }
+                    src={
+                      hero.photo_url ||
+                      portraits[portraitIndex] ||
+                      "/portrait.svg"
+                    }
+                    alt={hero.portraitAlt || "Portrait of Muhammed Fahim M"}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition-[filter] duration-500 hover:grayscale-0"
+                    loading="eager"
+                  />
+                </AnimatePresence>
               </div>
             </Tilt3D>
           </EntranceReveal>
@@ -161,8 +216,8 @@ export function HeroSection() {
                 {item.label}
               </a>
             ))}
-            <span className="dg-ui-mono ml-auto hidden text-[10px] uppercase tracking-[0.3em] text-themeText-secondary/60 md:block">
-              Palakkad, Kerala
+            <span className="dg-ui-mono ml-auto hidden text-[0.625rem] uppercase tracking-[0.3em] text-themeText-secondary/60 md:block">
+              {hero.footerLine}
             </span>
           </div>
         </EntranceReveal>
@@ -170,10 +225,10 @@ export function HeroSection() {
 
       {/* Scroll indicator */}
       <div className="absolute right-6 bottom-6 hidden flex-col items-center gap-2 md:flex">
-        <span className="dg-ui-mono text-[10px] font-bold uppercase tracking-[0.4em] text-themeTextSecondary/70">
+        <span className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.4em] text-themeTextSecondary/70">
           Scroll
         </span>
-        <div className="flex h-12 w-4 items-start justify-center border-2 border-themeAccent bg-themeBg px-1">
+        <div className="flex h-12 w-4 items-start justify-center border-2 border-themeAccent bg-themeBg/70 px-1 backdrop-blur-sm">
           <div className="h-2 w-1 animate-scroll-dot bg-themeAccent" />
         </div>
       </div>
