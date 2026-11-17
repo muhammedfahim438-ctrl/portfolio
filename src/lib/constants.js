@@ -45,5 +45,7 @@ export const MESSAGE_LIMITS = {
 // Simple email-format check (mirrored by the rules `matches()` predicate).
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Bots that submit faster than this are rejected by the client.
-export const MIN_FORM_FILL_MS = 3000;
+// A short bot heuristic. The hidden `website` field in the contact form is
+// the primary honeypot; this only catches instant scripted submissions and is
+// kept low enough that a genuine fast typist is never blocked.
+export const MIN_FORM_FILL_MS = 1000;

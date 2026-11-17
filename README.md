@@ -31,9 +31,10 @@ Storage) used as a headless CMS so the site can be edited without touching code.
 | Linting | ESLint (flat config) + `eslint-plugin-react-hooks` + `eslint-plugin-react-refresh` | `^10.14.0` | 10.14.0 |
 
 There is **no** GSAP, **no** Chart.js, **no** `react-chartjs-2`, **no** TypeScript, **no** test runner,
-and **no** Prettier config in this repository. Fonts (NDot55, Ntype82, Lettera Mono LL) are served
-from `public/fonts/*.woff2` via `@font-face` rules in `src/app/globals.css`, with system fallbacks
-until the files are dropped in.
+and **no** Prettier config in this repository. The three licensed NType82 faces (Headline, Regular,
+Mono) plus Ndot 55 are served from `public/fonts/*.woff2` via `@font-face` rules in
+`src/app/globals.css`, with system fallbacks while they load. Uppercase is applied to headings only;
+all other text renders in its authored case. See `public/fonts/README.md` for font provenance.
 
 ### Node requirement
 

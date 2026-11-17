@@ -230,10 +230,12 @@ export default function AdminPage() {
 
 function QuickActionCard({ title, desc, icon, onClick, active }) {
   return (
-    <motion.div
+    <motion.button
+      type="button"
       whileHover={{ y: -4 }}
       onClick={onClick}
-      className={`group cursor-pointer p-6 border-4 border-themeAccent bg-themeSurface/30 relative overflow-hidden transition-all duration-150 ${
+      aria-pressed={active}
+      className={`group w-full cursor-pointer p-6 border-4 border-themeAccent bg-themeSurface/30 relative overflow-hidden text-left transition-all duration-150 ${
         active
           ? "bg-themeAccent/20 border-themeAccent shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
           : "shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)]"
@@ -253,6 +255,6 @@ function QuickActionCard({ title, desc, icon, onClick, active }) {
           {desc}
         </p>
       </div>
-    </motion.div>
+    </motion.button>
   );
 }

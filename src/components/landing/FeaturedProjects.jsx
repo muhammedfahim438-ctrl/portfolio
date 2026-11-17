@@ -9,7 +9,9 @@ import { Tilt3D } from "@/components/ui/Tilt3D";
 
 export function FeaturedProjects() {
   const { sections } = useBrandContent();
-  const copy = sections.work || {};
+  const copy = sections?.work || {};
+  const loadingText = sections?.work?.loading || "Loading projects...";
+  const emptyText = sections?.work?.empty || "No projects yet.";
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,9 +60,9 @@ export function FeaturedProjects() {
         </EntranceReveal>
 
         {loading ? (
-          <div className="py-24 text-center text-themeTextSecondary">Loading projects...</div>
+          <div className="py-24 text-center text-themeTextSecondary">{loadingText}</div>
         ) : projects.length === 0 ? (
-          <div className="py-24 text-center text-themeTextSecondary">No projects yet.</div>
+          <div className="py-24 text-center text-themeTextSecondary">{emptyText}</div>
         ) : (
           <>
             <EntranceReveal variant="fade" delay={0.1} className="grid grid-cols-1 gap-3 grid-flow-dense sm:grid-cols-2 lg:grid-cols-3">
@@ -153,7 +155,7 @@ function CaseStudyCard({ project }) {
           ))}
         </div>
 
-        <div className="dg-ui-mono mt-4 flex items-center gap-1 text-[0.625rem] text-themeAccent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="dg-ui-mono mt-4 flex items-center gap-1 text-[0.625rem] text-themeAccent opacity-60 transition-opacity duration-300 group-hover:opacity-100">
           <span>&rarr;</span>
           <span className="text-themeTextSecondary">{linkLabel}</span>
         </div>

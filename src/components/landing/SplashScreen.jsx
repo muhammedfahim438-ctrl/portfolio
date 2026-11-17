@@ -121,7 +121,7 @@ export function SplashScreen() {
           {/* dot-matrix boot grid */}
           <div
             className="grid grid-cols-5 gap-3"
-            style={{ width: "min(180px, 40vw)" }}
+            style={{ width: "min(11.25rem, 40vw)" }}
             aria-hidden="true"
           >
             {DOTS.map((d) => (

@@ -160,14 +160,16 @@ export function ContactFooter() {
   };
 
   const scrollToForm = () => {
+    if (window.__lenis) {
+      window.__lenis.scrollTo("#contact-form", { offset: -96 });
+      return;
+    }
     const el = document.getElementById("contact-form");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
-    } else if (window.__lenis) {
-      window.__lenis.scrollTo("#contact-form");
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
     }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -265,17 +267,17 @@ export function ContactFooter() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <BrandInput id="name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required />
-                    <BrandInput id="phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999" />
+                    <BrandInput id="name" label="Name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required />
+                    <BrandInput id="phone" label="Phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999" />
                   </div>
 
-                  <BrandInput id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
-                  <BrandInput id="reason" type="select" value={reason} onChange={(e) => setReason(e.target.value)} required>
+                  <BrandInput id="email" label="Email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
+                  <BrandInput id="reason" label="Reason" type="select" value={reason} onChange={(e) => setReason(e.target.value)} required>
                     {REASONS.map((r) => (
                       <option key={r} value={r}>{r}</option>
                     ))}
                   </BrandInput>
-                  <BrandInput id="message" type="textarea" value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="Tell me about your project or idea..." required />
+                  <BrandInput id="message" label="Message" type="textarea" value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="Tell me about your project or idea..." required />
 
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -368,32 +370,39 @@ export function ContactFooter() {
   );
 }
 
-function BrandInput({ id, type, value, onChange, placeholder, required, children }) {
+function BrandInput({ id, label, type, value, onChange, placeholder, required, autoComplete, rows, children }) {
   const isSelect = type === "select";
   const isTextarea = type === "textarea";
   return (
     <div className="space-y-2">
       <label htmlFor={id} className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary/70 dg-ui-mono">
-        {id}{required && <span className="text-themeAccent">*</span>}
+        {label || id}{required && <span className="text-themeAccent">*</span>}
       </label>
       {isSelect ? (
-        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber">
+        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber">
           {children}
         </select>
       ) : isTextarea ? (
-        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={placeholder ? 1 : undefined} placeholder={placeholder} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber resize-none" />
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={rows} placeholder={placeholder} required={required} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText focus:outline-none focus:border-themeAccent transition-colors input-cyber resize-none" />
       ) : (
-        <input id={id} type={type} autoComplete={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText placeholder-themeTextSecondary/40 focus:outline-none focus:border-themeAccent transition-colors input-cyber" />
+        <input id={id} type={type} autoComplete={autoComplete} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className="w-full rounded-none border-2 border-themeBorder/60 bg-themeInput px-4 py-3 text-themeText placeholder-themeTextSecondary/40 focus:outline-none focus:border-themeAccent transition-colors input-cyber" />
       )}
     </div>
   );
 }
 
-function BrandContactItem({ icon, value, href }) {
+function BrandContactItem({ icon, label, value, href }) {
   return (
-    <a href={href} className="flex items-center gap-2 text-themeTextSecondary hover:text-themeAccent transition-colors uppercase tracking-[0.1em] text-xs dg-ui-mono">
-      {icon}
-      <span>{value}</span>
+    <a href={href} className="flex items-start gap-2 text-themeTextSecondary hover:text-themeAccent transition-colors dg-ui-mono">
+      <span className="mt-0.5">{icon}</span>
+      <span className="flex flex-col">
+        {label && (
+          <span className="text-[0.625rem] uppercase tracking-[0.2em] text-themeAccent">
+            {label}
+          </span>
+        )}
+        <span className="text-xs uppercase tracking-[0.1em]">{value}</span>
+      </span>
     </a>
   );
 }

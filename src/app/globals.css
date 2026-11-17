@@ -1,36 +1,35 @@
 @import "tailwindcss";
 
 /* ── Fonts ─────────────────────────────────────────────────────────────
- * Ntype82 (headline + body), Ntype82 Mono (labels/UI/readouts),
- * NDot55 (product names/logotypes/special items), NDot57 (data numerals).
- * Drop the woff2 files into public/fonts/ with these exact names:
- *   Ntype82.woff2  Ntype82-Mono.woff2  NDot55.woff2  NDot57.woff2
- * Until then the stack falls back to system faces and the layout holds.
+ * NType82 Headline (display), NType82 Regular (body), NType82 Mono
+ * (labels/UI/readouts), NDot55 (product names, monograms, logotypes).
+ * Licensed WOFF2 files live in public/fonts/. NDot57 was not supplied;
+ * --font-data keeps using NType82 Mono.
  * ──────────────────────────────────────────────────────────────────── */
 @font-face {
-  font-family: "Ntype82";
-  src: url("/fonts/Ntype82.woff2") format("woff2");
+  font-family: "NType82 Headline";
+  src: url("/fonts/NType82-Headline.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Ntype82 Mono";
-  src: url("/fonts/Ntype82-Mono.woff2") format("woff2");
+  font-family: "NType82";
+  src: url("/fonts/NType82-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NType82 Mono";
+  src: url("/fonts/NType82Mono-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "NDot55";
-  src: url("/fonts/NDot55.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "NDot57";
-  src: url("/fonts/NDot57.woff2") format("woff2");
+  src: url("/fonts/NDot_55.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -38,15 +37,15 @@
 
 @theme inline {
   /* ── Typography ──
-   * display = Ntype82 headline cut (h1-h3). subhead/sans = Ntype82 body.
-   * mono = Ntype82 Mono (labels, buttons, badges). logo = NDot55
-   * (product names/logotypes). data = NDot57 (numbers/readouts). */
-  --font-display: "Ntype82", ui-sans-serif, system-ui, sans-serif;
-  --font-subhead: "Ntype82", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Ntype82", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Ntype82 Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+   * display = NType82 headline (h1-h3). subhead/sans = NType82 body.
+   * mono = NType82 Mono (labels, buttons, badges). logo = NDot55
+   * (product names, monograms). data = NType82 Mono (numerals). */
+  --font-display: "NType82 Headline", ui-sans-serif, system-ui, sans-serif;
+  --font-subhead: "NType82", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "NType82", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "NType82 Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-logo: "NDot55", ui-sans-serif, system-ui, sans-serif;
-  --font-data: "NDot57", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  --font-data: "NType82 Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
 
   /* ── Radius ── */
   --radius-glass: 0.75rem;
@@ -89,7 +88,7 @@
   --color-glass-border-lo: var(--dg-glass-border-lo);
 
   /* ── Shadows ── */
-  --color-shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.52);
+  --color-shadow-glass: var(--dg-shadow-glass);
 
   /* ── Parallax & 3D ── */
   --color-parallax-depth-1: var(--dg-parallax-depth-1);
@@ -100,29 +99,28 @@
 }
 
 :root {
-  /* ── Core Palette ──
-   * Industrial-brutalist system on a single #080808 substrate.
-   * Red-line #C8102E draws borders/hairlines; red-fill #D71920 signals
-   * fills/alerts/active states; yellow #FFC700 is reserved for micro
-   * signals (scanlines, active tab, focus ring). Per-section ratios are
-   * tuned per component; global average: 80/15/5.
+  /* ── Core Palette (light) ──
+   * The dark theme overrides the same tokens in .dark. Dark is applied
+   * before paint by the inline script in index.html and is the default.
+   * Red-line #C8102E draws borders/hairlines; the darker gold keeps micro
+   * signals legible on a light substrate. Global average: 80/15/5.
    */
-  --dg-bg-deep: #080808;
-  --dg-surf: #CDCBCA;
-  --dg-high: #DCD7D2;
+  --dg-bg-deep: #F2F0ED;
+  --dg-surf: #1A1A1A;
+  --dg-high: #141414;
   --dg-accent-p: #C8102E;
-  --dg-accent-s: #FFC700;
+  --dg-accent-s: #8A6800;
   --dg-alert: #D71920;
-  --dg-warn: #FFC700;
+  --dg-warn: #8A6800;
 
   /* ── Glass Foundation ── */
-  --dg-glass-bg: rgba(8, 8, 8, 0.62);
-  --dg-glass-border: rgba(205, 203, 202, 0.30);
-  --dg-glass-border-li: rgba(255, 255, 255, 0.50);
-  --dg-glass-border-lo: rgba(0, 0, 0, 0.30);
+  --dg-glass-bg: rgba(255, 255, 255, 0.66);
+  --dg-glass-border: rgba(20, 20, 20, 0.22);
+  --dg-glass-border-li: rgba(0, 0, 0, 0.42);
+  --dg-glass-border-lo: rgba(255, 255, 255, 0.55);
 
   /* ── Shadows ── */
-  --dg-shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.52);
+  --dg-shadow-glass: 0 12px 32px -8px rgba(20, 20, 20, 0.18);
 
   /* ── Parallax & 3D ── */
   --dg-parallax-depth-1: 0.1;
@@ -132,23 +130,23 @@
   --dg-tilt-max-rotate: 8deg;
 
   /* ── Base overrides ── */
-  --themeBg: #080808;
-  --themeBgSecondary: #0A0A0A;
-  --themeSurface: #CDCBCA;
-  --themeText: #DCD7D2;
-  --themeTextSecondary: #CDCBCA;
+  --themeBg: #F2F0ED;
+  --themeBgSecondary: #E8E5DF;
+  --themeSurface: #1A1A1A;
+  --themeText: #141414;
+  --themeTextSecondary: #45423F;
   --themeAccent: #C8102E;
-  --themeAccentHover: #D71920;
-  --themeSecondary: #DCD7D2;
-  --themeBorder: rgba(205, 203, 202, 0.30);
-  --themeCard: rgba(8, 8, 8, 0.62);
-  --themeInput: #0A0A0A;
+  --themeAccentHover: #A00D25;
+  --themeSecondary: #141414;
+  --themeBorder: rgba(20, 20, 20, 0.22);
+  --themeCard: rgba(255, 255, 255, 0.66);
+  --themeInput: #FFFFFF;
 
-  --themeShadow: rgba(0, 0, 0, 0.52);
+  --themeShadow: rgba(20, 20, 20, 0.18);
   --themeGradientStart: #C8102E;
-  --themeGradientEnd: #FFC700;
-  --themeWaveform: #FFC700;
-  --themeWarn: #FFC700;
+  --themeGradientEnd: #8A6800;
+  --themeWaveform: #8A6800;
+  --themeWarn: #8A6800;
 
   /* ── Z-index scale ── */
   --dg-z-bg: 0;
@@ -160,7 +158,7 @@
 }
 
 .dark {
-  /* Dark-first, single theme - mirrors :root */
+  /* Dark theme — overrides the light :root tokens */
   --dg-bg-deep: #080808;
   --dg-surf: #CDCBCA;
   --dg-high: #DCD7D2;
@@ -208,19 +206,25 @@ body {
   color: var(--themeText);
   font-family: var(--font-subhead);
   overflow-x: hidden;
-  /* Nothing/brutalist voice: everything renders uppercase. Display-only
-     transform — source strings, input values and Firestore copy are
-     unchanged. SVG <text> nodes are not affected. */
+  /* Uppercase is reserved for headings. Everything else renders in the
+     case it was authored in. */
+}
+
+/* Headings only (landing + admin). text-transform is inherited, so glitch
+   pseudo-layers (::before/::after) uppercase in sync with the element. */
+h1,
+h2,
+h3,
+.h2,
+.dg-f-display {
   text-transform: uppercase;
 }
 
-/* All headings render uppercase (landing + admin). text-transform is an
-   inherited property, so generated glitch pseudo-layers (::before/::after)
-   uppercase in sync with the element. */
-h1,
-h2,
-h3 {
-  text-transform: uppercase;
+/* Tailwind's `uppercase` utility is used throughout the components; keep
+   headings and anything inside them uppercase, normalise every other
+   element back to its authored case. */
+*:not(h1):not(h2):not(h3):not(.h2):not(.dg-f-display):not(h1 *):not(h2 *):not(h3 *):not(.h2 *):not(.dg-f-display *) {
+  text-transform: none !important;
 }
 
 /* Accessible focus ring on every interactive element */
@@ -474,9 +478,9 @@ h3 {
 .dg-f-display { font-family: var(--font-display); letter-spacing: -0.02em; }
 .dg-f-subhead { font-family: var(--font-subhead); letter-spacing: -0.01em; }
 .dg-f-mono { font-family: var(--font-mono); letter-spacing: 0.02em; }
-/* Product names, logotypes, monograms — NDot55 */
+/* Product names, logotypes, monograms */
 .dg-f-logo { font-family: var(--font-logo); letter-spacing: 0.02em; }
-/* Data numerals and readouts — NDot57 */
+/* Data numerals and readouts */
 .dg-f-data { font-family: var(--font-data); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
 
 /* ── Radius scale (plain classes, not Tailwind utilities) ── */
@@ -526,7 +530,6 @@ h3 {
   font-family: var(--font-mono);
   font-weight: 600;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
   font-size: 0.875rem;
   min-height: 2.75rem;
   min-width: 7.5rem;
@@ -720,7 +723,7 @@ h3 {
 
 ::selection {
   background-color: var(--dg-accent-p);
-  color: #DCD7D2;
+  color: var(--dg-high);
 }
 
 /* Lenis */
@@ -812,7 +815,6 @@ html.lenis, html.lenis body { height: auto; }
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
   color: var(--themeTextSecondary);
 }
 

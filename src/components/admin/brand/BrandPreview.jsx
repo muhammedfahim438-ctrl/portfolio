@@ -101,7 +101,7 @@ export function SeoPreview({ title = "", description = "", url = "muhammedfahimm
           Google result
         </p>
         <p className="mt-3 truncate text-xs text-themeTextSecondary">{url}</p>
-        <p className="mt-1 truncate text-lg text-[#8ab4f8]">{title || "—"}</p>
+        <p className="mt-1 truncate text-lg text-themeAccent underline">{title || "—"}</p>
         <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-themeTextSecondary">
           {description || "—"}
         </p>

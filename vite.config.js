@@ -52,6 +52,9 @@ export default defineConfig({
     },
   },
   build: {
+    // The Firestore SDK is ~610 kB minified but is isolated in its own chunk
+    // and loaded on demand by src/lib/firestore.js, never in the entry path.
+    chunkSizeWarningLimit: 650,
     rollupOptions: {
       output: {
         manualChunks(id) {

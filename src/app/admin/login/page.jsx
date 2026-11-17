@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
     <div className="relative z-10 min-h-dvh overflow-hidden">
       {/* Ambient mesh */}
       <div className="absolute inset-0 z-0" style={{
-        backgroundImage: `radial-gradient(600px 300px at 30% -10%, rgba(200,16,46,0.06), transparent 60%), radial-gradient(400px 400px at 80% 30%, rgba(255,199,0,0.05), transparent 50%)`,
+        backgroundImage: `radial-gradient(600px 300px at 30% -10%, color-mix(in srgb, var(--dg-accent-p) 6%, transparent), transparent 60%), radial-gradient(400px 400px at 80% 30%, color-mix(in srgb, var(--dg-accent-s) 5%, transparent), transparent 50%)`,
         backgroundSize: "200% 200%",
       }} />
 

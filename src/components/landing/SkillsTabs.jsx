@@ -249,7 +249,8 @@ export function SkillsTabs() {
 
             <div className="mt-auto px-5 py-4">
               <p className="dg-ui-mono text-[0.625rem] uppercase leading-relaxed tracking-[0.25em] text-themeTextSecondary/70">
-                Select a role<br />to inspect stack
+                Select a role{" "}
+                <br />to inspect stack
               </p>
             </div>
           </div>

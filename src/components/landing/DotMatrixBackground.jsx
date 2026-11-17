@@ -22,31 +22,23 @@ export function DotMatrixBackground() {
     let lastTime = null;
     let running = true;
 
-    const colors = {
-      bg: "#080808",
-      silver: "#CDCBCA",
-      red: "#C8102E",
-    };
-
     const readColors = () => {
       const root = getComputedStyle(document.documentElement);
       const g = (name, fallback) => {
         const v = root.getPropertyValue(name).trim();
         return v ? v : fallback;
       };
-      colors.bg = g("--dg-bg-deep", "#080808");
-      colors.silver = g("--dg-high", "#CDCBCA");
-      colors.red = g("--dg-accent-p", "#C8102E");
+      return {
+        bg: g("--dg-bg-deep", "#080808"),
+        silver: g("--dg-high", "#CDCBCA"),
+        red: g("--dg-accent-p", "#C8102E"),
+      };
     };
 
-    readColors();
+    let colors = readColors();
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reducedMotion = mq.matches;
-    const onReduce = () => {
-      reducedMotion = mq.matches;
-    };
-    mq.addEventListener("change", onReduce);
 
     const dots = [];
     let cols = 0;
@@ -60,6 +52,7 @@ export function DotMatrixBackground() {
     const isMobile = () => window.innerWidth < 768;
 
     const resize = () => {
+      colors = readColors();
       const dp = Math.min(window.devicePixelRatio || 1, 2);
       dpr = dp;
       width = window.innerWidth;
@@ -92,6 +85,7 @@ export function DotMatrixBackground() {
       }
       dots.length = 0;
       dots.push(...newDots);
+      if (reducedMotion) draw(performance.now());
     };
 
     const onPointerMove = (e) => {
@@ -123,12 +117,7 @@ export function DotMatrixBackground() {
     window.addEventListener("mouseleave", onPointerLeave, { passive: true });
     window.addEventListener("touchend", onPointerLeave, { passive: true });
 
-    resize();
-
-    const animate = (now) => {
-      if (!running) return;
-      frameId = requestAnimationFrame((t) => animate(t));
-
+    const draw = (now) => {
       const dt = lastTime ? now - lastTime : 16;
       lastTime = now;
       time += dt;
@@ -192,12 +181,44 @@ export function DotMatrixBackground() {
       ctx.globalAlpha = 1;
     };
 
-    lastTime = performance.now();
-    frameId = requestAnimationFrame(animate);
+    const tick = (now) => {
+      if (!running || reducedMotion) return;
+      frameId = null;
+      draw(now);
+      frameId = requestAnimationFrame(tick);
+    };
+
+    const stopLoop = () => {
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+      lastTime = null;
+    };
+
+    const syncMotion = () => {
+      colors = readColors();
+      if (reducedMotion) {
+        stopLoop();
+        draw(performance.now());
+      } else if (running && frameId === null) {
+        lastTime = performance.now();
+        frameId = requestAnimationFrame(tick);
+      }
+    };
+
+    const onReduce = () => {
+      reducedMotion = mq.matches;
+      syncMotion();
+    };
+    mq.addEventListener("change", onReduce);
+
+    resize();
+    syncMotion();
 
     return () => {
       running = false;
-      if (frameId) cancelAnimationFrame(frameId);
+      if (frameId !== null) cancelAnimationFrame(frameId);
       mq.removeEventListener("change", onReduce);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);

@@ -16,7 +16,7 @@ export const BRAND = {
   monogram: "MF",
   role: "Data Product Engineer",
   tagline: "I turn raw data into shipped products.",
-  brandLine: "RAW DATA → MODEL → API → INTERFACE",
+  brandLine: "Raw data → model → API → interface",
   location: "Palakkad, Kerala, India",
   locationShort: "Palakkad, Kerala",
   metaTitle: "Muhammed Fahim M — Data Product Engineer",
@@ -25,7 +25,7 @@ export const BRAND = {
 };
 
 export const HERO = {
-  eyebrow: "MUHAMMED FAHIM M · DATA PRODUCT ENGINEER",
+  eyebrow: "Muhammed Fahim M · Data Product Engineer",
   headline: "I turn raw data into shipped products.",
   subhead:
     "Model, API, interface — I build the whole path. Based in Kerala, working with teams that need one person to own it end to end.",
@@ -38,27 +38,25 @@ export const HERO = {
   ctaPrimaryHref: "#contact",
   ctaSecondaryLabel: "See the work",
   ctaSecondaryHref: "#work",
-  footerLine: "PALAKKAD, KERALA · OPEN TO FULL-TIME ROLES",
+  footerLine: "Palakkad, Kerala · Open to full-time roles",
   portraitAlt: "Dot-matrix portrait of Muhammed Fahim M",
   photo_url: "",
 };
 
 export const ABOUT = {
-  label: "SEC.01 // PROFILE",
-  revision: "DOSSIER MF-01 / REV 2026.1",
+  label: "Sec. 01 // Profile",
+  revision: "Dossier MF-01 / Rev 2026.1",
   display: "ABOUT ME",
   lead: "I build the part after the notebook.",
   paragraphs: [
     "I'm Fahim, a data product engineer from Palakkad, Kerala. I started with Python and a frustration I kept running into: most analysis stops at a chart.",
-    "So I learned to ship the whole path. For my capstone I built India Geo API — 30 Census files turned into a live SaaS API serving 619,246 villages, with JWT auth, Redis caching and Razorpay billing. At Bluestock Fintech I solo-built the Nifty 100 financial intelligence platform: a Python ETL pipeline, a PostgreSQL warehouse, 7 Power BI dashboards and an HMAC-signed partner API. With three teammates I built VitaSense AI, a diabetes-risk prototype trained on 5,000 synthetic records, at 98.2% on its held-out split.",
+    "So I learned to ship the whole path. For my capstone I built India Geo API — 30 Census files turned into a live SaaS API serving 619,246 villages, with JWT auth, Redis caching and Razorpay billing. At Bluestock Fintech I solo-built the Nifty 100 financial intelligence platform: a Python ETL pipeline, a PostgreSQL warehouse, 7 Power BI dashboards and an HMAC-signed partner API. With three teammates I built VitaSense AI, a college diabetes-risk prototype on 5,000 synthetic records; it scored 98.2% on its held-out split but was never deployed.",
     "I care about clean code, documented decisions, and the unglamorous middle: messy data, edge cases, and the last 10% that turns a demo into a product.",
   ],
   facts: [
     { term: "Role", value: "Data Product Engineer" },
     { term: "Base", value: "Palakkad, Kerala, India" },
     { term: "Experience", value: "TechFifo & Bluestock · 2026" },
-    { term: "Education", value: "B.Sc Computer Science (Data Science)" },
-    { term: "Award", value: "Best Digital Innovation Award · 2026" },
     { term: "Focus", value: "Data → model → API → interface" },
   ],
   stats: [
@@ -71,7 +69,7 @@ export const ABOUT = {
     "Python", "Django", "DRF", "React", "Next.js",
     "Flutter", "PostgreSQL", "Redis", "Power BI", "Docker",
   ],
-  coordinates: "LAT 10.77 N / LON 76.66 E",
+  coordinates: "Lat 10.77 N / Lon 76.66 E",
   resumeLabel: "Download resume",
   ctaLabel: "Start a project",
   ctaHref: "#contact",
@@ -79,7 +77,7 @@ export const ABOUT = {
 
 export const SECTIONS = {
   experience: {
-    label: "SEC.02 // EXPERIENCE",
+    label: "Sec. 02 // Experience",
     heading: "Where the work had a deadline.",
     subhead:
       "Two 2026 internships — production APIs at TechFifo, a financial data platform at Bluestock.",
@@ -87,21 +85,23 @@ export const SECTIONS = {
     educationLine: "B.Sc Computer Science (Data Science) · 2024–2027",
   },
   skills: {
-    label: "SEC.03 // STACK",
+    label: "Sec. 03 // Stack",
     heading: "The stack behind the shipped work.",
     subhead:
       "Four roles, one workflow: explore the data, build the service, ship the interface, keep it running.",
   },
   work: {
-    label: "SEC.04 // SELECTED WORK",
+    label: "Sec. 04 // Selected work",
     heading: "Proof, not promises.",
     subhead:
       "Builds where the data, the API, and the interface had to work together. Every card links to the code or the live system.",
     ctaLabel: "Start a project",
     ctaHref: "#contact",
+    loading: "Loading projects...",
+    empty: "No projects yet.",
   },
   contact: {
-    label: "SEC.05 // CONTACT",
+    label: "Sec. 05 // Contact",
     heading: "Tell me what you're trying to ship.",
     subhead:
       "Open to full-time data and backend roles, plus a small number of freelance builds. Send the context and I'll reply with next steps.",
@@ -115,8 +115,8 @@ export const SECTIONS = {
 
 export const FOOTER = {
   copyright: "© 2026 Muhammed Fahim M. All rights reserved.",
-  brandLine: "RAW DATA → MODEL → API → INTERFACE",
-  credit: "PALAKKAD, KERALA · BUILT WITH REACT, FIREBASE & TAILWIND",
+  brandLine: "Raw data → model → API → interface",
+  credit: "Palakkad, Kerala · Built with React, Firebase & Tailwind",
   nav: [
     { label: "About", href: "#about" },
     { label: "Experience", href: "#experience" },
@@ -124,7 +124,7 @@ export const FOOTER = {
     { label: "Work", href: "#work" },
     { label: "Contact", href: "#contact" },
   ],
-  splashFinal: "RAW DATA → SHIPPED PRODUCT",
+  splashFinal: "Raw data → shipped product",
 };
 
 // Experience lives in the `experience` collection so the Content tab can edit

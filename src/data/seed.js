@@ -111,8 +111,8 @@ export async function seedProjects() {
     },
     {
       title: "VitaSense AI",
-      description: "98.2% accuracy diabetes prediction using ensemble ML models",
-      long_description: "Achieved 98.2% accuracy (ROC-AUC 0.9975) using a Random Forest + Gradient Boosting voting ensemble trained on 5,000 synthetic records with SMOTE-based class balancing. Built a Flask REST API and web app delivering real-time risk prediction, an educational chatbot explaining risk factors, and an analytics dashboard with interactive charts. The system includes data preprocessing pipelines, feature engineering, and model versioning.",
+      description: "Diabetes-risk prototype: 98.2% on a held-out split of 5,000 synthetic records",
+      long_description: "College team prototype — 98.2% accuracy (ROC-AUC 0.9975) on a held-out split of 5,000 synthetic records, not deployed. Built a Random Forest + Gradient Boosting voting ensemble with SMOTE-based class balancing, plus a Flask REST API and web app for real-time risk prediction, an educational chatbot explaining risk factors, and an analytics dashboard. Includes preprocessing pipelines, feature engineering, and model versioning.",
       image_url: "",
       images: [],
       video_url: "",
@@ -310,7 +310,7 @@ export async function seedRecognition() {
     },
     {
       title: "Team ML Build",
-      description: "VitaSense AI: 98.2% on the held-out split of a 5,000-record synthetic dataset, built with a four-person team",
+      description: "VitaSense AI: college prototype scoring 98.2% on the held-out split of a 5,000-record synthetic dataset, built with three teammates",
       icon: "FiUsers",
       color: "#C8102E",
     },

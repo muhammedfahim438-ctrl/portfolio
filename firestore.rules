@@ -57,17 +57,29 @@ service cloud.firestore {
         && d.created_at.toMillis() <= request.time.toMillis() + 60000;
     }
 
+    // Deterministic document id: lowercased email + UTC year-month-day.
+    // Must match messageDocId() in src/lib/firestore.js exactly. Enforcing it
+    // here (not just in the client) is what actually limits a sender to one
+    // message per UTC day — an arbitrary id must not bypass the limit.
+    function expectedMessageId() {
+      let d = request.resource.data;
+      return d.sender_email.lower().trim()
+        + "-" + string(request.time.year())
+        + "-" + string(request.time.month())
+        + "-" + string(request.time.day());
+    }
+
     // =====================================================================
     // CONTACT MESSAGES
     //
     // - any anonymous visitor may CREATE (contact form), but only a valid
-    //   payload
+    //   payload with the deterministic per-email/per-day id
     // - only the admin may read / update / delete (inbox tab)
     // - there is NO public read grant: a visitor cannot read anyone's
     //   message, not even their own
     // =====================================================================
     match /messages/{messageId} {
-      allow create: if isValidMessage();
+      allow create: if isValidMessage() && messageId == expectedMessageId();
       allow read, update, delete: if isAdmin();
     }
 

@@ -3,6 +3,6 @@
 import { useThemeContext } from "@/components/providers/ThemeProvider";
 
 export function useTheme() {
-  const { theme, toggleTheme, setTheme } = useThemeContext();
-  return { theme, toggleTheme, setTheme };
+  const { theme, preference, toggleTheme, setTheme } = useThemeContext();
+  return { theme, preference, toggleTheme, setTheme };
 }

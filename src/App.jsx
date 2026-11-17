@@ -11,6 +11,7 @@ import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
 import { ContactFooter } from "@/components/landing/ContactFooter";
 import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { BrandContentProvider } from "@/components/providers/BrandContentProvider";
 
@@ -44,8 +45,9 @@ function LandingPage() {
 
   return (
     <BrandContentProvider>
-      <main className="isolate min-h-[100dvh] overflow-x-hidden">
+      <main className="isolate min-h-dvh overflow-x-hidden">
         <CustomCursor />
+        <ThemeToggle />
         <SplashScreen />
         <div className="relative z-10">
           <HeroSection />

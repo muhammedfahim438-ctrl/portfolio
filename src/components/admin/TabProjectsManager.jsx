@@ -222,12 +222,17 @@ export function TabProjectsManager() {
                   </td>
                   <td className="px-5 py-4">
                     <button
+                      type="button"
+                      role="switch"
+                      aria-checked={Boolean(project.featured)}
+                      aria-label={`Featured status for ${project.title}`}
                       onClick={() => handleFeaturedToggle(project)}
-                      className={`h-5 w-9 border-4 border-themeAccent transition-colors relative ${
+                      className={`h-5 w-9 border-4 border-themeAccent transition-colors relative focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-themeAccent ${
                         project.featured ? "bg-themeAccent" : "bg-themeBorder"
                       }`}
                     >
                       <span
+                        aria-hidden="true"
                         className={`absolute top-1 left-1 h-3 w-3 bg-themeBg transition-transform ${
                           project.featured ? "translate-x-4" : ""
                         }`}
@@ -444,24 +449,32 @@ export function TabProjectsManager() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setForm({ ...form, featured: !form.featured })}
-                  className={`relative h-6 w-11 border-4 border-themeAccent transition-colors ${
-                    form.featured ? "bg-themeAccent" : "bg-themeBorder"
-                  }`}
+                <input
+                  type="checkbox"
+                  id="proj-featured"
+                  checked={form.featured}
+                  onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                  className="peer sr-only"
+                />
+                <label
+                  htmlFor="proj-featured"
+                  className="flex cursor-pointer items-center gap-3 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-themeAccent"
                 >
                   <span
-                    className={`absolute top-1 left-1 h-4 w-4 bg-themeBg transition-transform ${
-                      form.featured ? "translate-x-5" : ""
+                    className={`relative h-6 w-11 border-4 border-themeAccent transition-colors ${
+                      form.featured ? "bg-themeAccent" : "bg-themeBorder"
                     }`}
-                  />
-                </button>
-                <label
-                  className="text-xs font-mono text-themeTextSecondary uppercase tracking-[0.1em] cursor-pointer dg-ui-mono"
-                  onClick={() => setForm({ ...form, featured: !form.featured })}
-                >
-                  Featured
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`absolute top-1 left-1 h-4 w-4 bg-themeBg transition-transform ${
+                        form.featured ? "translate-x-5" : ""
+                      }`}
+                    />
+                  </span>
+                  <span className="text-xs font-mono text-themeTextSecondary uppercase tracking-[0.1em] dg-ui-mono">
+                    Featured
+                  </span>
                 </label>
               </div>
 

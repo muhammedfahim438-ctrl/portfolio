@@ -84,6 +84,7 @@ export function AboutSection() {
               +
             </span>
             <h2
+              aria-label={about.display}
               className="dg-f-display dg-glitch text-themeText uppercase"
               data-text={about.display}
               style={{

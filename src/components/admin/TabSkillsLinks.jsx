@@ -243,7 +243,7 @@ function SkillsManager() {
         </div>
       )}
 
-      <div className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end border-t border-themeBorder pt-5">
+      <div className="grid grid-cols-2 sm:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-end border-t border-themeBorder pt-5">
         <div className="space-y-1.5">
           <label htmlFor="skill-name" className="block text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary">
             Skill Name
