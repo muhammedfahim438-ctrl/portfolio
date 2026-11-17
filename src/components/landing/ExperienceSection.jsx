@@ -33,7 +33,7 @@ export function ExperienceSection() {
   return (
     <section
       id="experience"
-      className="dg-screen relative overflow-hidden border-t border-themeBorder/40 py-24 px-4"
+      className="dg-screen relative scroll-mt-24 overflow-hidden border-t border-themeBorder/40 py-24 px-4"
     >
       {/* Ambient parallax glow over the dot HUD */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -47,12 +47,13 @@ export function ExperienceSection() {
       <div className="relative z-10 mx-auto max-w-6xl">
         <EntranceReveal variant="slide" delay={0} className="mb-14 max-w-4xl">
           <div className="mb-6 flex items-center gap-3 border-l-2 border-themeAccent pl-4 dg-corner">
-            <span className="dg-ui-mono text-xs uppercase tracking-[0.3em] text-themeAccent">
+            <span className="dg-ui-mono text-xs uppercase tracking-[0.3em] text-themeAccentText">
               {copy.label}
             </span>
           </div>
 
           <h2
+            aria-label={copy.heading}
             className="h2 dg-f-display dg-glitch text-themeText dg-corner dg-corner--signal"
             data-text={copy.heading}
           >
@@ -75,7 +76,7 @@ export function ExperienceSection() {
               className="dg-sheen grid gap-6 bg-themeBg/55 p-8 lg:grid-cols-12 lg:p-10"
             >
               <div className="lg:col-span-3">
-                <p className="dg-ui-mono text-xs font-bold uppercase tracking-[0.25em] text-themeAccent">
+                <p className="dg-ui-mono text-xs font-bold uppercase tracking-[0.25em] text-themeAccentText">
                   {item.period}
                 </p>
                 {item.location && (
@@ -94,7 +95,7 @@ export function ExperienceSection() {
                 <h3 className="dg-f-subhead text-2xl font-bold leading-tight tracking-tight text-themeText">
                   {item.title}
                 </h3>
-                <p className="dg-ui-mono mt-1.5 text-xs font-bold uppercase tracking-[0.2em] text-themeAccent">
+                <p className="dg-ui-mono mt-1.5 text-xs font-bold uppercase tracking-[0.2em] text-themeAccentText">
                   {item.org}
                 </p>
 

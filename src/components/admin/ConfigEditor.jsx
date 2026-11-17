@@ -43,7 +43,7 @@ export function ConfigEditor({ configKey, title, schema, fallback, profile }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24 text-themeText/50">
+      <div className="flex items-center justify-center py-24 text-themeText/80">
         Loading {title}…
       </div>
     );
@@ -73,7 +73,7 @@ export function ConfigEditor({ configKey, title, schema, fallback, profile }) {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, [field.key]: e.target.checked }))
                   }
-                  className="w-4 h-4 border-4 border-themeAccent text-themeAccent bg-themeInput shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
+                  className="w-4 h-4 border-4 border-themeAccent text-themeAccentText bg-themeInput shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
                 />
                 <span className="text-xs font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                   {field.label}
@@ -148,7 +148,7 @@ export function ConfigEditor({ configKey, title, schema, fallback, profile }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center justify-center gap-2 px-6 py-3 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
+            className="flex items-center justify-center gap-2 px-6 py-3 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeBg shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
           >
             {saving ? "Saving…" : "Save Changes"}
           </button>

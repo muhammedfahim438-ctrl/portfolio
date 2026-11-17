@@ -9,6 +9,7 @@ import {
   updateTestimonial,
   deleteTestimonial,
 } from "@/lib/firestore";
+import { safeUrl } from "@/lib/safeUrl";
 
 
 const emptyForm = {
@@ -203,8 +204,8 @@ export function TabTestimonials() {
                 <FaStar
                   className={
                     star <= Number(form.rating)
-                      ? "text-themeAccent"
-                      : "text-themeBorder hover:text-themeText-secondary/40"
+                      ? "text-themeAccentText"
+                      : "text-themeBorder hover:text-themeText-secondary/80"
                   }
                 />
               </button>
@@ -240,7 +241,7 @@ export function TabTestimonials() {
           {editing && (
             <button
               onClick={resetForm}
-              className="px-5 py-2.5 rounded-none border-2 border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccent transition-all duration-200"
+              className="px-5 py-2.5 rounded-none border-2 border-themeBorder text-themeText-secondary text-xs font-medium hover:border-themeAccent hover:text-themeAccentText transition-all duration-200"
             >
               Cancel
             </button>
@@ -254,18 +255,18 @@ export function TabTestimonials() {
         </h2>
 
         {loading ? (
-          <p className="text-themeText/40">Loading testimonials…</p>
+          <p className="text-themeText/80">Loading testimonials…</p>
         ) : items.length === 0 ? (
-          <p className="text-themeText/40">No testimonials yet.</p>
+          <p className="text-themeText/80">No testimonials yet.</p>
         ) : (
           <div className="divide-y divide-themeBorder/50">
             {items.map((item) => (
               <div key={item.id} className="py-4 flex items-start gap-4">
                 <div className="w-10 h-10 rounded-none shrink-0 overflow-hidden border border-themeBorder/70 bg-themeBg/50 backdrop-blur-sm">
-                  {item.avatar_url ? (
-                    <img src={item.avatar_url} alt="" className="w-full h-full object-cover" />
+                  {safeUrl(item.avatar_url) ? (
+                    <img src={safeUrl(item.avatar_url)} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-display font-bold text-themeAccent">
+                    <div className="w-full h-full flex items-center justify-center font-display font-bold text-themeAccentText">
                       {getInitials(item.author)}
                     </div>
                   )}
@@ -277,10 +278,10 @@ export function TabTestimonials() {
                       {item.author}
                     </p>
                     {item.role && (
-                      <p className="text-xs text-themeText-secondary/60">{item.role}</p>
+                      <p className="text-xs text-themeText-secondary/80">{item.role}</p>
                     )}
                     {Number(item.rating) > 0 && (
-                      <span className="flex items-center gap-0.5 text-themeAccent">
+                      <span className="flex items-center gap-0.5 text-themeAccentText">
                         {[1, 2, 3, 4, 5].map((s) => (
                           <FaStar
                             key={s}
@@ -314,7 +315,7 @@ export function TabTestimonials() {
                     />
                     <button
                       onClick={() => handleAvatarSave(item.id)}
-                      className="text-[0.625rem] text-themeAccent hover:text-themeAccent-hover font-medium"
+                      className="text-[0.625rem] text-themeAccentText hover:text-themeAccent-hover font-medium"
                     >
                       Save
                     </button>
@@ -322,14 +323,14 @@ export function TabTestimonials() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => startEdit(item)}
-                      className="text-[0.625rem] text-themeText-secondary/60 hover:text-themeAccent transition-colors"
+                      className="text-[0.625rem] text-themeText-secondary/80 hover:text-themeAccentText transition-colors"
                       title="Edit testimonial"
                     >
                       ✎ Edit
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="text-[0.625rem] text-themeAccent hover:text-themeText transition-colors"
+                      className="text-[0.625rem] text-themeAccentText hover:text-themeText transition-colors"
                     >
                       Delete
                     </button>

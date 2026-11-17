@@ -49,7 +49,14 @@ service cloud.firestore {
         && d.message_body.size() >= 1
         && d.message_body.size() <= 4000
         && (!("sender_phone" in d) || (d.sender_phone is string && d.sender_phone.size() <= 40))
-        && (!("reason" in d) || (d.reason is string && d.reason.size() <= 120))
+        // Reason is a closed enum matching REASONS in ContactFooter.jsx.
+        // A script must not be able to inject arbitrary text into the inbox.
+        && (!("reason" in d) || d.reason in [
+             "Project work",
+             "Collaboration",
+             "Speaking or event invitation",
+             "Just saying hello",
+           ])
         // serverTimestamp() resolves to request.time inside the rules, so a
         // visitor cannot spoof, back-date, forward-date or omit the timestamp.
         && d.created_at == request.time

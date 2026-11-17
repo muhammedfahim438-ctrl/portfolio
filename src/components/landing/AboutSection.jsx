@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { FiDownload, FiSend } from "react-icons/fi";
 import { getConfig, getSocialData } from "@/lib/firestore";
+import { safeUrl } from "@/lib/safeUrl";
 import { useBrandContent } from "@/hooks/useBrandContent";
 import { EntranceReveal } from "@/components/ui/EntranceReveal";
 import { ParallaxLayers } from "@/components/ui/ParallaxLayers";
@@ -51,7 +52,7 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="dg-screen relative overflow-hidden border-t-2 border-themeBorder py-24 px-4"
+      className="dg-screen relative scroll-mt-24 overflow-hidden border-t-2 border-themeBorder py-24 px-4"
     >
       {/* Ambient parallax glows over the dot HUD, under the Swiss grid */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -67,7 +68,7 @@ export function AboutSection() {
         <EntranceReveal variant="slide" delay={0}>
           {/* Masthead rule */}
           <div className="flex items-end justify-between gap-4 border-b-2 border-themeAccent pb-4">
-            <p className="dg-ui-mono text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-themeAccent">
+            <p className="dg-ui-mono text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-themeAccentText">
               [ {about.label} ]
             </p>
             <p className="dg-ui-mono hidden text-[0.625rem] uppercase tracking-[0.2em] text-themeText-secondary sm:block">
@@ -110,7 +111,7 @@ export function AboutSection() {
           <div className="mt-14 grid grid-cols-1 gap-px border-2 border-themeBorder bg-themeBorder lg:grid-cols-12">
             {/* Left cell: bio, facts, actions */}
             <div className="bg-themeBg/55 p-8 lg:col-span-7 lg:p-10">
-              <p className="dg-f-display text-2xl font-bold leading-tight tracking-tight text-themeAccent sm:text-3xl">
+              <p className="dg-f-display text-2xl font-bold leading-tight tracking-tight text-themeAccentText sm:text-3xl">
                 {about.lead}
               </p>
 
@@ -140,14 +141,14 @@ export function AboutSection() {
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a
-                  href={resume}
+                  href={safeUrl(resume, "/resume.pdf")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn--primary dg-border-neon-red"
                 >
                   {about.resumeLabel} <FiDownload className="ml-2 w-4 h-4" />
                 </a>
-                <a href={about.ctaHref || "#contact"} className="btn btn--secondary">
+                <a href={safeUrl(about.ctaHref, "#contact")} className="btn btn--secondary">
                   {about.ctaLabel} <FiSend className="ml-2 w-4 h-4" />
                 </a>
               </div>
@@ -166,7 +167,7 @@ export function AboutSection() {
                   >
                     <span
                       className={`dg-f-data block font-bold uppercase leading-none tracking-tighter ${
-                        index === 0 ? "text-5xl text-themeAccent" : "text-4xl text-themeText"
+                        index === 0 ? "text-5xl text-themeAccentText" : "text-4xl text-themeText"
                       }`}
                     >
                       {stat.value}
@@ -192,7 +193,7 @@ export function AboutSection() {
                 {tech.map((item) => (
                   <span
                     key={item}
-                    className="dg-ui-mono border border-themeBorder px-3 py-2 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-themeText-secondary transition-colors duration-150 hover:border-themeAccent hover:text-themeAccent"
+                    className="dg-ui-mono border border-themeBorder px-3 py-2 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-themeText-secondary transition-colors duration-150 hover:border-themeAccent hover:text-themeAccentText"
                   >
                     {item}
                   </span>

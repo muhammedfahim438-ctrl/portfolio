@@ -120,14 +120,14 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="relative z-10 min-h-dvh overflow-hidden">
+    <div className="relative z-10 min-h-dvh overflow-x-hidden">
       <AdminHeader />
 
       <main className="relative z-10 max-w-[75rem] mx-auto px-4 py-12">
         <div className="border-4 border-themeAccent bg-themeSurface/25 backdrop-blur-md shadow-[4px_4px_0_0_var(--dg-bg-deep)] p-6 mb-12 dg-r-0">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-4">
-              <span className="text-[0.625rem] font-mono text-themeAccent uppercase tracking-[0.1em] dg-ui-mono">
+              <span className="text-[0.625rem] font-mono text-themeAccentText uppercase tracking-[0.1em] dg-ui-mono">
                 Collection Stats
               </span>
               {loadingStats ? (
@@ -139,7 +139,7 @@ export default function AdminPage() {
                     className="flex items-center gap-2 px-4 py-2 border-4 border-themeAccent bg-transparent text-xs font-mono text-themeText-secondary shadow-[2px_2px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky"
                   >
                     {s.name.replace("_", " ").toUpperCase()}
-                    <span className="text-themeAccent font-bold">{s.count}</span>
+                    <span className="text-themeAccentText font-bold">{s.count}</span>
                   </span>
                 ))
               ) : (
@@ -165,11 +165,16 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-12">
+        <div role="tablist" aria-label="Admin sections" className="flex flex-wrap gap-2 mb-12">
           {tabs.map((tab) => {
             return (
               <button
                 key={tab.id}
+                type="button"
+                role="tab"
+                id={`admin-tab-${tab.id}`}
+                aria-controls="admin-panel"
+                aria-selected={activeTab === tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-2.5 border-4 border-themeAccent bg-transparent font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
                   activeTab === tab.id
@@ -213,7 +218,7 @@ export default function AdminPage() {
             />
           </div>
 
-          <div className="lg:col-span-9">
+          <div role="tabpanel" id="admin-panel" aria-labelledby={`admin-tab-${activeTab}`} className="lg:col-span-9">
             {activeTab === "brand" && <TabBrandStudio />}
             {activeTab === "projects" && <TabProjectsManager />}
             {activeTab === "content" && <TabContent />}
@@ -244,11 +249,11 @@ function QuickActionCard({ title, desc, icon, onClick, active }) {
       <div className="relative z-10 space-y-3">
         <div className="flex items-center gap-2">
           <span className="text-xs">{icon}</span>
-          <span className="ml-auto text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary/60 group-hover:text-themeAccent transition-colors">
+          <span className="ml-auto text-[0.625rem] font-mono uppercase tracking-wider text-themeText-secondary/80 group-hover:text-themeAccentText transition-colors">
             Open
           </span>
         </div>
-        <h3 className="font-display font-bold text-themeText text-base leading-tight group-hover:text-themeAccent transition-colors">
+        <h3 className="font-display font-bold text-themeText text-base leading-tight group-hover:text-themeAccentText transition-colors">
           {title}
         </h3>
         <p className="text-xs text-themeTextSecondary leading-relaxed max-w-[12.5rem]">

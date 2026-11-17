@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { getProjects, addProject, updateProject, deleteProject } from "@/lib/firestore";
+import { safeUrl } from "@/lib/safeUrl";
 
 const CATEGORIES = ["Backend", "Frontend", "Mobile", "Data", "AI/ML", "Tools"];
 
@@ -142,7 +143,7 @@ export function TabProjectsManager() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24 text-themeText/50">
+      <div className="flex items-center justify-center py-24 text-themeText/80">
         Loading projects…
       </div>
     );
@@ -155,7 +156,7 @@ export function TabProjectsManager() {
           <h2 className="text-xl font-display font-bold text-themeText uppercase tracking-tight dg-f-display">
             Projects
           </h2>
-          <p className="text-xs text-themeTextSecondary/60 mt-1 uppercase tracking-[0.1em] dg-ui-mono">
+          <p className="text-xs text-themeTextSecondary/80 mt-1 uppercase tracking-[0.1em] dg-ui-mono">
             Manage project case studies
           </p>
         </div>
@@ -169,20 +170,20 @@ export function TabProjectsManager() {
 
       {projects.length === 0 ? (
         <div className="p-16 text-center border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky">
-          <div className="w-12 h-12 border-4 border-themeAccent bg-themeAccent/20 flex items-center justify-center text-themeAccent mx-auto mb-3 shadow-[2px_2px_0_0_var(--dg-bg-deep)]">
+          <div className="w-12 h-12 border-4 border-themeAccent bg-themeAccent/20 flex items-center justify-center text-themeAccentText mx-auto mb-3 shadow-[2px_2px_0_0_var(--dg-bg-deep)]">
             <span className="text-2xl">📁</span>
           </div>
           <p className="text-themeTextSecondary text-sm uppercase tracking-[0.1em] dg-ui-mono">
             No projects yet
           </p>
-          <p className="text-[0.625rem] text-themeTextSecondary/50 mt-1 uppercase tracking-wider dg-ui-mono">
+          <p className="text-[0.625rem] text-themeTextSecondary/80 mt-1 uppercase tracking-wider dg-ui-mono">
             Click "Add New Project" to get started
           </p>
         </div>
       ) : (
         <div className="overflow-hidden border-4 border-themeAccent bg-themeSurface/30 shadow-[4px_4px_0_0_var(--dg-bg-deep)] dg-r-0 dg-chunky">
           <table className="w-full text-left text-sm">
-            <thead className="border-b-4 border-themeAccent text-themeTextSecondary/60">
+            <thead className="border-b-4 border-themeAccent text-themeTextSecondary/80">
               <tr>
                 <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider">Title</th>
                 <th className="px-5 py-4 font-mono text-[0.625rem] uppercase tracking-wider">Category</th>
@@ -199,7 +200,7 @@ export function TabProjectsManager() {
                 >
                   <td className="px-5 py-4 text-themeText font-medium">{project.title}</td>
                   <td className="px-5 py-4">
-                    <span className="text-[0.625rem] px-2.5 py-1 border-2 border-themeAccent bg-themeAccent/20 text-themeAccent font-bold uppercase tracking-tighter">
+                    <span className="text-[0.625rem] px-2.5 py-1 border-2 border-themeAccent bg-themeAccent/20 text-themeAccentText font-bold uppercase tracking-tighter">
                       {project.category || "-"}
                     </span>
                   </td>
@@ -208,13 +209,13 @@ export function TabProjectsManager() {
                       {(project.tags ?? []).slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="inline-block border-2 border-themeAccent px-2 py-0.5 text-[0.625rem] text-themeAccent uppercase tracking-[0.1em] shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
+                          className="inline-block border-2 border-themeAccent px-2 py-0.5 text-[0.625rem] text-themeAccentText uppercase tracking-[0.1em] shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
                         >
                           {tag}
                         </span>
                       ))}
                       {(project.tags ?? []).length > 3 && (
-                        <span className="text-xs text-themeTextSecondary/50">
+                        <span className="text-xs text-themeTextSecondary/80">
                           +{(project.tags ?? []).length - 3}
                         </span>
                       )}
@@ -243,14 +244,14 @@ export function TabProjectsManager() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => openEdit(project)}
-                        className="px-3.5 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] active:translate-[1px_1px] dg-f-mono dg-r-0"
+                        className="px-3.5 py-1.5 text-xs font-medium text-themeAccentText hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] active:translate-[1px_1px] dg-f-mono dg-r-0"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(project.id)}
                         disabled={deletingId === project.id}
-                        className="px-3.5 py-1.5 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
+                        className="px-3.5 py-1.5 text-xs font-medium text-themeAccentText hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
                       >
                         {deletingId === project.id ? "…" : "Delete"}
                       </button>
@@ -268,7 +269,7 @@ export function TabProjectsManager() {
           <div className="border-4 border-themeAccent bg-themeBg shadow-[8px_8px_0_0_var(--dg-bg-deep)] w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto dg-r-0 dg-chunky relative">
             <button
               onClick={() => setPanelOpen(false)}
-              className="absolute top-4 right-4 border-2 border-themeAccent bg-transparent text-themeAccent hover:bg-themeAccent hover:text-themeText shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] dg-f-mono dg-r-0"
+              className="absolute top-4 right-4 border-2 border-themeAccent bg-transparent text-themeAccentText hover:bg-themeAccent hover:text-themeText shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] dg-f-mono dg-r-0"
               aria-label="Close panel"
             >
               ✕
@@ -339,10 +340,10 @@ export function TabProjectsManager() {
                   Main Thumbnail Image
                 </label>
                 <div className="flex items-center gap-3">
-                  {form.image_url ? (
-                    <img src={form.image_url} alt="" className="w-16 h-16 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_var(--dg-bg-deep)]" />
+                  {safeUrl(form.image_url) ? (
+                    <img src={safeUrl(form.image_url)} alt="" className="w-16 h-16 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_var(--dg-bg-deep)]" />
                   ) : (
-                    <div className="w-16 h-16 border-4 border-dashed border-themeAccent flex items-center justify-center text-[0.625rem] text-themeTextSecondary/50 uppercase tracking-wider">
+                    <div className="w-16 h-16 border-4 border-dashed border-themeAccent flex items-center justify-center text-[0.625rem] text-themeTextSecondary/80 uppercase tracking-wider">
                       none
                     </div>
                   )}
@@ -363,7 +364,7 @@ export function TabProjectsManager() {
                 <div className="flex flex-wrap gap-2 mb-2">
                   {form.images.map((url, i) => (
                     <div key={i} className="relative group">
-                      <img src={url} alt="" className="w-16 h-16 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_var(--dg-bg-deep)]" />
+                      <img src={safeUrl(url)} alt="" className="w-16 h-16 border-4 border-themeAccent object-cover shadow-[2px_2px_0_0_var(--dg-bg-deep)]" />
                       <button
                         onClick={() => removeGalleryImage(i)}
                         className="absolute -top-1 -right-1 w-6 h-6 bg-themeAccent text-themeText text-[0.625rem] flex items-center justify-center shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"

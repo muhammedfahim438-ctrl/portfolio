@@ -103,13 +103,13 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
         {title}
       </h2>
 
-      {loading && <p className="text-themeText/40">Loading {title}…</p>}
-      {!loading && items.length === 0 && <p className="text-themeText/40">No {title} yet.</p>}
+      {loading && <p className="text-themeText/80">Loading {title}…</p>}
+      {!loading && items.length === 0 && <p className="text-themeText/80">No {title} yet.</p>}
       {!loading && items.length > 0 && (
         <div className="space-y-6">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm border-collapse">
-              <thead className="border-b-4 border-themeAccent text-themeTextSecondary/60">
+              <thead className="border-b-4 border-themeAccent text-themeTextSecondary/80">
                 <tr>
                   {schema.map((f) => (
                     <th key={f.key} className="px-4 py-3 font-mono text-[0.625rem] uppercase tracking-wider text-left">
@@ -125,7 +125,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                     {schema.map((f) => (
                       <td key={f.key} className="px-4 py-3 text-themeText font-medium">
                         {f.type === "tags" && Array.isArray(item[f.key]) ? (
-                          <span className="text-[0.625rem] text-themeAccent dg-ui-mono">
+                          <span className="text-[0.625rem] text-themeAccentText dg-ui-mono">
                             {item[f.key].join(", ")}
                           </span>
                         ) : (
@@ -137,14 +137,14 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => startEdit(item)}
-                          className="px-3 py-1 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] active:translate-[1px_1px] dg-f-mono dg-r-0"
+                          className="px-3 py-1 text-xs font-medium text-themeAccentText hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] hover:shadow-[2px_2px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[0px_0px_0_0_var(--dg-bg-deep)] active:translate-[1px_1px] dg-f-mono dg-r-0"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(item.id)}
                           disabled={deletingId === item.id}
-                          className="px-3 py-1 text-xs font-medium text-themeAccent hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
+                          className="px-3 py-1 text-xs font-medium text-themeAccentText hover:bg-themeAccent/10 shadow-[1px_1px_0_0_var(--dg-bg-deep)] transition-all duration-150 disabled:opacity-50 dg-f-mono dg-r-0"
                         >
                           {deletingId === item.id ? "…" : "Delete"}
                         </button>
@@ -155,9 +155,11 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
 
-          <div className="mt-8 space-y-4">
-            <h3 className="text-sm font-display font-bold text-themeText uppercase mb-3 dg-f-display">
+      <div className="mt-8 space-y-4">
+        <h3 className="text-sm font-display font-bold text-themeText uppercase mb-3 dg-f-display">
               {editingId ? "Edit" : "Add New"} {title}
             </h3>
 
@@ -196,7 +198,7 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                         type="checkbox"
                         checked={getFieldValue(field.key) === "true" || getFieldValue(field.key) === true}
                         onChange={(e) => setFieldValue(field.key, e.target.checked)}
-                        className="w-4 h-4 border-4 border-themeAccent text-themeAccent bg-themeInput shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
+                        className="w-4 h-4 border-4 border-themeAccent text-themeAccentText bg-themeInput shadow-[1px_1px_0_0_var(--dg-bg-deep)] dg-r-0"
                       />
                       <span className="text-xs font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                         {field.label}
@@ -257,15 +259,13 @@ export function ReusableCrud({ collection, schema, title, emptyItem }) {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2.5 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeText shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
+                  className="px-5 py-2.5 border-4 border-themeAccent bg-themeAccent text-themeText font-display font-semibold uppercase tracking-tight hover:bg-themeWarn hover:text-themeBg shadow-[2px_2px_0_0_var(--dg-bg-deep)] hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] transition-all duration-150 active:shadow-[1px_1px_0_0_var(--dg-bg-deep)] active:translate-[2px_2px] disabled:opacity-50 disabled:cursor-not-allowed dg-f-mono dg-r-0"
                 >
                   {saving ? "Saving…" : editingId ? "Update" : "Create"}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+          </form>
+      </div>
     </section>
   );
 }

@@ -52,8 +52,17 @@ export default function AdminLoginPage() {
         return;
       }
       navigate("/admin", { replace: true });
-    } catch {
-      setError("Invalid password.");
+    } catch (err) {
+      const code = err?.code || "";
+      const messages = {
+        "auth/invalid-credential": "Incorrect password.",
+        "auth/wrong-password": "Incorrect password.",
+        "auth/user-not-found": "That account does not exist.",
+        "auth/invalid-email": "Enter a valid email address.",
+        "auth/too-many-requests": "Too many attempts. Try again later.",
+        "auth/network-request-failed": "Network unavailable. Check your connection.",
+      };
+      setError(messages[code] || "Sign-in failed. Check your password and try again.");
     } finally {
       setLoading(false);
     }
@@ -88,7 +97,7 @@ export default function AdminLoginPage() {
           </p>
 
           {notice && (
-            <p className="mb-4 rounded-none border border-themeBorder bg-themeBg/60 px-4 py-3 text-sm text-themeText backdrop-blur-sm">
+            <p role="status" className="mb-4 rounded-none border border-themeBorder bg-themeBg/60 px-4 py-3 text-sm text-themeText backdrop-blur-sm">
               {notice}
             </p>
           )}
@@ -112,7 +121,7 @@ export default function AdminLoginPage() {
             </div>
 
             {error && (
-              <p className="text-xs text-themeAccent text-center font-mono">{error}</p>
+              <p role="alert" className="text-xs text-themeWarn text-center font-mono">{error}</p>
             )}
 
             <button

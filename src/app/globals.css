@@ -70,6 +70,7 @@
   --color-themeText-secondary: var(--themeTextSecondary);
   --color-themeTextSecondary: var(--themeTextSecondary);
   --color-themeAccent: var(--themeAccent);
+  --color-themeAccentText: var(--themeAccentText);
   --color-themeAccent-hover: var(--themeAccentHover);
   --color-themeSecondary: var(--themeSecondary);
   --color-themeBorder: var(--themeBorder);
@@ -99,66 +100,13 @@
 }
 
 :root {
-  /* ── Core Palette (light) ──
-   * The dark theme overrides the same tokens in .dark. Dark is applied
-   * before paint by the inline script in index.html and is the default.
-   * Red-line #C8102E draws borders/hairlines; the darker gold keeps micro
-   * signals legible on a light substrate. Global average: 80/15/5.
+  /* ── Dark-only palette ──
+   * The portfolio ships in the Nothing-inspired dark palette only. These
+   * tokens are the single source for every component colour; there is no
+   * light theme to flip to, so no runtime class switching is required.
+   * Red-line #C8102E draws borders/hairlines; gold keeps micro signals
+   * legible. Global average: 80/15/5.
    */
-  --dg-bg-deep: #F2F0ED;
-  --dg-surf: #1A1A1A;
-  --dg-high: #141414;
-  --dg-accent-p: #C8102E;
-  --dg-accent-s: #8A6800;
-  --dg-alert: #D71920;
-  --dg-warn: #8A6800;
-
-  /* ── Glass Foundation ── */
-  --dg-glass-bg: rgba(255, 255, 255, 0.66);
-  --dg-glass-border: rgba(20, 20, 20, 0.22);
-  --dg-glass-border-li: rgba(0, 0, 0, 0.42);
-  --dg-glass-border-lo: rgba(255, 255, 255, 0.55);
-
-  /* ── Shadows ── */
-  --dg-shadow-glass: 0 12px 32px -8px rgba(20, 20, 20, 0.18);
-
-  /* ── Parallax & 3D ── */
-  --dg-parallax-depth-1: 0.1;
-  --dg-parallax-depth-2: 0.3;
-  --dg-parallax-depth-3: 0.5;
-  --dg-perspective-3d: 1000px;
-  --dg-tilt-max-rotate: 8deg;
-
-  /* ── Base overrides ── */
-  --themeBg: #F2F0ED;
-  --themeBgSecondary: #E8E5DF;
-  --themeSurface: #1A1A1A;
-  --themeText: #141414;
-  --themeTextSecondary: #45423F;
-  --themeAccent: #C8102E;
-  --themeAccentHover: #A00D25;
-  --themeSecondary: #141414;
-  --themeBorder: rgba(20, 20, 20, 0.22);
-  --themeCard: rgba(255, 255, 255, 0.66);
-  --themeInput: #FFFFFF;
-
-  --themeShadow: rgba(20, 20, 20, 0.18);
-  --themeGradientStart: #C8102E;
-  --themeGradientEnd: #8A6800;
-  --themeWaveform: #8A6800;
-  --themeWarn: #8A6800;
-
-  /* ── Z-index scale ── */
-  --dg-z-bg: 0;
-  --dg-z-content: 10;
-  --dg-z-sticky: 30;
-  --dg-z-overlay: 50;
-  --dg-z-modal: 80;
-  --dg-z-cursor: 9999;
-}
-
-.dark {
-  /* Dark theme — overrides the light :root tokens */
   --dg-bg-deep: #080808;
   --dg-surf: #CDCBCA;
   --dg-high: #DCD7D2;
@@ -166,6 +114,8 @@
   --dg-accent-s: #FFC700;
   --dg-alert: #D71920;
   --dg-warn: #FFC700;
+  /* Text on the red accent — light enough for >= 4.5:1 on #C8102E. */
+  --dg-on-accent: #F2F0ED;
 
   --dg-glass-bg: rgba(8, 8, 8, 0.62);
   --dg-glass-border: rgba(205, 203, 202, 0.30);
@@ -174,7 +124,6 @@
 
   --dg-shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.52);
 
-  /* ── Parallax & 3D ── */
   --dg-parallax-depth-1: 0.1;
   --dg-parallax-depth-2: 0.3;
   --dg-parallax-depth-3: 0.5;
@@ -187,6 +136,9 @@
   --themeText: #DCD7D2;
   --themeTextSecondary: #CDCBCA;
   --themeAccent: #C8102E;
+  /* Red #C8102E is only ~4.1:1 on #080808. This lighter red clears 4.5:1
+     for text; the darker --themeAccent stays for borders and fills. */
+  --themeAccentText: #FF5468;
   --themeAccentHover: #D71920;
   --themeSecondary: #DCD7D2;
   --themeBorder: rgba(205, 203, 202, 0.30);
@@ -198,6 +150,13 @@
   --themeGradientEnd: #FFC700;
   --themeWaveform: #FFC700;
   --themeWarn: #FFC700;
+
+  --dg-z-bg: 0;
+  --dg-z-content: 10;
+  --dg-z-sticky: 30;
+  --dg-z-overlay: 50;
+  --dg-z-modal: 80;
+  --dg-z-cursor: 9999;
 }
 
 /* ── Base ── */
@@ -227,10 +186,12 @@ h3,
   text-transform: none !important;
 }
 
-/* Accessible focus ring on every interactive element */
+/* Accessible focus ring on every interactive element. `!important` is
+   deliberate: admin inputs carry Tailwind's `focus:outline-none`, which
+   otherwise wins on specificity and hides the ring for keyboard users. */
 :focus-visible {
-  outline: 2px solid var(--dg-warn);
-  outline-offset: 3px;
+  outline: 2px solid var(--dg-warn) !important;
+  outline-offset: 3px !important;
   border-radius: 2px;
 }
 
@@ -541,13 +502,13 @@ h3,
 .btn--primary {
   background: var(--dg-accent-p);
   border: 1px solid var(--dg-accent-p);
-  color: var(--dg-bg-deep);
+  color: var(--dg-on-accent);
   box-shadow: 4px 4px 0 0 var(--dg-accent-s);
 }
 .btn--primary:hover {
   background: var(--dg-accent-p);
   border-color: var(--dg-accent-p);
-  color: var(--dg-bg-deep);
+  color: var(--dg-on-accent);
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 0 var(--dg-accent-s);
 }

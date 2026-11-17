@@ -99,6 +99,7 @@ export const SECTIONS = {
     ctaHref: "#contact",
     loading: "Loading projects...",
     empty: "No projects yet.",
+    error: "Projects are unavailable right now. Check back shortly.",
   },
   contact: {
     label: "Sec. 05 // Contact",

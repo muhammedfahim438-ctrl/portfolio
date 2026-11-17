@@ -6,7 +6,7 @@ import { getConfig, setConfig } from "@/lib/firestore";
 import { getAt, mergeDeep, setAt } from "@/lib/contentMerge";
 
 const INPUT =
-  "w-full border-4 border-themeAccent bg-themeInput px-3 py-2.5 text-sm text-themeText placeholder:text-themeTextSecondary/40 focus:outline-none focus:shadow-[3px_3px_0_0_var(--dg-bg-deep)] transition-shadow dg-r-0";
+  "w-full border-4 border-themeAccent bg-themeInput px-3 py-2.5 text-sm text-themeText placeholder:text-themeTextSecondary/80 focus:outline-none focus:shadow-[3px_3px_0_0_var(--dg-bg-deep)] transition-shadow dg-r-0";
 
 const LABEL =
   "block text-[0.625rem] font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono";
@@ -85,7 +85,7 @@ export function BrandForm({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center border-4 border-themeAccent bg-themeSurface/30 py-24 text-themeText/50 dg-r-0">
+      <div className="flex items-center justify-center border-4 border-themeAccent bg-themeSurface/30 py-24 text-themeText/80 dg-r-0">
         Loading {title}…
       </div>
     );
@@ -107,7 +107,7 @@ export function BrandForm({
         <span
           className={`dg-ui-mono border-2 px-3 py-1.5 text-[0.5625rem] font-bold uppercase tracking-[0.2em] ${
             hasStored
-              ? "border-themeAccent text-themeAccent"
+              ? "border-themeAccent text-themeAccentText"
               : "border-themeBorder text-themeTextSecondary"
           }`}
         >
@@ -127,7 +127,7 @@ export function BrandForm({
                 {field.max && typeof value === "string" && (
                   <span
                     className={`dg-ui-mono text-[0.625rem] ${
-                      value.length > field.max ? "text-themeAccent" : "text-themeTextSecondary/60"
+                      value.length > field.max ? "text-themeAccentText" : "text-themeTextSecondary/80"
                     }`}
                   >
                     {value.length}/{field.max}
@@ -219,7 +219,7 @@ export function BrandForm({
                         field.empty || {},
                       ])
                     }
-                    className="dg-ui-mono border-2 border-dashed border-themeAccent px-3 py-2 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-themeAccent transition-colors hover:bg-themeAccent hover:text-themeText"
+                    className="dg-ui-mono border-2 border-dashed border-themeAccent px-3 py-2 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-themeAccentText transition-colors hover:bg-themeAccent hover:text-themeText"
                   >
                     + Add row
                   </button>
@@ -232,7 +232,7 @@ export function BrandForm({
                     type="checkbox"
                     checked={value === true}
                     onChange={(e) => setValue(field.key, e.target.checked)}
-                    className="h-4 w-4 border-4 border-themeAccent bg-themeInput text-themeAccent dg-r-0"
+                    className="h-4 w-4 border-4 border-themeAccent bg-themeInput text-themeAccentText dg-r-0"
                   />
                   <span className="text-xs font-mono uppercase tracking-wider text-themeTextSecondary dg-ui-mono">
                     {field.checkboxLabel || field.label}
@@ -265,7 +265,7 @@ export function BrandForm({
               )}
 
               {field.hint && (
-                <p className="text-[0.6875rem] leading-relaxed text-themeTextSecondary/70">
+                <p className="text-[0.6875rem] leading-relaxed text-themeTextSecondary/80">
                   {field.hint}
                 </p>
               )}
@@ -282,7 +282,7 @@ export function BrandForm({
         <button
           onClick={handleSave}
           disabled={saving}
-          className="dg-f-mono border-4 border-themeAccent bg-themeAccent px-6 py-3 font-display font-semibold uppercase tracking-tight text-themeText transition-all duration-150 hover:bg-themeWarn hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] disabled:cursor-not-allowed disabled:opacity-50 dg-r-0"
+          className="dg-f-mono border-4 border-themeAccent bg-themeAccent px-6 py-3 font-display font-semibold uppercase tracking-tight text-themeText transition-all duration-150 hover:bg-themeWarn hover:text-themeBg hover:shadow-[4px_4px_0_0_var(--dg-bg-deep)] disabled:cursor-not-allowed disabled:opacity-50 dg-r-0"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>
@@ -293,7 +293,7 @@ export function BrandForm({
         >
           Load brand defaults
         </button>
-        <span className="dg-ui-mono text-[0.625rem] uppercase tracking-[0.2em] text-themeTextSecondary/60">
+        <span className="dg-ui-mono text-[0.625rem] uppercase tracking-[0.2em] text-themeTextSecondary/80">
           Saves to {configKey}
           {path ? ` → ${path}` : ""}
         </span>

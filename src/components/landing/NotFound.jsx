@@ -33,9 +33,9 @@ export function NotFound() {
         <p className="theme-eyebrow mb-6">Error 404</p>
 
         <h1 className="dg-f-data text-[clamp(4rem,18vw,9rem)] font-bold leading-none tracking-tight">
-          <span className="text-themeAccent">4</span>
+          <span className="text-themeAccentText">4</span>
           <span className="text-themeText">0</span>
-          <span className="text-themeAccent">4</span>
+          <span className="text-themeAccentText">4</span>
         </h1>
 
         <p className="theme-display mt-6">Page not found</p>
@@ -62,7 +62,7 @@ export function NotFound() {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="link-underline text-sm text-themeText-secondary transition-colors hover:text-themeAccent"
+                  className="link-underline text-sm text-themeText-secondary transition-colors hover:text-themeAccentText"
                 >
                   {link.label}
                 </a>

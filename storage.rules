@@ -19,7 +19,14 @@ service firebase.storage {
     function isValidImage() {
       return request.resource.size > 0
         && request.resource.size < 5 * 1024 * 1024
-        && request.resource.contentType.matches("image/.*");
+        // Explicit allowlist: never accept SVG (scriptable when opened
+        // directly) or a spoofed `image/*` content type carrying HTML.
+        && request.resource.contentType in [
+             "image/png",
+             "image/jpeg",
+             "image/webp",
+             "image/avif",
+           ];
     }
 
     // =====================================================================

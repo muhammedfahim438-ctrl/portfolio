@@ -265,20 +265,24 @@ export async function sendMessage(data) {
   return { id };
 }
 
-export function subscribeToMessages(callback) {
+export function subscribeToMessages(callback, onError) {
   let unsub = null;
   let cancelled = false;
   (async () => {
-    const { collection, query, orderBy, onSnapshot, db } = await ready();
-    if (cancelled) return;
-    const q = query(collection(db, "messages"), orderBy("created_at", "desc"));
-    unsub = onSnapshot(q, (snap) => {
-      callback(snap.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-        created_at: d.data().created_at?.toDate(),
-      })));
-    });
+    try {
+      const { collection, query, orderBy, onSnapshot, db } = await ready();
+      if (cancelled) return;
+      const q = query(collection(db, "messages"), orderBy("created_at", "desc"));
+      unsub = onSnapshot(q, (snap) => {
+        callback(snap.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+          created_at: d.data().created_at?.toDate(),
+        })));
+      }, onError);
+    } catch (err) {
+      if (!cancelled) onError?.(err);
+    }
   })();
   return () => {
     cancelled = true;

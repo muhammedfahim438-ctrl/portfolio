@@ -9,7 +9,7 @@ export function HeroPreview({ values = {} }) {
 
   return (
     <div className="border-2 border-themeBorder/70 bg-themeBg/60 backdrop-blur-sm p-6">
-      <p className="dg-ui-mono border-l-2 border-themeAccent pl-3 text-[0.5625rem] font-bold uppercase tracking-[0.3em] text-themeAccent">
+      <p className="dg-ui-mono border-l-2 border-themeAccent pl-3 text-[0.5625rem] font-bold uppercase tracking-[0.3em] text-themeAccentText">
         {values.eyebrow || "—"}
       </p>
       <p
@@ -55,7 +55,7 @@ export function AboutPreview({ values = {} }) {
   return (
     <div className="border-2 border-themeBorder/70 bg-themeBg/60 backdrop-blur-sm p-6">
       <div className="flex items-center justify-between gap-3 border-b-2 border-themeAccent pb-2">
-        <span className="dg-ui-mono text-[0.5625rem] font-bold uppercase tracking-[0.3em] text-themeAccent">
+        <span className="dg-ui-mono text-[0.5625rem] font-bold uppercase tracking-[0.3em] text-themeAccentText">
           [ {values.label || "—"} ]
         </span>
         <span className="dg-ui-mono text-[0.5rem] uppercase tracking-[0.2em] text-themeTextSecondary">
@@ -66,7 +66,7 @@ export function AboutPreview({ values = {} }) {
       <p className="dg-f-display mt-4 text-2xl font-extrabold uppercase tracking-tight text-themeText">
         {values.display || "—"}
       </p>
-      <p className="mt-2 text-lg font-bold leading-tight text-themeAccent">
+      <p className="mt-2 text-lg font-bold leading-tight text-themeAccentText">
         {values.lead || "—"}
       </p>
       {paragraphs[0] && (
@@ -101,7 +101,7 @@ export function SeoPreview({ title = "", description = "", url = "muhammedfahimm
           Google result
         </p>
         <p className="mt-3 truncate text-xs text-themeTextSecondary">{url}</p>
-        <p className="mt-1 truncate text-lg text-themeAccent underline">{title || "—"}</p>
+        <p className="mt-1 truncate text-lg text-themeAccentText underline">{title || "—"}</p>
         <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-themeTextSecondary">
           {description || "—"}
         </p>
@@ -113,7 +113,7 @@ export function SeoPreview({ title = "", description = "", url = "muhammedfahimm
         </p>
         <div className="mt-3 border border-themeBorder">
           <div className="flex h-24 items-center justify-center bg-themeAccent/10">
-            <span className="dg-ui-mono text-[0.5625rem] uppercase tracking-[0.3em] text-themeAccent">
+            <span className="dg-ui-mono text-[0.5625rem] uppercase tracking-[0.3em] text-themeAccentText">
               og-cover.png
             </span>
           </div>

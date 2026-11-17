@@ -11,7 +11,6 @@ import { FeaturedProjects } from "@/components/landing/FeaturedProjects";
 import { ContactFooter } from "@/components/landing/ContactFooter";
 import { NotFound } from "@/components/landing/NotFound";
 import { CustomCursor } from "@/components/ui/CustomCursor";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { BrandContentProvider } from "@/components/providers/BrandContentProvider";
 
@@ -30,14 +29,16 @@ function LandingPage() {
     });
     window.__lenis = lenis;
 
+    let frame = 0;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frame = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    frame = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(frame);
       window.__lenis = undefined;
       lenis.destroy();
     };
@@ -45,9 +46,14 @@ function LandingPage() {
 
   return (
     <BrandContentProvider>
-      <main className="isolate min-h-dvh overflow-x-hidden">
+      <a
+        href="#about"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:border-2 focus:border-themeAccent focus:bg-themeBg focus:px-4 focus:py-2 focus:text-themeText"
+      >
+        Skip to content
+      </a>
+      <main className="isolate min-h-dvh overflow-x-hidden" id="main">
         <CustomCursor />
-        <ThemeToggle />
         <SplashScreen />
         <div className="relative z-10">
           <HeroSection />

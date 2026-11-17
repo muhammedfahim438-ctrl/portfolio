@@ -16,13 +16,13 @@ export function BrandGuideCard() {
           {BRAND_GUIDE.positioning}
         </h2>
         <p className="dg-f-subhead mt-2 text-sm text-themeTextSecondary">
-          {BRAND_GUIDE.promise} <span className="text-themeAccent">{BRAND_GUIDE.wedge}</span>
+          {BRAND_GUIDE.promise} <span className="text-themeAccentText">{BRAND_GUIDE.wedge}</span>
         </p>
       </header>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="border-2 border-themeBorder/70 bg-themeBg/60 backdrop-blur-sm p-4">
-          <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.25em] text-themeAccent">
+          <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.25em] text-themeAccentText">
             Proof you can publish
           </p>
           <ul className="mt-3 space-y-2">
@@ -39,7 +39,7 @@ export function BrandGuideCard() {
         </div>
 
         <div className="border-2 border-themeBorder/70 bg-themeBg/60 backdrop-blur-sm p-4">
-          <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.25em] text-themeAccent">
+          <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.25em] text-themeAccentText">
             Voice
           </p>
           <ul className="mt-3 space-y-2">
@@ -54,7 +54,7 @@ export function BrandGuideCard() {
       </div>
 
       <div className="border-2 border-themeAccent bg-themeAccent/10 p-4">
-        <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.25em] text-themeAccent">
+        <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.25em] text-themeAccentText">
           Never publish
         </p>
         <ul className="mt-3 space-y-2">

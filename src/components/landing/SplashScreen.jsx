@@ -142,7 +142,7 @@ export function SplashScreen() {
           </p>
 
           {/* percentage readout */}
-          <p className="dg-f-data mt-3 text-xs tracking-[0.2em] text-themeAccent" aria-hidden="true">
+          <p className="dg-f-data mt-3 text-xs tracking-[0.2em] text-themeAccentText" aria-hidden="true">
             {String(pct).padStart(3, "0")}%
           </p>
 

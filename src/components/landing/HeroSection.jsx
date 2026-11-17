@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight, FiSend } from "react-icons/fi";
 import { getConfig, getSocialData } from "@/lib/firestore";
+import { safeUrl } from "@/lib/safeUrl";
 import { useBrandContent } from "@/hooks/useBrandContent";
 import { EntranceReveal } from "@/components/ui/EntranceReveal";
 import { ParallaxLayers } from "@/components/ui/ParallaxLayers";
@@ -71,20 +72,25 @@ export function HeroSection() {
   }, []);
 
   const dock = [
-    { label: "GitHub", href: social.github, external: true },
-    { label: "LinkedIn", href: social.linkedin, external: true },
-    { label: "Email", href: `mailto:${social.email}`, external: false },
+    { label: "GitHub", href: safeUrl(social.github), external: true },
+    { label: "LinkedIn", href: safeUrl(social.linkedin), external: true },
+    { label: "Email", href: safeUrl(`mailto:${social.email}`), external: false },
   ];
-  if (social.resume) {
-    dock.push({ label: "Resume", href: social.resume, external: true });
+  const resumeUrl = safeUrl(social.resume);
+  if (resumeUrl) {
+    dock.push({ label: "Resume", href: resumeUrl, external: true });
   }
 
   const proof = Array.isArray(hero.proof) ? hero.proof.filter(Boolean) : [];
+  const portraitSrc = safeUrl(
+    hero.photo_url || portraits[portraitIndex],
+    "/portrait.svg"
+  );
 
   return (
     <section
       id="hero"
-      className="dg-screen relative flex min-h-dvh items-center overflow-hidden border-t-2 border-themeAccent"
+      className="dg-screen relative flex min-h-dvh scroll-mt-24 items-center overflow-hidden border-t-2 border-themeAccent"
     >
       {/* Parallax background: blueprint grid + accent glows over the dot HUD */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -108,12 +114,13 @@ export function HeroSection() {
               className="space-y-8"
             >
               <div className="flex items-center gap-3 border-l-2 border-themeAccent pl-4">
-                <span className="dg-ui-mono text-[0.6875rem] font-bold uppercase tracking-[0.4em] text-themeAccent">
+                <span className="dg-ui-mono text-[0.6875rem] font-bold uppercase tracking-[0.4em] text-themeAccentText">
                   {hero.eyebrow}
                 </span>
               </div>
 
               <h1
+                aria-label={hero.headline}
                 className="dg-f-display dg-glitch text-themeText"
                 data-text={hero.headline}
                 style={{
@@ -150,13 +157,13 @@ export function HeroSection() {
 
               <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a
-                  href={hero.ctaPrimaryHref || "#contact"}
+                  href={safeUrl(hero.ctaPrimaryHref, "#contact")}
                   className="btn btn--primary dg-border-neon-red"
                 >
                   {hero.ctaPrimaryLabel} <FiSend className="ml-2 w-4 h-4" />
                 </a>
                 <a
-                  href={hero.ctaSecondaryHref || "#work"}
+                  href={safeUrl(hero.ctaSecondaryHref, "#work")}
                   className="btn btn--secondary"
                 >
                   {hero.ctaSecondaryLabel} <FiArrowRight className="ml-2 w-4 h-4" />
@@ -177,16 +184,8 @@ export function HeroSection() {
                 <div className="absolute right-0 bottom-0 h-16 w-16 border-r-2 border-b-2 border-themeWarn" />
                 <AnimatePresence initial={false}>
                   <motion.img
-                    key={
-                      hero.photo_url ||
-                      portraits[portraitIndex] ||
-                      "/portrait.svg"
-                    }
-                    src={
-                      hero.photo_url ||
-                      portraits[portraitIndex] ||
-                      "/portrait.svg"
-                    }
+                    key={portraitSrc}
+                    src={portraitSrc}
                     alt={hero.portraitAlt || "Portrait of Muhammed Fahim M"}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -211,12 +210,12 @@ export function HeroSection() {
                 {...(item.external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="dg-ui-mono text-xs font-bold uppercase tracking-[0.2em] text-themeTextSecondary transition-colors hover:text-themeAccent"
+                className="dg-ui-mono text-xs font-bold uppercase tracking-[0.2em] text-themeTextSecondary transition-colors hover:text-themeAccentText"
               >
                 {item.label}
               </a>
             ))}
-            <span className="dg-ui-mono ml-auto hidden text-[0.625rem] uppercase tracking-[0.3em] text-themeText-secondary/60 md:block">
+            <span className="dg-ui-mono ml-auto hidden text-[0.625rem] uppercase tracking-[0.3em] text-themeText-secondary/80 md:block">
               {hero.footerLine}
             </span>
           </div>
@@ -225,7 +224,7 @@ export function HeroSection() {
 
       {/* Scroll indicator */}
       <div className="absolute right-6 bottom-6 hidden flex-col items-center gap-2 md:flex">
-        <span className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.4em] text-themeTextSecondary/70">
+        <span className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.4em] text-themeTextSecondary/80">
           Scroll
         </span>
         <div className="flex h-12 w-4 items-start justify-center border-2 border-themeAccent bg-themeBg/70 px-1 backdrop-blur-sm">

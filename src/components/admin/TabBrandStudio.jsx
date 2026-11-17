@@ -139,7 +139,7 @@ export function TabBrandStudio() {
   return (
     <div className="space-y-6">
       <div className="border-4 border-themeAccent bg-themeSurface/30 p-5 shadow-[4px_4px_0_0_var(--dg-bg-deep)] dg-r-0">
-        <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.3em] text-themeAccent">
+        <p className="dg-ui-mono text-[0.625rem] font-bold uppercase tracking-[0.3em] text-themeAccentText">
           Brand Studio
         </p>
         <p className="mt-2 max-w-3xl text-xs leading-relaxed text-themeTextSecondary">

@@ -4,24 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- theme color: kept in sync with the active palette by the script below -->
+    <!-- Dark-only palette: no pre-paint theme switch is needed. -->
     <meta name="theme-color" content="#080808" />
-
-    <!-- Apply the stored theme before first paint to avoid a flash. -->
-    <script>
-      (function () {
-        try {
-          var pref = localStorage.getItem("theme") || "dark";
-          var dark = pref === "dark" ||
-            (pref === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-          document.documentElement.classList.add(dark ? "dark" : "light");
-          document.querySelector('meta[name="theme-color"]')
-            .setAttribute("content", dark ? "#080808" : "#F2F0ED");
-        } catch (e) {
-          document.documentElement.classList.add("dark");
-        }
-      })();
-    </script>
 
     <!-- icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

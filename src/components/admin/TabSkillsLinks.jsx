@@ -14,6 +14,7 @@ import {
   getSocialData,
   updateSocialData,
 } from "@/lib/firestore";
+import { safeUrl } from "@/lib/safeUrl";
 
 
 const CATEGORIES = [
@@ -155,9 +156,9 @@ function SkillsManager() {
       </h2>
 
       {loading ? (
-        <p className="text-themeText/40">Loading skills…</p>
+        <p className="text-themeText/80">Loading skills…</p>
       ) : skills.length === 0 ? (
-        <p className="text-themeText/40">No skills yet.</p>
+        <p className="text-themeText/80">No skills yet.</p>
       ) : (
         <div className="space-y-5">
           {CATEGORIES.map((cat) => {
@@ -200,11 +201,11 @@ function SkillsManager() {
                             onChange={(e) => setEditLevel(Number(e.target.value))}
                             className="w-16 accent-themeAccent"
                           />
-                          <span className="text-themeAccent font-mono text-[0.625rem] w-6">{editLevel}</span>
+                          <span className="text-themeAccentText font-mono text-[0.625rem] w-6">{editLevel}</span>
                           <button
                             onClick={() => handleSaveEdit(skill.id)}
                             disabled={savingEdit}
-                            className="text-themeAccent hover:text-themeAccent-hover text-[0.625rem] font-medium"
+                            className="text-themeAccentText hover:text-themeAccent-hover text-[0.625rem] font-medium"
                           >
                             {savingEdit ? "…" : "✓"}
                           </button>
@@ -218,17 +219,17 @@ function SkillsManager() {
                       ) : (
                         <>
                           <span>{skill.name}</span>
-                          <span className="text-themeAccent font-mono text-[0.625rem]">{skill.level}</span>
+                          <span className="text-themeAccentText font-mono text-[0.625rem]">{skill.level}</span>
                           <button
                             onClick={() => startEdit(skill)}
-                            className="ml-1 text-themeText-secondary hover:text-themeAccent text-[0.625rem]"
+                            className="ml-1 text-themeText-secondary hover:text-themeAccentText text-[0.625rem]"
                             title="Edit skill"
                           >
                             ✎
                           </button>
                           <button
                             onClick={() => handleDelete(skill.id)}
-                            className="text-themeAccent hover:text-themeText text-[0.625rem]"
+                            className="text-themeAccentText hover:text-themeText text-[0.625rem]"
                           >
                             ✕
                           </button>
@@ -388,24 +389,24 @@ function CertificationsManager() {
       </h2>
 
       {loading ? (
-        <p className="text-themeText/40">Loading certifications…</p>
+        <p className="text-themeText/80">Loading certifications…</p>
       ) : certs.length === 0 ? (
-        <p className="text-themeText/40">No certifications yet.</p>
+        <p className="text-themeText/80">No certifications yet.</p>
       ) : (
         <div className="divide-y divide-themeBorder/50">
           {certs.map((cert) => (
             <div key={cert.id} className="py-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className="w-10 h-10 rounded-none bg-themeBg/50 border border-themeBorder/70 backdrop-blur-sm flex items-center justify-center shrink-0 overflow-hidden">
-                  {cert.badge_image_url ? (
-                    <img src={cert.badge_image_url} alt="" className="w-full h-full object-cover" />
+                  {safeUrl(cert.badge_image_url) ? (
+                    <img src={safeUrl(cert.badge_image_url)} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-themeAccent text-lg">📜</span>
+                    <span className="text-themeAccentText text-lg">📜</span>
                   )}
                 </div>
                 <div className="min-w-0">
                   <p className="text-themeText font-medium truncate">{cert.title}</p>
-                  <p className="text-sm text-themeText-secondary/60">
+                  <p className="text-sm text-themeText-secondary/80">
                     {cert.issuer} {cert.issue_date ? `· ${cert.issue_date}` : ""}
                   </p>
                 </div>
@@ -425,7 +426,7 @@ function CertificationsManager() {
                   />
                   <button
                     onClick={() => handleBadgeSave(cert.id)}
-                    className="text-xs text-themeAccent hover:text-themeAccent-hover font-medium"
+                    className="text-xs text-themeAccentText hover:text-themeAccent-hover font-medium"
                   >
                     Save
                   </button>
@@ -433,7 +434,7 @@ function CertificationsManager() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleDelete(cert.id)}
-                    className="text-xs text-themeAccent hover:text-themeText"
+                    className="text-xs text-themeAccentText hover:text-themeText"
                   >
                     Delete
                   </button>
@@ -552,7 +553,7 @@ function SocialLinksManager() {
 
   if (loading) {
     return (
-      <section className="rounded-none py-10 text-center text-themeText/40 border border-themeBorder bg-themeSurface/20">
+      <section className="rounded-none py-10 text-center text-themeText/80 border border-themeBorder bg-themeSurface/20">
         Loading social data…
       </section>
     );
@@ -594,9 +595,9 @@ function SocialLinksManager() {
         <h3 className="text-sm font-mono text-themeText-secondary uppercase tracking-wider">
           Resume PDF
         </h3>
-        <p className="text-xs text-themeText-secondary/50">
+        <p className="text-xs text-themeText-secondary/80">
           The site uses the local file{" "}
-          <code className="text-themeAccent">public/resume.pdf</code> by default. Leave
+          <code className="text-themeAccentText">public/resume.pdf</code> by default. Leave
           the field empty to use it, or enter an override URL/path.
         </p>
         <div className="space-y-1.5">
@@ -613,10 +614,10 @@ function SocialLinksManager() {
           />
         </div>
         <a
-          href={form.resume_pdf_url || "/resume.pdf"}
+          href={safeUrl(form.resume_pdf_url, "/resume.pdf")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block text-sm text-themeAccent hover:underline font-mono"
+          className="inline-block text-sm text-themeAccentText hover:underline font-mono"
         >
           Preview resume
         </a>
